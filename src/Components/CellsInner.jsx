@@ -1,17 +1,20 @@
 /* eslint-disable react/no-unknown-property */
 
 import { useControls } from 'leva';
-import { useRef, useLayoutEffect, useMemo } from 'react';
+import { useRef, useLayoutEffect, useMemo, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 function CellsInner(isStemCells, page) {
 	const properties = useControls('Organoid', {
 		instances: 200,
-		radius: 25,
+		radius: 15,
 		speed: 0.5,
 	});
-
+	const [radius, setRadius] = useState(25);
+	if (page === 1) {
+		setRadius(8);
+	}
 	const ref = useRef();
 	const colors = useMemo(() => {
 		let cellColors = ['blue', 'purple', 'green', 'red'];
@@ -30,7 +33,6 @@ function CellsInner(isStemCells, page) {
 	useLayoutEffect(() => {
 		if (isStemCells) {
 			let i = 0;
-			const radius = properties.radius;
 			const numInstances = properties.instances;
 			for (let j = 0; j < numInstances; j++) {
 				const phi = Math.acos(-1 + (2 * j) / numInstances);
@@ -47,14 +49,13 @@ function CellsInner(isStemCells, page) {
 			}
 		} else {
 			let i = 0;
-			const radius = properties.radius;
 			const numInstances = properties.instances;
 			for (let j = 0; j < numInstances; j++) {
 				const phi = Math.acos(-1 + (2 * j) / numInstances);
 				const theta = Math.sqrt(numInstances * Math.PI) * phi;
-				const x = radius * Math.sin(phi) * Math.cos(theta) + (j % 5);
-				const y = radius * Math.cos(phi) + (j % 5);
-				const z = radius * Math.sin(phi) * Math.sin(theta) + (j % 5);
+				const x = radius * Math.sin(phi) * Math.cos(theta);
+				const y = radius * Math.cos(phi);
+				const z = radius * Math.sin(phi) * Math.sin(theta);
 				const id = i++;
 				const o = new THREE.Object3D();
 				o.position.set(x, y, z);
@@ -72,7 +73,7 @@ function CellsInner(isStemCells, page) {
 			ref.current.instanceMatrix.needsUpdate = true;
 			ref.current.instanceColor.needsUpdate = true;
 		}
-	}, [properties.instances, properties.radius, colors, isStemCells]);
+	}, [radius, properties.instances, properties.radius, colors, isStemCells]);
 
 	// useFrame(({ clock }) => {
 	// 	const time = clock.getElapsedTime();
@@ -82,9 +83,9 @@ function CellsInner(isStemCells, page) {
 	// 		const phi = Math.acos(-1 + (2 * j) / numInstances);
 	// 		let theta = Math.sqrt(numInstances * Math.PI) * phi;
 	// 		theta += Math.sin(time * properties.speed + j) * 0.1; // Add small, random movement
-	// 		const x = radius * Math.sin(phi) * Math.cos(theta) + (j % 5);
-	// 		const y = radius * Math.cos(phi) + (j % 5);
-	// 		const z = radius * Math.sin(phi) * Math.sin(theta) + (j % 5);
+	// 		const x = radius * Math.sin(phi) * Math.cos(theta) ;
+	// 		const y = radius * Math.cos(phi) ;
+	// 		const z = radius * Math.sin(phi) * Math.sin(theta);
 	// 		const id = j;
 	// 		const o = new THREE.Object3D();
 	// 		o.position.set(x, y, z);

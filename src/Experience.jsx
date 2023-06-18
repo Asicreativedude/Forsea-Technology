@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState } from 'react';
-import { folder, useControls } from 'leva';
+import { useControls } from 'leva';
 import {
 	EffectComposer,
 	Bloom,
@@ -31,18 +31,31 @@ export function Experience() {
 			step: 1,
 		},
 	});
-
+	const [cameraPosition, setCameraPosition] = useState([
+		properties.cameraX,
+		properties.cameraY,
+		properties.cameraZ,
+	]);
 	const [isStemCells, setStemCells] = useState(true);
+	const [bokehScale, setBokehScale] = useState(10);
+	const [blur, setBlur] = useState(9);
 
+	useEffect(() => {
+		if (pages.SelectPage === 0) {
+			setStemCells(true);
+			setBokehScale(10);
+			setBlur(9);
+		} else if (pages.SelectPage === 1) {
+			setBokehScale(0);
+			setBlur(0);
+			setCameraPosition([-30, 10, 85]);
+		}
+	}, [pages.SelectPage]);
 	return (
 		<div className='canvas-c'>
 			<Canvas gl={{ antialias: true, alpha: true }}>
 				<PerspectiveCamera
-					position={[
-						properties.cameraX,
-						properties.cameraY,
-						properties.cameraZ,
-					]}
+					position={[cameraPosition[0], cameraPosition[1], cameraPosition[2]]}
 					makeDefault
 				/>
 				<color attach='background' args={['#222']} />
@@ -64,8 +77,8 @@ export function Experience() {
 					<DepthOfField
 						focusDistance={0}
 						focalLength={0.06}
-						bokehScale={10}
-						blur={9}
+						bokehScale={bokehScale}
+						blur={blur}
 					/>
 				</EffectComposer>
 			</Canvas>
