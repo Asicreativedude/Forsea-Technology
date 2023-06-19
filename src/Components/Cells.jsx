@@ -1,13 +1,13 @@
 /* eslint-disable react/no-unknown-property */
 import { useControls } from 'leva';
-import { useRef, useLayoutEffect, useState } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
 
 function Cells(isStemCells, page) {
 	const properties = useControls('Organoid', {
-		instances: 200,
+		instances: 350,
 		radius: 15,
 		speed: 0.5,
 	});
@@ -17,21 +17,41 @@ function Cells(isStemCells, page) {
 	if (page === 1) {
 		setRadius(8);
 	}
+	const [cellsGroupPosition, setCellsGroupPosition] = useState([0, 0, 0]);
+	useEffect(() => {
+		if (isStemCells) {
+			setCellsGroupPosition([30, -100, -50]);
+		} else {
+			setCellsGroupPosition([0, 0, 0]);
+		}
+	}, [isStemCells]);
+
 	useLayoutEffect(() => {
 		if (isStemCells) {
+			const radii = [5, 10, 15, 20, 25, 30, 35];
 			let i = 0;
 			const numInstances = properties.instances;
-			for (let j = 0; j < numInstances; j++) {
-				const phi = Math.acos(-1 + (2 * j) / numInstances);
-				const theta = Math.sqrt(numInstances * Math.PI) * phi;
-				const x = radius * Math.sin(phi) * Math.cos(theta);
-				const y = radius * Math.cos(phi);
-				const z = 0;
-				const id = i++;
-				const o = new THREE.Object3D();
-				o.position.set(x, y, z);
-				o.updateMatrix();
-				ref.current.setMatrixAt(id, o.matrix);
+			let radiusIndex = 0;
+			let instancesLeft = numInstances;
+			while (instancesLeft > 0) {
+				const instancesPerRadius = Math.ceil(
+					instancesLeft / (radii.length - radiusIndex) / 5
+				);
+				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
+				const currentRadius = radii[radiusIndex];
+				for (let j = 0; j < instancesPerRadius && instancesLeft > 0; j++) {
+					const angle = j * angleIncrement + Math.PI / instancesPerRadius;
+					const x = currentRadius * Math.cos(angle);
+					const y = currentRadius * Math.sin(angle);
+					const z = 0;
+					const id = i++;
+					const o = new THREE.Object3D();
+					o.position.set(x, y, z);
+					o.updateMatrix();
+					ref.current.setMatrixAt(id, o.matrix);
+					instancesLeft--;
+				}
+				radiusIndex++;
 			}
 			ref.current.instanceMatrix.needsUpdate = true;
 		} else {
@@ -76,7 +96,7 @@ function Cells(isStemCells, page) {
 	});
 
 	return (
-		<group>
+		<group position={cellsGroupPosition}>
 			<instancedMesh ref={ref} args={[null, null, properties.instances]}>
 				<sphereGeometry args={[1, 64, 64]} />
 				<MeshTransmissionMaterial

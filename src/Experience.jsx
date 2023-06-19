@@ -15,11 +15,12 @@ import { PerspectiveCamera } from '@react-three/drei';
 import Cells from './Components/Cells';
 import CellsInner from './Components/CellsInner';
 import StemCells from './Components/StemCells';
+import BioReactor from './Components/BioReactor';
 
 export function Experience() {
 	const properties = useControls('camera', {
 		cameraX: { min: -100, max: 100, value: 0, step: 1, label: 'Camera X' },
-		cameraY: { min: -100, max: 100, value: 100, step: 1, label: 'Camera Y' },
+		cameraY: { min: -1000, max: 0, value: 0, step: 1, label: 'Camera Y' },
 		cameraZ: { min: -100, max: 100, value: 0, step: 1, label: 'Camera Z' },
 	});
 
@@ -50,12 +51,19 @@ export function Experience() {
 			setBlur(0);
 			setCameraPosition([-30, 10, 85]);
 		}
+		if (pages.SelectPage === 2) {
+			setCameraPosition([0, 50, 0]);
+		}
 	}, [pages.SelectPage]);
 	return (
 		<div className='canvas-c'>
 			<Canvas gl={{ antialias: true, alpha: true }}>
 				<PerspectiveCamera
-					position={[cameraPosition[0], cameraPosition[1], cameraPosition[2]]}
+					position={[
+						properties.cameraX,
+						properties.cameraY,
+						properties.cameraZ,
+					]}
 					makeDefault
 				/>
 				<color attach='background' args={['#222']} />
@@ -70,6 +78,7 @@ export function Experience() {
 					<StemCells />
 					<CellsInner isStemCells={isStemCells} pages={pages.value} />
 					<Cells isStemCells={isStemCells} pages={pages.value} />
+					<BioReactor />
 				</Suspense>
 				<EffectComposer smaa>
 					<Bloom intensity={5} />
@@ -86,3 +95,9 @@ export function Experience() {
 	);
 }
 export default Experience;
+
+{
+	/**pages camera settings:
+0: 0,0,0
+1: 0,-100,0 */
+}

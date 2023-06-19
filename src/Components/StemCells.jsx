@@ -9,7 +9,7 @@ function StemCells() {
 				rotationIntensity={0}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[1, 100, -8]}>
+				<group position={[1, 0, -8]}>
 					<mesh>
 						<sphereGeometry args={[1, 64, 64]} />
 						<MeshTransmissionMaterial
@@ -32,7 +32,7 @@ function StemCells() {
 				rotationIntensity={0}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[3, 100, -6]}>
+				<group position={[3, 0, -6]}>
 					<mesh>
 						<sphereGeometry args={[1, 64, 64]} />
 						<MeshTransmissionMaterial

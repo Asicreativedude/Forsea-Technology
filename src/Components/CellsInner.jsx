@@ -1,13 +1,13 @@
 /* eslint-disable react/no-unknown-property */
 
 import { useControls } from 'leva';
-import { useRef, useLayoutEffect, useMemo, useState } from 'react';
+import { useRef, useLayoutEffect, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 function CellsInner(isStemCells, page) {
 	const properties = useControls('Organoid', {
-		instances: 200,
+		instances: 350,
 		radius: 15,
 		speed: 0.5,
 	});
@@ -15,6 +15,15 @@ function CellsInner(isStemCells, page) {
 	if (page === 1) {
 		setRadius(8);
 	}
+
+	const [cellsGroupPosition, setCellsGroupPosition] = useState([0, 0, 0]);
+	useEffect(() => {
+		if (isStemCells) {
+			setCellsGroupPosition([30, -100, -50]);
+		} else {
+			setCellsGroupPosition([0, 0, 0]);
+		}
+	}, [isStemCells]);
 	const ref = useRef();
 	const colors = useMemo(() => {
 		let cellColors = ['blue', 'purple', 'green', 'red'];
@@ -29,27 +38,38 @@ function CellsInner(isStemCells, page) {
 		}
 		return colorArray;
 	}, [properties.instances]);
-
 	useLayoutEffect(() => {
 		if (isStemCells) {
+			const radii = [5, 10, 15, 20, 25, 30, 35];
 			let i = 0;
 			const numInstances = properties.instances;
-			for (let j = 0; j < numInstances; j++) {
-				const phi = Math.acos(-1 + (2 * j) / numInstances);
-				const theta = Math.sqrt(numInstances * Math.PI) * phi;
-				const x = radius * Math.sin(phi) * Math.cos(theta);
-				const y = radius * Math.cos(phi);
-				const z = 0;
-				const id = i++;
-				const o = new THREE.Object3D();
-				o.position.set(x, y, z);
-				o.updateMatrix();
-				ref.current.setMatrixAt(id, o.matrix);
-				ref.current.instanceMatrix.needsUpdate = true;
+			let radiusIndex = 0;
+			let instancesLeft = numInstances;
+			while (instancesLeft > 0) {
+				const instancesPerRadius = Math.ceil(
+					instancesLeft / (radii.length - radiusIndex) / 5
+				);
+				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
+				const currentRadius = radii[radiusIndex];
+				for (let j = 0; j < instancesPerRadius && instancesLeft > 0; j++) {
+					const angle = j * angleIncrement + Math.PI / instancesPerRadius;
+					const x = currentRadius * Math.cos(angle);
+					const y = currentRadius * Math.sin(angle);
+					const z = 0;
+					const id = i++;
+					const o = new THREE.Object3D();
+					o.position.set(x, y, z);
+					o.updateMatrix();
+					ref.current.setMatrixAt(id, o.matrix);
+					instancesLeft--;
+				}
+				radiusIndex++;
 			}
+			ref.current.instanceMatrix.needsUpdate = true;
 		} else {
 			let i = 0;
 			const numInstances = properties.instances;
+
 			for (let j = 0; j < numInstances; j++) {
 				const phi = Math.acos(-1 + (2 * j) / numInstances);
 				const theta = Math.sqrt(numInstances * Math.PI) * phi;
@@ -74,29 +94,29 @@ function CellsInner(isStemCells, page) {
 			ref.current.instanceColor.needsUpdate = true;
 		}
 	}, [radius, properties.instances, properties.radius, colors, isStemCells]);
-
-	// useFrame(({ clock }) => {
-	// 	const time = clock.getElapsedTime();
-	// 	const radius = properties.radius;
-	// 	const numInstances = properties.instances;
-	// 	for (let j = 0; j < numInstances; j++) {
-	// 		const phi = Math.acos(-1 + (2 * j) / numInstances);
-	// 		let theta = Math.sqrt(numInstances * Math.PI) * phi;
-	// 		theta += Math.sin(time * properties.speed + j) * 0.1; // Add small, random movement
-	// 		const x = radius * Math.sin(phi) * Math.cos(theta) ;
-	// 		const y = radius * Math.cos(phi) ;
-	// 		const z = radius * Math.sin(phi) * Math.sin(theta);
-	// 		const id = j;
-	// 		const o = new THREE.Object3D();
-	// 		o.position.set(x, y, z);
-	// 		o.updateMatrix();
-	// 		ref.current.setMatrixAt(id, o.matrix);
-	// 	}
-	// 	ref.current.instanceMatrix.needsUpdate = true;
-	// });
-
+	useFrame(({ clock }) => {
+		const time = clock.getElapsedTime();
+		const radius = properties.radius;
+		let numInstances = properties.instances;
+		if (!isStemCells) {
+			for (let j = 0; j < numInstances; j++) {
+				const phi = Math.acos(-1 + (2 * j) / numInstances);
+				let theta = Math.sqrt(numInstances * Math.PI) * phi;
+				theta += Math.sin(time * properties.speed + j) * 0.1; // Add small, random movement
+				const x = radius * Math.sin(phi) * Math.cos(theta);
+				const y = radius * Math.cos(phi);
+				const z = radius * Math.sin(phi) * Math.sin(theta);
+				const id = j;
+				const o = new THREE.Object3D();
+				o.position.set(x, y, z);
+				o.updateMatrix();
+				ref.current.setMatrixAt(id, o.matrix);
+			}
+		}
+		ref.current.instanceMatrix.needsUpdate = true;
+	});
 	return (
-		<group>
+		<group position={cellsGroupPosition}>
 			<instancedMesh ref={ref} args={[null, null, properties.instances]}>
 				<sphereGeometry args={[0.4, 64, 64]} />
 				<meshPhysicalMaterial color='#555' depthWrite={false} />
