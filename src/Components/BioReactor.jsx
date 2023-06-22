@@ -2,12 +2,13 @@
 
 import { useLayoutEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
-
+// import { useFrame } from '@react-three/fiber';
+// import { useHelper, SpotLight } from '@react-three/drei';
+// import { SpotLightHelper } from 'three';
 function BioReactor() {
 	const ref = useRef();
 	const colors = useMemo(() => {
-		let cellColors = ['blue', 'purple', 'green', 'red'];
+		let cellColors = ['blue', 'yellow', 'teal', 'red'];
 
 		const numInstances = 30;
 		const colorArray = new Array(numInstances * 3).fill(0);
@@ -21,10 +22,10 @@ function BioReactor() {
 	}, []);
 	useLayoutEffect(() => {
 		let i = 0;
-		const numInstances = 30;
-		const spacing = 10;
-		const numRows = Math.ceil(Math.sqrt(numInstances));
-		const numCols = Math.ceil(numInstances / numRows);
+		// const numInstances = 30;
+		const spacing = 20;
+		const numRows = 6;
+		const numCols = 3;
 		for (let row = 0; row < numRows; row++) {
 			for (let col = 0; col < numCols; col++) {
 				const x = col * spacing - ((numCols - 1) * spacing) / 2;
@@ -64,11 +65,17 @@ function BioReactor() {
 	// 	}
 	// 	ref.current.instanceMatrix.needsUpdate = true;
 	// });
+
+	// const light = useRef();
+	// console.log(light.current.rotation);
+	// useHelper(light, SpotLightHelper, 'cyan');
+
 	return (
-		<group position={[0, -200, -50]}>
-			<instancedMesh ref={ref} args={[null, null, 20]}>
-				<coneGeometry args={[1, 2, 4]} />
-				{/* <MeshTransmissionMaterial
+		<>
+			<group position={[30, -200, -100]}>
+				<instancedMesh ref={ref} args={[null, null, 18]}>
+					<coneGeometry args={[1, 2, 4]} />
+					{/* <MeshTransmissionMaterial
 					color='red'
 					thickness={0.9}
 					transmission={0.98}
@@ -76,9 +83,20 @@ function BioReactor() {
 					ior={1.25}
 					depthWrite={false}
 				/> */}
-				<meshPhysicalMaterial color='#555' depthWrite={false} />
-			</instancedMesh>
-		</group>
+					<meshPhysicalMaterial color='#555' depthWrite={false} />
+				</instancedMesh>
+			</group>
+			{/* <SpotLight
+				ref={light}
+				position={[0, -199, -3]}
+				rotateX={Math.PI * 2}
+				distance={5}
+				angle={0.55}
+				attenuation={5}
+				anglePower={10} // Diffuse-cone anglePower (default: 5)
+				color={'red'}
+			/> */}
+		</>
 	);
 }
 export default BioReactor;
