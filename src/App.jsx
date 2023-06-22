@@ -6,7 +6,7 @@ export function App() {
 	return (
 		<>
 			<Experience />
-			<div className='section'>
+			<div className='section' id='page-1'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>
@@ -16,7 +16,7 @@ export function App() {
 					</div>
 				</div>
 			</div>
-			<div className='section'>
+			<div className='section' id='page-2'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>
@@ -26,7 +26,7 @@ export function App() {
 					</div>
 				</div>
 			</div>
-			<div className='section'>
+			<div className='section' id='page-3'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>
@@ -35,7 +35,7 @@ export function App() {
 					</div>
 				</div>
 			</div>
-			<div className='section'>
+			<div className='section' id='page-4'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>
@@ -44,7 +44,7 @@ export function App() {
 					</div>
 				</div>
 			</div>
-			<div className='section'>
+			<div className='section' id='page-5'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>
@@ -54,7 +54,7 @@ export function App() {
 					</div>
 				</div>
 			</div>
-			<div className='section'>
+			<div className='section' id='page-6'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>No Scaffolding</h2>

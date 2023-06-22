@@ -35,6 +35,9 @@ export function Experience() {
 	const [currentPage, setCurrentPage] = useState(1);
 	useEffect(() => {
 		setCurrentPage(pages.SelectPage);
+
+		let section = document.getElementById(`page-${currentPage}`);
+		section.scrollIntoView({ behavior: 'smooth' });
 	}, [pages.SelectPage, currentPage]);
 
 	useEffect(() => {
