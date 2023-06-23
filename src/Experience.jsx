@@ -9,7 +9,7 @@ import {
 	DepthOfField,
 } from '@react-three/postprocessing';
 import { PerspectiveCamera } from '@react-three/drei';
-// import { Perf } from 'r3f-perf';
+import { Perf } from 'r3f-perf';
 // import gsap from 'gsap';
 
 import Cells from './Components/Cells';
@@ -63,7 +63,7 @@ export function Experience() {
 		<div className='canvas-c'>
 			<Leva />
 			<Canvas gl={{ antialias: true, alpha: true }}>
-				{/* <Perf position='top-left' hidden /> */}
+				<Perf position='top-left' />
 				<PerspectiveCamera
 					position={[cameraPosition[0], cameraPosition[1], cameraPosition[2]]}
 					makeDefault

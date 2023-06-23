@@ -12,13 +12,16 @@ CellsInner.propTypes = {
 
 function CellsInner(props) {
 	const radius = 25;
-	const instances = 200;
+	const [instances, setInstances] = useState(200);
 	const speed = 0.5;
 	const [cellsGroupPosition, setCellsGroupPosition] = useState([0, -100, 0]);
 
 	useEffect(() => {
 		if (props.page === 2) {
 			setCellsGroupPosition([30, -100, -50]);
+		} else if (props.page === 3) {
+			setCellsGroupPosition([20, -200, -70]);
+			setInstances(50);
 		} else if (props.page === 4) {
 			setCellsGroupPosition([5, -295, -70]);
 		} else if (props.page === 5) {
@@ -76,6 +79,17 @@ function CellsInner(props) {
 				radiusIndex++;
 			}
 			ref.current.instanceMatrix.needsUpdate = true;
+		} else if (props.page === 3) {
+			for (let i = 0; i < instances; i++) {
+				const x = (i % 5) * 5 - 25;
+				const y = Math.floor(i / 10) * 10 - 25;
+				const z = 0;
+				const id = i;
+				const o = new THREE.Object3D();
+				o.position.set(x, y, z);
+				o.updateMatrix();
+				ref.current.setMatrixAt(id, o.matrix);
+			}
 		} else if (props.page === 4) {
 			for (let i = 0; i < instances; i++) {
 				const x = (i % 10) * 12 - 60;
@@ -117,7 +131,25 @@ function CellsInner(props) {
 	useFrame(({ clock }) => {
 		const time = clock.getElapsedTime();
 		let numInstances = instances;
-		if (props.page === 4) {
+		if (props.page === 3) {
+			for (let i = 0; i < instances; i++) {
+				let newI = i;
+				if (i % 2 === 0) {
+					newI = instances + 1;
+				}
+				const phi = Math.sqrt(newI) * 0.1;
+				const theta = time * 0.2 * Math.sqrt(i);
+				const radius = 25;
+				const x = radius * Math.sin(phi) * Math.cos(theta) * -1.5;
+				const y = radius * Math.cos(phi) * Math.sin(theta) + newI;
+				const z = radius * Math.sin(phi) * Math.sin(theta) * -1.5;
+				const id = i;
+				const o = new THREE.Object3D();
+				o.position.set(x, y, z);
+				o.updateMatrix();
+				ref.current.setMatrixAt(id, o.matrix);
+			}
+		} else if (props.page === 4) {
 			for (let i = 0; i < instances; i++) {
 				const x = (i % 10) * 12 - 60 + Math.sin(time * speed + i) * 0.5;
 				const y =
@@ -161,7 +193,7 @@ function CellsInner(props) {
 		<group position={cellsGroupPosition}>
 			<instancedMesh ref={ref} args={[null, null, instances]}>
 				<sphereGeometry args={[0.4, 8, 8]} />
-				<meshPhysicalMaterial color='#555' depthWrite={false} />
+				<meshPhysicalMaterial color='#666' depthWrite={false} />
 			</instancedMesh>
 		</group>
 	);
