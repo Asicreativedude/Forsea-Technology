@@ -29,8 +29,8 @@ export function Experience() {
 	const [cameraPosition, setCameraPosition] = useState([0, 0, 0]);
 
 	const [isStemCells, setStemCells] = useState(true);
-	const [bokehScale, setBokehScale] = useState(10);
-	const [blur, setBlur] = useState(9);
+	const [bokehScale, setBokehScale] = useState(0);
+	const [blur, setBlur] = useState(0);
 
 	const [currentPage, setCurrentPage] = useState(1);
 	useEffect(() => {
@@ -53,9 +53,9 @@ export function Experience() {
 			setCameraPosition([0, -200, 0]);
 		} else if (currentPage === 4) {
 			setCameraPosition([0, -300, 0]);
-			setBokehScale(1.5);
-			setBlur(9);
 			setStemCells(false);
+		} else if (currentPage === 6) {
+			setCameraPosition([0, -400, 0]);
 		}
 	}, [currentPage]);
 
@@ -67,20 +67,22 @@ export function Experience() {
 				<PerspectiveCamera
 					position={[cameraPosition[0], cameraPosition[1], cameraPosition[2]]}
 					makeDefault
+					far={1000}
+					near={0.1}
 				/>
-				<color attach='background' args={['#222']} />
+				<color attach='background' args={['#111']} />
 
 				<ambientLight intensity={3} />
 				<directionalLight
 					position={[1, cameraPosition[1] + 1, 5]}
-					intensity={1}
-					color={'white'}
+					intensity={1.5}
+					color={'#F8EDEB'}
 				/>
 				<Suspense fallback={null}>
 					<StemCells />
 					<CellsInner isStemCells={isStemCells} page={currentPage} />
 					<Cells isStemCells={isStemCells} page={currentPage} />
-					<BioReactor />
+					<BioReactor page={currentPage} />
 				</Suspense>
 				<EffectComposer smaa>
 					<Bloom intensity={5} />
@@ -104,5 +106,13 @@ export default Experience;
 2: 250 instances
 3:
 4: 100 instances radius 10
-5:  */
+5:  
+addible cell - organoid from the inside
+landsacape - organoid from the outside big
+growth factors fade away from the organoid
+NonGMO wrap organoid 
+NoScaffolding add another organoid
+
+change colors to pinkish skien yellow
+*/
 }

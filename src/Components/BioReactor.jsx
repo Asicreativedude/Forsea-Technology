@@ -1,12 +1,24 @@
 /* eslint-disable react/no-unknown-property */
 
-import { useLayoutEffect, useRef, useMemo, useState } from 'react';
+import { useLayoutEffect, useRef, useMemo, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-
-function BioReactor() {
+import PropTypes from 'prop-types';
+BioReactor.propTypes = {
+	page: PropTypes.number.isRequired,
+};
+function BioReactor(props) {
 	const ref = useRef();
 	const [instances, setInstances] = useState(20);
+	const [cellsGroupPosition, setCellsGroupPosition] = useState([
+		25, -205, -100,
+	]);
+
+	useEffect(() => {
+		if (props.page === 6) {
+			setCellsGroupPosition([0, -400, -100]);
+		}
+	}, [props, cellsGroupPosition]);
 
 	const colors = useMemo(() => {
 		let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
@@ -25,12 +37,9 @@ function BioReactor() {
 	useLayoutEffect(() => {
 		setInstances(20);
 		for (let i = 0; i < instances; i++) {
-			// const x = (i % 10) * 12 - 60;
-			// const y = Math.floor(i / 5) * 20 - 60;
-			// const z = 0;
 			const id = i;
 			const o = new THREE.Object3D();
-			// o.position.set(x, y, z);
+
 			o.updateMatrix();
 
 			ref.current.setColorAt(
@@ -44,39 +53,86 @@ function BioReactor() {
 
 	useFrame(({ clock }, delta) => {
 		const time = clock.getElapsedTime();
-		for (let i = 0; i < instances; i++) {
-			let newI = i;
-			if (i % 2 === 0) {
-				newI = instances + 1;
+		if (props.page === 3) {
+			for (let i = 0; i < instances; i++) {
+				let newI = i;
+				if (i % 2 === 0) {
+					newI = instances + 1;
+				}
+				const phi = Math.sqrt(newI) * 0.1;
+				const theta = time * 0.2 * Math.sqrt(newI);
+				const radius = 20;
+				const x = radius * Math.sin(phi) * Math.cos(theta) * 1.5 + newI;
+				const y = radius * Math.cos(phi) * Math.sin(theta) + newI * 1.5;
+				const z = radius * Math.sin(phi) * Math.sin(theta) * -1.5 + newI;
+				const id = i;
+				const o = new THREE.Object3D();
+				o.position.set(x, y, z);
+				o.rotation.x = time + newI * delta;
+				o.rotation.y = time + newI * delta;
+				o.rotation.z = time + newI * delta;
+				o.updateMatrix();
+				ref.current.setMatrixAt(id, o.matrix);
 			}
-			const phi = Math.sqrt(newI) * 0.1;
-			const theta = time * 0.2 * Math.sqrt(newI);
-			const radius = 10;
-			const x = radius * Math.sin(phi) * Math.cos(theta) * 1.5 + newI;
-			const y = radius * Math.cos(phi) * Math.sin(theta) + newI * 1.5;
-			const z = radius * Math.sin(phi) * Math.sin(theta) * -1.5 + newI;
-			const id = i;
-			const o = new THREE.Object3D();
-			o.position.set(x, y, z);
-			o.rotation.x = time + newI * delta;
-			o.rotation.y = time + newI * delta;
-			o.rotation.z = time + newI * delta;
-			o.updateMatrix();
-			ref.current.setMatrixAt(id, o.matrix);
+		} else if (props.page === 6) {
+			const loopDuration = 10; // duration of the loop in seconds
+			const scaleDuration = 5; // duration of the scale animation in seconds
+			const scaleDelay = 5; // delay before the scale animation starts in seconds
+			const fadeInDuration = 1; // duration of the fade-in animation in seconds
+			const maxHeight = 10; // maximum height of the fountain
+			const startPosition = new THREE.Vector3(90, -35, 0); // starting position for all instances
+
+			for (let i = 0; i < instances; i++) {
+				const t = (i / instances) * 0.2; // calculate a value between 0 and 1 based on the index
+				const loopTime = (time + i * 0.3) % loopDuration; // calculate the current time within the loop, adding a small offset based on the index
+				const loopT = loopTime / loopDuration; // calculate a value between 0 and 1 based on the current time within the loop
+				const oscillationT = loopT * Math.PI * 2; // create a smooth oscillation between -1 and 1
+				const id = i;
+				const o = new THREE.Object3D();
+				let endPosition;
+				if (i % 5 === 0) {
+					endPosition = new THREE.Vector3(0, 0, 0);
+				} else if (i % 5 === 1) {
+					endPosition = new THREE.Vector3(-70, -85, 0);
+				} else if (i % 5 === 2) {
+					endPosition = new THREE.Vector3(-10, 15, 0);
+				} else if (i % 5 === 3) {
+					endPosition = new THREE.Vector3(-20, -105, 0);
+				} else if (i % 5 === 4) {
+					endPosition = new THREE.Vector3(-10, -45, 0);
+				}
+				const position = new THREE.Vector3().lerpVectors(
+					startPosition,
+					endPosition,
+					t
+				); // interpolate between the start and end positions
+				position.y += Math.pow(oscillationT, 2) * maxHeight + 1;
+				position.x += Math.pow(oscillationT, 2) * -maxHeight + 1; // add the parabolic trajectory to the y position
+				o.position.copy(position);
+				o.rotation.x = time + i * delta;
+				o.rotation.y = time + i * delta;
+				o.rotation.z = time + i * delta;
+				const fadeInT = Math.min(loopT * (loopDuration - fadeInDuration), 1); // create a value between 0 and 1 based on the current time within the loop, clamped to 1 after the fade-in duration
+				o.scale.setScalar(fadeInT);
+				const scaleT = Math.min(
+					Math.max((loopT * (loopDuration - scaleDelay)) / scaleDuration, 0),
+					1
+				);
+				o.scale.multiplyScalar(1 - scaleT); // set the scale of the instance based on the current time within the loop
+
+				o.updateMatrix();
+				ref.current.setMatrixAt(id, o.matrix);
+			}
 		}
 
 		ref.current.instanceMatrix.needsUpdate = true;
 	});
 
-	// const light = useRef();
-	// console.log(light.current.rotation);
-	// useHelper(light, SpotLightHelper, 'cyan');
-
 	return (
 		<>
-			<group position={[25, -205, -100]}>
+			<group position={cellsGroupPosition}>
 				<instancedMesh ref={ref} args={[null, null, instances]}>
-					<coneGeometry args={[1, 1.5, 4]} />
+					<coneGeometry args={[0.5, 1, 4]} />
 					{/* <MeshTransmissionMaterial
 						color='#fff'
 						thickness={0.5}
@@ -88,17 +144,10 @@ function BioReactor() {
 					<meshPhysicalMaterial color='#999' depthWrite={false} wireframe />
 				</instancedMesh>
 			</group>
-			{/* <SpotLight
-				ref={light}
-				position={[0, -199, -3]}
-				rotateX={Math.PI * 2}
-				distance={5}
-				angle={0.55}
-				attenuation={5}
-				anglePower={10} // Diffuse-cone anglePower (default: 5)
-				color={'red'}
-			/> */}
 		</>
 	);
 }
 export default BioReactor;
+
+//make growth factor  smaller
+//make more cells slowly appear

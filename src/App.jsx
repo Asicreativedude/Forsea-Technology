@@ -57,21 +57,21 @@ export function App() {
 			<div className='section' id='page-6'>
 				<div className='container'>
 					<div className='tech-c'>
-						<h2 className='tech-text'>No Scaffolding</h2>
-						<p>
-							Our organoids contain the edible cell. Therefore, scaffolding is
-							not necessary for cultivating our seafood meat.
-						</p>
-					</div>
-				</div>
-			</div>{' '}
-			<div className='section'>
-				<div className='container'>
-					<div className='tech-c'>
 						<h2 className='tech-text'>Less Growth Factors</h2>
 						<p>
 							Organoids are directed to grow naturally into mini-tissue,
 							allowing for a remarkable reduction in growth factors usage.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div className='section'>
+				<div className='container'>
+					<div className='tech-c'>
+						<h2 className='tech-text'>No Scaffolding</h2>
+						<p>
+							Our organoids contain the edible cell. Therefore, scaffolding is
+							not necessary for cultivating our seafood meat.
 						</p>
 					</div>
 				</div>

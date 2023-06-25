@@ -11,35 +11,31 @@ CellsInner.propTypes = {
 };
 
 function CellsInner(props) {
-	const radius = 25;
+	const [radius, setRadius] = useState(25);
 	const [instances, setInstances] = useState(200);
 	const speed = 0.5;
 	const [cellsGroupPosition, setCellsGroupPosition] = useState([0, -100, 0]);
-
+	const [cellSize, setCellSize] = useState(0);
 	useEffect(() => {
 		if (props.page === 2) {
-			setCellsGroupPosition([30, -100, -50]);
+			setCellsGroupPosition([20, -110, -25]);
 		} else if (props.page === 3) {
-			setCellsGroupPosition([20, -200, -70]);
-			setInstances(50);
+			setCellsGroupPosition([20, -210, -70]);
 		} else if (props.page === 4) {
-			setCellsGroupPosition([5, -295, -70]);
+			setCellsGroupPosition([5, -300, -15]);
 		} else if (props.page === 5) {
-			setCellsGroupPosition([5, -315, -150]);
+			setCellsGroupPosition([20, -300, -50]);
+			setRadius(15);
+		} else if (props.page === 6) {
+			setCellsGroupPosition([50, -420, -70]);
 		}
-	}, [props]);
+	}, [props, cellsGroupPosition]);
 
-	function getHeight(x, z, time) {
-		const a = 5; // controls the amplitude of the wave
-		const b = 1; // controls the wavelength of the wave
-		const c = time; // controls the phase of the wave
-		const d = 0; // controls the vertical offset of the wave
-		const height = a * Math.sin((2 * Math.PI * x) / b + c) + d;
-		return height;
-	}
 	const ref = useRef();
+	const masterBank = useRef();
 	const colors = useMemo(() => {
-		let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
+		// let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
+		let cellColors = ['#FFC2D1', '#FFB5A7', '#FB6F92', '#FCD5CE'];
 
 		const numInstances = instances;
 		const colorArray = new Array(numInstances * 3).fill(0);
@@ -53,15 +49,16 @@ function CellsInner(props) {
 	}, [instances]);
 	useLayoutEffect(() => {
 		if (props.page === 2) {
-			const radii = [5, 10, 15, 20, 25, 30];
+			const radii = [5, 8, 11, 14, 17, 20, 23];
 			let i = 0;
-			const numInstances = instances;
 			let radiusIndex = 0;
-			let instancesLeft = numInstances;
+			let instancesLeft = instances;
 			while (instancesLeft > 0) {
-				const instancesPerRadius = Math.ceil(
-					instancesLeft / (radii.length - radiusIndex) / 5
+				let instancesPerRadius = Math.ceil(
+					instancesLeft / (radii.length - radiusIndex) / 2
 				);
+				if (radiusIndex === 0) instancesPerRadius = 8;
+
 				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
 				const currentRadius = radii[radiusIndex];
 				for (let j = 0; j < instancesPerRadius && instancesLeft > 0; j++) {
@@ -72,6 +69,13 @@ function CellsInner(props) {
 					const id = i++;
 					const o = new THREE.Object3D();
 					o.position.set(x, y, z);
+					if (radiusIndex === 0) o.scale.set(1, 1, 1);
+					else
+						o.scale.set(
+							Math.min((cellSize * j) / 50, 1),
+							Math.min((cellSize * j) / 50, 1),
+							Math.min((cellSize * j) / 50, 1)
+						);
 					o.updateMatrix();
 					ref.current.setMatrixAt(id, o.matrix);
 					instancesLeft--;
@@ -91,11 +95,14 @@ function CellsInner(props) {
 				ref.current.setMatrixAt(id, o.matrix);
 			}
 		} else if (props.page === 4) {
-			for (let i = 0; i < instances; i++) {
-				const x = (i % 10) * 12 - 60;
-				const y = Math.floor(i / 10) * 12 - 60;
-				const z = 0;
-				const id = i;
+			let i = 0;
+			for (let j = 0; j < instances; j++) {
+				const phi = Math.acos(-1 + (2 * j) / instances);
+				const theta = Math.sqrt(instances * Math.PI) * phi;
+				const x = radius * Math.sin(phi) * Math.cos(theta);
+				const y = radius * Math.cos(phi);
+				const z = radius * Math.sin(phi) * Math.sin(theta);
+				const id = i++;
 				const o = new THREE.Object3D();
 				o.position.set(x, y, z);
 				o.updateMatrix();
@@ -109,29 +116,29 @@ function CellsInner(props) {
 					)
 				);
 			}
-		} else if (props.page === 6) {
-			let i = 0;
-			const numInstances = instances;
-			for (let j = 0; j < numInstances; j++) {
-				const phi = Math.acos(-1 + (2 * j) / numInstances);
-				const theta = Math.sqrt(numInstances * Math.PI) * phi;
-				const x = radius * Math.sin(phi) * Math.cos(theta);
-				const y = radius * Math.cos(phi);
-				const z = radius * Math.sin(phi) * Math.sin(theta);
-				const id = i++;
-				const o = new THREE.Object3D();
-				o.position.set(x, y, z);
-				o.updateMatrix();
-				ref.current.setMatrixAt(id, o.matrix);
-			}
 			ref.current.instanceMatrix.needsUpdate = true;
 			ref.current.instanceColor.needsUpdate = true;
 		}
-	}, [radius, instances, colors, props.page]);
+	}, [radius, instances, colors, props.page, cellSize]);
 	useFrame(({ clock }) => {
 		const time = clock.getElapsedTime();
-		let numInstances = instances;
-		if (props.page === 3) {
+		if (props.page === 2) {
+			if (cellSize < 5) {
+				for (let i = 0; i < instances; i++) {
+					setCellSize(0 + ((time * i) / 100) * speed);
+				}
+			}
+			if (
+				masterBank.current.position.z > -40 &&
+				masterBank.current.position.x < 30
+			) {
+				masterBank.current.position.z += time * -0.001;
+				masterBank.current.position.x += time * 0.001;
+			}
+			masterBank.current.rotation.z = time * 0.1;
+		} else if (props.page === 3) {
+			masterBank.current.rotation.z = 0;
+
 			for (let i = 0; i < instances; i++) {
 				let newI = i;
 				if (i % 2 === 0) {
@@ -149,33 +156,10 @@ function CellsInner(props) {
 				o.updateMatrix();
 				ref.current.setMatrixAt(id, o.matrix);
 			}
-		} else if (props.page === 4) {
-			for (let i = 0; i < instances; i++) {
-				const x = (i % 10) * 12 - 60 + Math.sin(time * speed + i) * 0.5;
-				const y =
-					Math.floor(i / 10) * 12 - 60 + Math.cos(time * speed + i) * 0.5;
-				const z = 0;
-				const id = i;
-				const o = new THREE.Object3D();
-				o.position.set(x, y, z);
-				o.updateMatrix();
-				ref.current.setMatrixAt(id, o.matrix);
-			}
-		} else if (props.page === 5) {
-			for (let i = 0; i < instances; i++) {
-				const x = (i % 10) * 20 - 100;
-				const z = Math.floor(i / 10) * 12 - 60;
-				const y = getHeight(z, x, time + i * 0.05);
-				const id = i;
-				const o = new THREE.Object3D();
-				o.position.set(x, y, z);
-				o.updateMatrix();
-				ref.current.setMatrixAt(id, o.matrix);
-			}
-		} else if (props.page === 6) {
-			for (let j = 0; j < numInstances; j++) {
-				const phi = Math.acos(-1 + (2 * j) / numInstances);
-				let theta = Math.sqrt(numInstances * Math.PI) * phi;
+		} else {
+			for (let j = 0; j < instances; j++) {
+				const phi = Math.acos(-1 + (2 * j) / instances);
+				let theta = Math.sqrt(instances * Math.PI) * phi;
 				theta += Math.sin(time * speed + j + 0.05) * 0.1; // Add small, random movement
 				const x = radius * Math.sin(phi) * Math.cos(theta) + 0.05;
 				const y = radius * Math.cos(phi) + 0.05;
@@ -190,7 +174,7 @@ function CellsInner(props) {
 		ref.current.instanceMatrix.needsUpdate = true;
 	});
 	return (
-		<group position={cellsGroupPosition}>
+		<group position={cellsGroupPosition} ref={masterBank}>
 			<instancedMesh ref={ref} args={[null, null, instances]}>
 				<sphereGeometry args={[0.4, 8, 8]} />
 				<meshPhysicalMaterial color='#666' depthWrite={false} />
