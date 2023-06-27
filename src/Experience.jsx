@@ -2,12 +2,12 @@
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState } from 'react';
 import { Leva } from 'leva';
-import {
-	EffectComposer,
-	Bloom,
-	HueSaturation,
-	DepthOfField,
-} from '@react-three/postprocessing';
+// import {
+// 	EffectComposer,
+// 	Bloom,
+// 	HueSaturation,
+// 	DepthOfField,
+// } from '@react-three/postprocessing';
 
 import { PerspectiveCamera } from '@react-three/drei';
 import { Perf } from 'r3f-perf';
@@ -26,8 +26,8 @@ function Experience() {
 	const [cameraPosition, setCameraPosition] = useState([0, 0, 0]);
 
 	const [isStemCells, setStemCells] = useState(true);
-	const [bokehScale, setBokehScale] = useState(0);
-	const [blur, setBlur] = useState(0);
+	// const [bokehScale, setBokehScale] = useState(0);
+	// const [blur, setBlur] = useState(0);
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [progress, setProgress] = useState(0);
@@ -45,12 +45,12 @@ function Experience() {
 	useEffect(() => {
 		if (currentPage === 1) {
 			setStemCells(true);
-			setBokehScale(10);
-			setBlur(9);
+			// setBokehScale(10);
+			// setBlur(9);
 			setCameraPosition([0, 0, 0]);
 		} else if (currentPage === 2) {
-			setBokehScale(0);
-			setBlur(0);
+			// setBokehScale(0);
+			// setBlur(0);
 			setCameraPosition([0, -100, 0]);
 		} else if (currentPage === 3) {
 			setCameraPosition([0, -200, 0]);

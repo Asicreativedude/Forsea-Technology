@@ -4,6 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
 import PropTypes from 'prop-types';
+import gsap from 'gsap';
 
 Cells.propTypes = {
 	isStemCells: PropTypes.bool.isRequired,
@@ -14,7 +15,7 @@ function Cells(props) {
 	const ref = useRef();
 	const startTime = useRef();
 	const masterBank = useRef();
-	const [radius, setRadius] = useState(25);
+	const radius = useRef(25);
 	const instances = 200;
 	const speed = 0.5;
 	const [cellsGroupPosition, setCellsGroupPosition] = useState([0, -100, 0]);
@@ -26,11 +27,6 @@ function Cells(props) {
 			setCellsGroupPosition([20, -210, -70]);
 		} else if (props.page === 4) {
 			setCellsGroupPosition([5, -300, -15]);
-		} else if (props.page === 5) {
-			setCellsGroupPosition([20, -300, -50]);
-			setRadius(15);
-		} else if (props.page === 6) {
-			setCellsGroupPosition([30, -310, -50]);
 		}
 	}, [props, cellsGroupPosition]);
 
@@ -85,9 +81,9 @@ function Cells(props) {
 			for (let j = 0; j < instances; j++) {
 				const phi = Math.acos(-1 + (2 * j) / instances);
 				const theta = Math.sqrt(instances * Math.PI) * phi;
-				const x = radius * Math.sin(phi) * Math.cos(theta) + 0.1;
-				const y = radius * Math.cos(phi) + 0.1;
-				const z = radius * Math.sin(phi) * Math.sin(theta) + 0.1;
+				const x = radius.current * Math.sin(phi) * Math.cos(theta) + 0.1;
+				const y = radius.current * Math.cos(phi) + 0.1;
+				const z = radius.current * Math.sin(phi) * Math.sin(theta) + 0.1;
 				const id = i++;
 				const o = new THREE.Object3D();
 				o.position.set(x, y, z);
@@ -96,7 +92,7 @@ function Cells(props) {
 			}
 			ref.current.instanceMatrix.needsUpdate = true;
 		}
-	}, [instances, radius, props.page, cellSize.current]);
+	}, [instances, radius.current, props.page, cellSize.current]);
 
 	useFrame(({ clock }) => {
 		if (!startTime.current) {
@@ -116,7 +112,7 @@ function Cells(props) {
 				masterBank.current.position.z += time * -0.001;
 				masterBank.current.position.x += time * 0.001;
 			}
-			masterBank.current.rotation.z = time * 0.05;
+			masterBank.current.rotation.z = time * -0.05;
 		} else if (props.page === 3) {
 			const time = clock.getElapsedTime();
 			masterBank.current.rotation.z = 0;
@@ -128,10 +124,9 @@ function Cells(props) {
 				}
 				const phi = Math.sqrt(newI) * 0.1;
 				const theta = time * 0.2 * Math.sqrt(i);
-				const radius = 25;
-				const x = radius * Math.sin(phi) * Math.cos(theta) * -1.5;
-				const y = radius * Math.cos(phi) * Math.sin(theta) + newI;
-				const z = radius * Math.sin(phi) * Math.sin(theta) * -1.5;
+				const x = radius.current * Math.sin(phi) * Math.cos(theta) * -1.5;
+				const y = radius.current * Math.cos(phi) * Math.sin(theta) + newI;
+				const z = radius.current * Math.sin(phi) * Math.sin(theta) * -1.5;
 				const id = i;
 				const o = new THREE.Object3D();
 				o.position.set(x, y, z);
@@ -145,9 +140,9 @@ function Cells(props) {
 				const phi = Math.acos(-1 + (2 * j) / instances);
 				let theta = Math.sqrt(instances * Math.PI) * phi;
 				theta += Math.sin(time * speed + j) * 0.1; // Add small, random movement
-				const x = radius * Math.sin(phi) * Math.cos(theta);
-				const y = radius * Math.cos(phi);
-				const z = radius * Math.sin(phi) * Math.sin(theta);
+				const x = radius.current * Math.sin(phi) * Math.cos(theta);
+				const y = radius.current * Math.cos(phi);
+				const z = radius.current * Math.sin(phi) * Math.sin(theta);
 				const id = j;
 				const o = new THREE.Object3D();
 				o.position.set(x, y, z);
@@ -157,7 +152,55 @@ function Cells(props) {
 		}
 		ref.current.instanceMatrix.needsUpdate = true;
 	});
-
+	useEffect(() => {
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-2',
+				start: 'top top',
+				end: 'bottom top',
+				scrub: true,
+			},
+		});
+		tl.to(masterBank.current.position, {
+			duration: 1,
+			x: 50,
+		});
+		const tl3 = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-4',
+				start: 'top top',
+				end: 'bottom top',
+				scrub: true,
+			},
+		});
+		tl3
+			.to(masterBank.current.position, {
+				duration: 1,
+				z: -50,
+				x: 20,
+			})
+			.to(
+				radius,
+				{
+					duration: 1,
+					current: 15,
+				},
+				'<'
+			);
+		const tl4 = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-5',
+				start: 'top top',
+				end: 'bottom top',
+				scrub: true,
+			},
+		});
+		tl4.to(masterBank.current.position, {
+			duration: 1,
+			y: -310,
+			x: 30,
+		});
+	}, []);
 	return (
 		<group position={cellsGroupPosition} ref={masterBank}>
 			<instancedMesh ref={ref} args={[null, null, instances]}>
