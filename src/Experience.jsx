@@ -11,8 +11,8 @@ import {
 
 import { PerspectiveCamera } from '@react-three/drei';
 import { Perf } from 'r3f-perf';
-// import gsap from 'gsap';
-
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Cells from './Components/Cells';
 import CellsInner from './Components/CellsInner';
 import StemCells from './Components/StemCells';
@@ -20,15 +20,9 @@ import BioReactor from './Components/BioReactor';
 import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
 
-export function Experience() {
-	const pages = useControls({
-		SelectPage: {
-			value: 1,
-			min: 1,
-			max: 14,
-			step: 1,
-		},
-	});
+gsap.registerPlugin(ScrollTrigger);
+
+function Experience() {
 	const [cameraPosition, setCameraPosition] = useState([0, 0, 0]);
 
 	const [isStemCells, setStemCells] = useState(true);
@@ -36,13 +30,24 @@ export function Experience() {
 	const [blur, setBlur] = useState(0);
 
 	const [currentPage, setCurrentPage] = useState(1);
+	// useEffect(() => {
+	// 	setCurrentPage(pages.SelectPage);
+
+	// 	let section = document.getElementById(`page-${currentPage}`);
+	// 	section.scrollIntoView({ behavior: 'smooth' });
+	// }, [pages.SelectPage, currentPage]);
 	useEffect(() => {
-		setCurrentPage(pages.SelectPage);
+		ScrollTrigger.create({
+			start: '0',
+			scrub: true,
+			markers: true,
+			onUpdate: (self) => {
+				let page = self.progress * 10 + 1;
 
-		let section = document.getElementById(`page-${currentPage}`);
-		section.scrollIntoView({ behavior: 'smooth' });
-	}, [pages.SelectPage, currentPage]);
-
+				setCurrentPage(Math.round(page));
+			},
+		});
+	}, []);
 	useEffect(() => {
 		if (currentPage === 1) {
 			setStemCells(true);
@@ -75,7 +80,7 @@ export function Experience() {
 				/>
 				<color attach='background' args={['#111']} />
 
-				<ambientLight intensity={1} />
+				<ambientLight intensity={3} />
 				<directionalLight
 					position={[1, cameraPosition[1] + 1, 5]}
 					intensity={1.5}
