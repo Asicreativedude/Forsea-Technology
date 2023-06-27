@@ -1,7 +1,42 @@
 /* eslint-disable react/no-unknown-property */
 
 import { MeshTransmissionMaterial, Float } from '@react-three/drei';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useRef, useEffect } from 'react';
+
+gsap.registerPlugin(ScrollTrigger);
 function StemCells() {
+	const stemCellsRef = useRef();
+	const stemCellsRef2 = useRef();
+
+	useEffect(() => {
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-1',
+				start: 'top top',
+				end: 'bottom top',
+				scrub: true,
+			},
+		});
+		tl.to(stemCellsRef.current.position, {
+			duration: 1,
+			x: 9,
+			y: 15,
+			z: -15,
+		});
+		tl.to(
+			stemCellsRef2.current.position,
+			{
+				duration: 1,
+				x: 10,
+				y: 20,
+				z: -15,
+			},
+			'<'
+		);
+	}, []);
+
 	return (
 		<>
 			<Float
@@ -9,7 +44,7 @@ function StemCells() {
 				rotationIntensity={0}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[1, 0, -8]}>
+				<group position={[1, 0, -8]} ref={stemCellsRef}>
 					<mesh>
 						<sphereGeometry args={[1, 64, 64]} />
 						<MeshTransmissionMaterial
@@ -32,7 +67,7 @@ function StemCells() {
 				rotationIntensity={0}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[3, 0, -6]}>
+				<group position={[3, 0, -6]} ref={stemCellsRef2}>
 					<mesh>
 						<sphereGeometry args={[1, 64, 64]} />
 						<MeshTransmissionMaterial

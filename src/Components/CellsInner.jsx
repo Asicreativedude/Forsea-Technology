@@ -4,18 +4,25 @@ import { useRef, useLayoutEffect, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import PropTypes from 'prop-types';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 CellsInner.propTypes = {
 	isStemCells: PropTypes.bool.isRequired,
 	page: PropTypes.number.isRequired,
 };
+gsap.registerPlugin(ScrollTrigger);
 
 function CellsInner(props) {
+	const ref = useRef();
+	const masterBank = useRef();
+	const startTime = useRef();
 	const [radius, setRadius] = useState(25);
-	const [instances, setInstances] = useState(200);
+	const instances = 200;
 	const speed = 0.5;
 	const [cellsGroupPosition, setCellsGroupPosition] = useState([0, -100, 0]);
-	const [cellSize, setCellSize] = useState(0);
+	const cellSize = useRef(0);
+
 	useEffect(() => {
 		if (props.page === 2) {
 			setCellsGroupPosition([20, -110, -25]);
@@ -31,8 +38,6 @@ function CellsInner(props) {
 		}
 	}, [props, cellsGroupPosition]);
 
-	const ref = useRef();
-	const masterBank = useRef();
 	const colors = useMemo(() => {
 		// let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
 		let cellColors = ['#FFC2D1', '#FFB5A7', '#FB6F92', '#FCD5CE'];
@@ -57,7 +62,7 @@ function CellsInner(props) {
 				let instancesPerRadius = Math.ceil(
 					instancesLeft / (radii.length - radiusIndex) / 2
 				);
-				if (radiusIndex === 0) instancesPerRadius = 8;
+				if (radiusIndex === 0) instancesPerRadius = 10;
 
 				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
 				const currentRadius = radii[radiusIndex];
@@ -72,9 +77,9 @@ function CellsInner(props) {
 					if (radiusIndex === 0) o.scale.set(1, 1, 1);
 					else
 						o.scale.set(
-							Math.min((cellSize * j) / 50, 1),
-							Math.min((cellSize * j) / 50, 1),
-							Math.min((cellSize * j) / 50, 1)
+							Math.min((cellSize.current * j) / 50, 1),
+							Math.min((cellSize.current * j) / 50, 1),
+							Math.min((cellSize.current * j) / 50, 1)
 						);
 					o.updateMatrix();
 					ref.current.setMatrixAt(id, o.matrix);
@@ -119,13 +124,17 @@ function CellsInner(props) {
 			ref.current.instanceMatrix.needsUpdate = true;
 			ref.current.instanceColor.needsUpdate = true;
 		}
-	}, [radius, instances, colors, props.page, cellSize]);
+	}, [radius, instances, colors, props.page, cellSize.current]);
+
 	useFrame(({ clock }) => {
-		const time = clock.getElapsedTime();
+		if (!startTime.current) {
+			startTime.current = clock.getElapsedTime();
+		}
 		if (props.page === 2) {
-			if (cellSize < 5) {
+			const time = clock.getElapsedTime() - startTime.current;
+			if (cellSize.current < 200) {
 				for (let i = 0; i < instances; i++) {
-					setCellSize(0 + ((time * i) / 100) * speed);
+					cellSize.current = ((time * i) / 100) * 0.8;
 				}
 			}
 			if (
@@ -135,8 +144,9 @@ function CellsInner(props) {
 				masterBank.current.position.z += time * -0.001;
 				masterBank.current.position.x += time * 0.001;
 			}
-			masterBank.current.rotation.z = time * 0.1;
+			masterBank.current.rotation.z = time * 0.05;
 		} else if (props.page === 3) {
+			const time = clock.getElapsedTime();
 			masterBank.current.rotation.z = 0;
 
 			for (let i = 0; i < instances; i++) {
@@ -156,7 +166,8 @@ function CellsInner(props) {
 				o.updateMatrix();
 				ref.current.setMatrixAt(id, o.matrix);
 			}
-		} else {
+		} else if (props.page >= 4) {
+			const time = clock.getElapsedTime();
 			masterBank.current.rotation.y += 0.001;
 			for (let j = 0; j < instances; j++) {
 				const phi = Math.acos(-1 + (2 * j) / instances);

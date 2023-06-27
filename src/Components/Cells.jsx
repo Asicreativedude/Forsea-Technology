@@ -8,15 +8,17 @@ import PropTypes from 'prop-types';
 Cells.propTypes = {
 	isStemCells: PropTypes.bool.isRequired,
 	page: PropTypes.number.isRequired,
+	progress: PropTypes.number.isRequired,
 };
 function Cells(props) {
 	const ref = useRef();
+	const startTime = useRef();
 	const masterBank = useRef();
 	const [radius, setRadius] = useState(25);
-	const [instances, setInstances] = useState(200);
+	const instances = 200;
 	const speed = 0.5;
 	const [cellsGroupPosition, setCellsGroupPosition] = useState([0, -100, 0]);
-	const [cellSize, setCellSize] = useState(0);
+	const cellSize = useRef(0);
 	useEffect(() => {
 		if (props.page === 2) {
 			setCellsGroupPosition([20, -110, -25]);
@@ -42,7 +44,7 @@ function Cells(props) {
 				let instancesPerRadius = Math.ceil(
 					instancesLeft / (radii.length - radiusIndex) / 2
 				);
-				if (radiusIndex === 0) instancesPerRadius = 8;
+				if (radiusIndex === 0) instancesPerRadius = 10;
 				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
 				const currentRadius = radii[radiusIndex];
 				for (let j = 0; j < instancesPerRadius && instancesLeft > 0; j++) {
@@ -56,9 +58,9 @@ function Cells(props) {
 					if (radiusIndex === 0) o.scale.set(1, 1, 1);
 					else
 						o.scale.set(
-							Math.min((cellSize * j) / 50, 1),
-							Math.min((cellSize * j) / 50, 1),
-							Math.min((cellSize * j) / 50, 1)
+							Math.min((cellSize.current * j) / 50, 1),
+							Math.min((cellSize.current * j) / 50, 1),
+							Math.min((cellSize.current * j) / 50, 1)
 						);
 					o.updateMatrix();
 					ref.current.setMatrixAt(id, o.matrix);
@@ -94,15 +96,17 @@ function Cells(props) {
 			}
 			ref.current.instanceMatrix.needsUpdate = true;
 		}
-	}, [instances, radius, props.page, cellSize]);
+	}, [instances, radius, props.page, cellSize.current]);
 
 	useFrame(({ clock }) => {
-		const time = clock.getElapsedTime();
-
+		if (!startTime.current) {
+			startTime.current = clock.getElapsedTime();
+		}
 		if (props.page === 2) {
-			if (cellSize < 5) {
+			const time = clock.getElapsedTime() - startTime.current;
+			if (cellSize.current < 200) {
 				for (let i = 0; i < instances; i++) {
-					setCellSize(0 + ((time * i) / 100) * speed);
+					cellSize.current = (time * i) / 100;
 				}
 			}
 			if (
@@ -112,8 +116,9 @@ function Cells(props) {
 				masterBank.current.position.z += time * -0.001;
 				masterBank.current.position.x += time * 0.001;
 			}
-			masterBank.current.rotation.z = time * 0.1;
+			masterBank.current.rotation.z = time * 0.05;
 		} else if (props.page === 3) {
+			const time = clock.getElapsedTime();
 			masterBank.current.rotation.z = 0;
 
 			for (let i = 0; i < instances; i++) {
@@ -133,7 +138,8 @@ function Cells(props) {
 				o.updateMatrix();
 				ref.current.setMatrixAt(id, o.matrix);
 			}
-		} else {
+		} else if (props.page >= 4) {
+			const time = clock.getElapsedTime();
 			masterBank.current.rotation.y += 0.001;
 			for (let j = 0; j < instances; j++) {
 				const phi = Math.acos(-1 + (2 * j) / instances);

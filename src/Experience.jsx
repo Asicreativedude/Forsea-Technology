@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState } from 'react';
-import { useControls, Leva } from 'leva';
+import { Leva } from 'leva';
 import {
 	EffectComposer,
 	Bloom,
@@ -30,20 +30,14 @@ function Experience() {
 	const [blur, setBlur] = useState(0);
 
 	const [currentPage, setCurrentPage] = useState(1);
-	// useEffect(() => {
-	// 	setCurrentPage(pages.SelectPage);
-
-	// 	let section = document.getElementById(`page-${currentPage}`);
-	// 	section.scrollIntoView({ behavior: 'smooth' });
-	// }, [pages.SelectPage, currentPage]);
+	const [progress, setProgress] = useState(0);
 	useEffect(() => {
 		ScrollTrigger.create({
 			start: '0',
 			scrub: true,
-			markers: true,
 			onUpdate: (self) => {
+				setProgress(self.progress * 10);
 				let page = self.progress * 10 + 1;
-
 				setCurrentPage(Math.round(page));
 			},
 		});
@@ -53,6 +47,7 @@ function Experience() {
 			setStemCells(true);
 			setBokehScale(10);
 			setBlur(9);
+			setCameraPosition([0, 0, 0]);
 		} else if (currentPage === 2) {
 			setBokehScale(0);
 			setBlur(0);
@@ -79,7 +74,6 @@ function Experience() {
 					near={0.1}
 				/>
 				<color attach='background' args={['#111']} />
-
 				<ambientLight intensity={3} />
 				<directionalLight
 					position={[1, cameraPosition[1] + 1, 5]}
@@ -88,23 +82,32 @@ function Experience() {
 				/>
 				<Suspense fallback={null}>
 					<StemCells />
-					<CellsInner isStemCells={isStemCells} page={currentPage} />
-					<Cells isStemCells={isStemCells} page={currentPage} />
-					<BioReactor page={currentPage} />
-					<Gmo page={currentPage} />
-					<Scalable page={currentPage} />
+
+					{currentPage >= 2 ? (
+						<>
+							<Cells
+								isStemCells={isStemCells}
+								page={currentPage}
+								progress={progress}
+							/>
+							<CellsInner isStemCells={isStemCells} page={currentPage} />
+							<BioReactor page={currentPage} />
+
+							<Scalable />
+						</>
+					) : null}
+					{currentPage === 6 ? <Gmo page={currentPage} /> : null}
 				</Suspense>
-				<EffectComposer smaa>
-					{currentPage !== 9
-						? ((<HueSaturation saturation={0.3} />), (<Bloom intensity={5} />))
-						: null}
+				{/* <EffectComposer smaa>
+					<HueSaturation saturation={0.3} />
+					<Bloom intensity={5} /> 
 					<DepthOfField
 						focusDistance={0}
 						focalLength={0.06}
 						bokehScale={bokehScale}
 						blur={blur}
 					/>
-				</EffectComposer>
+				</EffectComposer> */}
 			</Canvas>
 		</div>
 	);
