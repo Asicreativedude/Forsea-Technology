@@ -16,7 +16,7 @@ function BioReactor(props) {
 
 	useEffect(() => {
 		if (props.page === 6) {
-			setCellsGroupPosition([0, -400, -100]);
+			setCellsGroupPosition([0, -300, -50]);
 		}
 	}, [props, cellsGroupPosition]);
 
@@ -35,7 +35,6 @@ function BioReactor(props) {
 	}, [instances]);
 
 	useLayoutEffect(() => {
-		setInstances(20);
 		for (let i = 0; i < instances; i++) {
 			const id = i;
 			const o = new THREE.Object3D();
@@ -76,11 +75,11 @@ function BioReactor(props) {
 			}
 		} else if (props.page === 6) {
 			const loopDuration = 10; // duration of the loop in seconds
-			const scaleDuration = 5; // duration of the scale animation in seconds
+			const scaleDuration = 2; // duration of the scale animation in seconds
 			const scaleDelay = 5; // delay before the scale animation starts in seconds
 			const fadeInDuration = 1; // duration of the fade-in animation in seconds
 			const maxHeight = 10; // maximum height of the fountain
-			const startPosition = new THREE.Vector3(90, -35, 0); // starting position for all instances
+			const startPosition = new THREE.Vector3(40, -10, 0); // starting position for all instances
 
 			for (let i = 0; i < instances; i++) {
 				const t = (i / instances) * 0.2; // calculate a value between 0 and 1 based on the index
@@ -133,14 +132,6 @@ function BioReactor(props) {
 			<group position={cellsGroupPosition}>
 				<instancedMesh ref={ref} args={[null, null, instances]}>
 					<coneGeometry args={[0.5, 1, 4]} />
-					{/* <MeshTransmissionMaterial
-						color='#fff'
-						thickness={0.5}
-						transmission={0.2}
-						roughness={0.1}
-						ior={1.25}
-						depthWrite={false}
-					/> */}
 					<meshPhysicalMaterial color='#999' depthWrite={false} wireframe />
 				</instancedMesh>
 			</group>

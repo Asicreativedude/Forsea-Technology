@@ -8,6 +8,7 @@ import {
 	HueSaturation,
 	DepthOfField,
 } from '@react-three/postprocessing';
+
 import { PerspectiveCamera } from '@react-three/drei';
 import { Perf } from 'r3f-perf';
 // import gsap from 'gsap';
@@ -16,6 +17,8 @@ import Cells from './Components/Cells';
 import CellsInner from './Components/CellsInner';
 import StemCells from './Components/StemCells';
 import BioReactor from './Components/BioReactor';
+import Gmo from './Components/Gmo';
+import Scalable from './Components/Scalable';
 
 export function Experience() {
 	const pages = useControls({
@@ -54,7 +57,7 @@ export function Experience() {
 		} else if (currentPage === 4) {
 			setCameraPosition([0, -300, 0]);
 			setStemCells(false);
-		} else if (currentPage === 6) {
+		} else if (currentPage === 8) {
 			setCameraPosition([0, -400, 0]);
 		}
 	}, [currentPage]);
@@ -72,7 +75,7 @@ export function Experience() {
 				/>
 				<color attach='background' args={['#111']} />
 
-				<ambientLight intensity={3} />
+				<ambientLight intensity={1} />
 				<directionalLight
 					position={[1, cameraPosition[1] + 1, 5]}
 					intensity={1.5}
@@ -83,10 +86,13 @@ export function Experience() {
 					<CellsInner isStemCells={isStemCells} page={currentPage} />
 					<Cells isStemCells={isStemCells} page={currentPage} />
 					<BioReactor page={currentPage} />
+					<Gmo page={currentPage} />
+					<Scalable page={currentPage} />
 				</Suspense>
 				<EffectComposer smaa>
-					<Bloom intensity={5} />
-					<HueSaturation saturation={0.3} />
+					{currentPage !== 9
+						? ((<HueSaturation saturation={0.3} />), (<Bloom intensity={5} />))
+						: null}
 					<DepthOfField
 						focusDistance={0}
 						focalLength={0.06}

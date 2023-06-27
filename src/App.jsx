@@ -65,18 +65,7 @@ export function App() {
 					</div>
 				</div>
 			</div>
-			<div className='section'>
-				<div className='container'>
-					<div className='tech-c'>
-						<h2 className='tech-text'>No Scaffolding</h2>
-						<p>
-							Our organoids contain the edible cell. Therefore, scaffolding is
-							not necessary for cultivating our seafood meat.
-						</p>
-					</div>
-				</div>
-			</div>
-			<div className='section'>
+			<div className='section' id='page-7'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>Non-GMO</h2>
@@ -87,8 +76,19 @@ export function App() {
 						</p>
 					</div>
 				</div>
+			</div>
+			<div className='section' id='page-8'>
+				<div className='container'>
+					<div className='tech-c'>
+						<h2 className='tech-text'>No Scaffolding</h2>
+						<p>
+							Our organoids contain the edible cell. Therefore, scaffolding is
+							not necessary for cultivating our seafood meat.
+						</p>
+					</div>
+				</div>
 			</div>{' '}
-			<div className='section'>
+			<div className='section' id='page-9'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>A Scalable Cost- Effective Process</h2>
@@ -98,8 +98,8 @@ export function App() {
 						</p>
 					</div>
 				</div>
-			</div>{' '}
-			<div className='section'>
+			</div>
+			<div className='section' id='page-10'>
 				<div className='container'>
 					<div className='tech-c'>
 						<p>
@@ -109,8 +109,8 @@ export function App() {
 						</p>
 					</div>
 				</div>
-			</div>{' '}
-			<div className='section'>
+			</div>
+			<div className='section' id='page-11'>
 				<div className='container'>
 					<div className='tech-c'>
 						<p>
@@ -119,8 +119,8 @@ export function App() {
 						</p>
 					</div>
 				</div>
-			</div>{' '}
-			<div className='section'>
+			</div>
+			<div className='section' id='page-12'>
 				<div className='container'>
 					<div className='tech-c'>
 						<h2 className='tech-text'>Bring out your plates:</h2>

@@ -28,7 +28,7 @@ function Cells(props) {
 			setCellsGroupPosition([20, -300, -50]);
 			setRadius(15);
 		} else if (props.page === 6) {
-			setCellsGroupPosition([50, -420, -70]);
+			setCellsGroupPosition([30, -310, -50]);
 		}
 	}, [props, cellsGroupPosition]);
 
@@ -134,6 +134,7 @@ function Cells(props) {
 				ref.current.setMatrixAt(id, o.matrix);
 			}
 		} else {
+			masterBank.current.rotation.y += 0.001;
 			for (let j = 0; j < instances; j++) {
 				const phi = Math.acos(-1 + (2 * j) / instances);
 				let theta = Math.sqrt(instances * Math.PI) * phi;
