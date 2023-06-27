@@ -8,8 +8,7 @@ Scalable.propTypes = {
 	page: PropTypes.number.isRequired,
 };
 function Scalable(props) {
-	const modelUrl = 'src/assets/unagi3.glb';
-	const { nodes, materials } = useGLTF(modelUrl);
+	const { nodes, materials } = useGLTF('/unagi3.glb');
 	const unagi = useRef();
 
 	// materials.base.metalness = 1;
