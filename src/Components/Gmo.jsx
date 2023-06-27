@@ -1,19 +1,10 @@
 /* eslint-disable react/no-unknown-property */
 // import { MeshTransmissionMaterial } from '@react-three/drei';
 // import { useState } from 'react';
-import PropTypes from 'prop-types';
-
 import { GradientTexture } from '@react-three/drei';
 import * as THREE from 'three';
-Gmo.propTypes = {
-	page: PropTypes.number.isRequired,
-};
-function Gmo(props) {
-	// const [gmoPosition, setGmoPosition] = useState([6.5, -302.5, -10]);
 
-	if (props.page === 7) {
-		console.log('GMO');
-	}
+function Gmo() {
 	return (
 		<group position={[6.5, -302.5, -10]} rotation={[0, 0, 0]}>
 			<mesh>

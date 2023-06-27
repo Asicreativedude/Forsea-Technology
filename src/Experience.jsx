@@ -96,7 +96,7 @@ function Experience() {
 							<Scalable />
 						</>
 					) : null}
-					{currentPage === 6 ? <Gmo page={currentPage} /> : null}
+					{currentPage === 7 ? <Gmo page={currentPage} /> : null}
 				</Suspense>
 				{/* <EffectComposer smaa>
 					<HueSaturation saturation={0.3} />
