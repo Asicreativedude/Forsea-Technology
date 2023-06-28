@@ -16,6 +16,7 @@ export function App() {
 							</h2>
 						</div>
 					</div>
+					<div className='blur-c'></div>
 				</div>
 				<div className='section' id='page-2'>
 					<div className='container'>

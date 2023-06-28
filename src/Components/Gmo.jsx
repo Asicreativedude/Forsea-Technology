@@ -1,12 +1,28 @@
 /* eslint-disable react/no-unknown-property */
-// import { MeshTransmissionMaterial } from '@react-three/drei';
-// import { useState } from 'react';
+
 import { GradientTexture } from '@react-three/drei';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 function Gmo() {
+	const gmoRef = useRef();
+	useEffect(() => {
+		const gmoTl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-7',
+				start: 'top bottom',
+				end: 'bottom center',
+				scrub: true,
+			},
+		});
+		gmoTl.to(gmoRef.current.position, {
+			duration: 1,
+			x: 9,
+		});
+	}, []);
 	return (
-		<group position={[6.5, -302.5, -10]} rotation={[0, 0, 0]}>
+		<group ref={gmoRef} position={[20, -302.5, -10]} rotation={[0, 0, 0]}>
 			<mesh>
 				<torusGeometry args={[5, 0.1, 96, 96]} />
 				<meshPhysicalMaterial>

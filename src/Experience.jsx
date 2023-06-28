@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useState } from 'react';
-import { Leva } from 'leva';
+import { Suspense, useEffect, useState, useRef } from 'react';
+
 // import {
 // 	EffectComposer,
 // 	Bloom,
@@ -9,7 +9,6 @@ import { Leva } from 'leva';
 // 	DepthOfField,
 // } from '@react-three/postprocessing';
 
-import { PerspectiveCamera } from '@react-three/drei';
 import { Perf } from 'r3f-perf';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -19,18 +18,14 @@ import StemCells from './Components/StemCells';
 import BioReactor from './Components/BioReactor';
 import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
+import Camera from './Components/Camera';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function Experience() {
-	const [cameraPosition, setCameraPosition] = useState([0, 0, 0]);
-
-	const [isStemCells, setStemCells] = useState(true);
-	// const [bokehScale, setBokehScale] = useState(0);
-	// const [blur, setBlur] = useState(0);
-
 	const [currentPage, setCurrentPage] = useState(1);
 	const [progress, setProgress] = useState(0);
+	const directLightRef = useRef();
 	useEffect(() => {
 		ScrollTrigger.create({
 			start: '0',
@@ -41,66 +36,52 @@ function Experience() {
 				setCurrentPage(Math.round(page));
 			},
 		});
-	}, []);
-	useEffect(() => {
-		if (currentPage === 1) {
-			setStemCells(true);
-			// setBokehScale(10);
-			// setBlur(9);
-			setCameraPosition([0, 0, 0]);
-		} else if (currentPage === 2) {
-			// setBokehScale(0);
-			// setBlur(0);
-			setCameraPosition([0, -100, 0]);
-		} else if (currentPage === 3) {
-			setCameraPosition([0, -200, 0]);
-		} else if (currentPage === 4) {
-			setCameraPosition([0, -300, 0]);
-			setStemCells(false);
-		} else if (currentPage === 8) {
-			setCameraPosition([0, -400, 0]);
-		}
+		const lightTl = gsap.timeline({
+			scrollTrigger: {
+				start: '0',
+				end: '+=1000',
+				scrub: true,
+			},
+		});
+		lightTl.to(directLightRef.current, {
+			y: currentPage + 1.5,
+			duration: 1,
+		});
 	}, [currentPage]);
 
 	return (
 		<div className='canvas-c'>
-			<Leva />
-			<Canvas gl={{ antialias: true, alpha: true }}>
+			<Canvas
+				gl={{ antialias: true, alpha: true }}
+				camera={{
+					near: 0.1,
+					far: 1000,
+					fov: 55,
+				}}>
 				<Perf position='top-left' />
-				<PerspectiveCamera
-					position={[cameraPosition[0], cameraPosition[1], cameraPosition[2]]}
-					makeDefault
-					far={1000}
-					near={0.1}
-				/>
-				<color attach='background' args={['#111']} />
-				<ambientLight intensity={3} />
+				<Camera />
+				<color attach='background' args={['#222']} />
+				<ambientLight intensity={1} />
 				<directionalLight
-					position={[1, cameraPosition[1] + 1, 5]}
-					intensity={1.5}
+					ref={directLightRef}
+					intensity={1}
 					color={'#F8EDEB'}
 				/>
-				<Suspense fallback={null}>
+				<Suspense fallback={'loading'}>
 					<StemCells />
-
 					{currentPage >= 2 ? (
 						<>
-							<Cells
-								isStemCells={isStemCells}
-								page={currentPage}
-								progress={progress}
-							/>
-							<CellsInner isStemCells={isStemCells} page={currentPage} />
+							<Cells page={currentPage} progress={progress} />
+							<CellsInner page={currentPage} />
 							<BioReactor page={currentPage} />
-
+							<Gmo page={currentPage} />
 							<Scalable />
 						</>
 					) : null}
-					{currentPage === 7 ? <Gmo page={currentPage} /> : null}
 				</Suspense>
 				{/* <EffectComposer smaa>
 					<HueSaturation saturation={0.3} />
-					<Bloom intensity={5} /> 
+					<Bloom intensity={5} />
 					<DepthOfField
 						focusDistance={0}
 						focalLength={0.06}

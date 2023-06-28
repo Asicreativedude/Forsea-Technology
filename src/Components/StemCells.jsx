@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 
 import { MeshTransmissionMaterial, Float } from '@react-three/drei';
+import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef, useEffect } from 'react';
@@ -9,6 +10,10 @@ gsap.registerPlugin(ScrollTrigger);
 function StemCells() {
 	const stemCellsRef = useRef();
 	const stemCellsRef2 = useRef();
+	const insideMaterial = new THREE.MeshPhysicalMaterial({
+		color: '#555',
+		depthWrite: false,
+	});
 
 	useEffect(() => {
 		const tl = gsap.timeline({
@@ -35,6 +40,14 @@ function StemCells() {
 			},
 			'<'
 		);
+		tl.to(
+			'.blur-c',
+			{
+				duration: 0.5,
+				opacity: 0,
+			},
+			'<+0.5'
+		);
 	}, []);
 
 	return (
@@ -46,7 +59,7 @@ function StemCells() {
 				floatingRange={[-0.5, 0.5]}>
 				<group position={[1, 0, -8]} ref={stemCellsRef}>
 					<mesh>
-						<sphereGeometry args={[1, 64, 64]} />
+						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
 							color='#ffffff'
 							thickness={0.5}
@@ -54,11 +67,11 @@ function StemCells() {
 							roughness={0.6}
 							ior={1.25}
 							depthWrite={false}
+							resolution={128}
 						/>
 					</mesh>
-					<mesh>
-						<sphereGeometry args={[0.4, 64, 64]} />
-						<meshPhysicalMaterial color='#555' depthWrite={false} />
+					<mesh material={insideMaterial}>
+						<sphereGeometry args={[0.4, 16, 16]} />
 					</mesh>
 				</group>
 			</Float>
@@ -67,9 +80,9 @@ function StemCells() {
 				rotationIntensity={0}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[3, 0, -6]} ref={stemCellsRef2}>
+				<group position={[3, 0, -5]} ref={stemCellsRef2}>
 					<mesh>
-						<sphereGeometry args={[1, 64, 64]} />
+						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
 							color='#ffffff'
 							thickness={0.5}
@@ -77,11 +90,11 @@ function StemCells() {
 							roughness={0.6}
 							ior={1.25}
 							depthWrite={false}
+							resolution={128}
 						/>
 					</mesh>
-					<mesh>
-						<sphereGeometry args={[0.4, 64, 64]} />
-						<meshPhysicalMaterial color='#555' depthWrite={false} />
+					<mesh material={insideMaterial}>
+						<sphereGeometry args={[0.4, 16, 16]} />
 					</mesh>
 				</group>
 			</Float>

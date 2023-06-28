@@ -9,7 +9,8 @@ BioReactor.propTypes = {
 };
 function BioReactor(props) {
 	const ref = useRef();
-	const [instances, setInstances] = useState(20);
+	const instances = 20;
+	const tempObject = new THREE.Object3D();
 	const [cellsGroupPosition, setCellsGroupPosition] = useState([
 		25, -205, -100,
 	]);
@@ -37,10 +38,6 @@ function BioReactor(props) {
 	useLayoutEffect(() => {
 		for (let i = 0; i < instances; i++) {
 			const id = i;
-			const o = new THREE.Object3D();
-
-			o.updateMatrix();
-
 			ref.current.setColorAt(
 				id,
 				new THREE.Color(colors[id * 3], colors[id * 3 + 1], colors[id * 3 + 2])
@@ -65,13 +62,12 @@ function BioReactor(props) {
 				const y = radius * Math.cos(phi) * Math.sin(theta) + newI * 1.5;
 				const z = radius * Math.sin(phi) * Math.sin(theta) * -1.5 + newI;
 				const id = i;
-				const o = new THREE.Object3D();
-				o.position.set(x, y, z);
-				o.rotation.x = time + newI * delta;
-				o.rotation.y = time + newI * delta;
-				o.rotation.z = time + newI * delta;
-				o.updateMatrix();
-				ref.current.setMatrixAt(id, o.matrix);
+				tempObject.position.set(x, y, z);
+				tempObject.rotation.x = time + newI * delta;
+				tempObject.rotation.y = time + newI * delta;
+				tempObject.rotation.z = time + newI * delta;
+				tempObject.updateMatrix();
+				ref.current.setMatrixAt(id, tempObject.matrix);
 			}
 		} else if (props.page === 6) {
 			const loopDuration = 10; // duration of the loop in seconds
@@ -87,7 +83,7 @@ function BioReactor(props) {
 				const loopT = loopTime / loopDuration; // calculate a value between 0 and 1 based on the current time within the loop
 				const oscillationT = loopT * Math.PI * 2; // create a smooth oscillation between -1 and 1
 				const id = i;
-				const o = new THREE.Object3D();
+
 				let endPosition;
 				if (i % 5 === 0) {
 					endPosition = new THREE.Vector3(0, 0, 0);
@@ -107,20 +103,20 @@ function BioReactor(props) {
 				); // interpolate between the start and end positions
 				position.y += Math.pow(oscillationT, 2) * maxHeight + 1;
 				position.x += Math.pow(oscillationT, 2) * -maxHeight + 1; // add the parabolic trajectory to the y position
-				o.position.copy(position);
-				o.rotation.x = time + i * delta;
-				o.rotation.y = time + i * delta;
-				o.rotation.z = time + i * delta;
+				tempObject.position.copy(position);
+				tempObject.rotation.x = time + i * delta;
+				tempObject.rotation.y = time + i * delta;
+				tempObject.rotation.z = time + i * delta;
 				const fadeInT = Math.min(loopT * (loopDuration - fadeInDuration), 1); // create a value between 0 and 1 based on the current time within the loop, clamped to 1 after the fade-in duration
-				o.scale.setScalar(fadeInT);
+				tempObject.scale.setScalar(fadeInT);
 				const scaleT = Math.min(
 					Math.max((loopT * (loopDuration - scaleDelay)) / scaleDuration, 0),
 					1
 				);
-				o.scale.multiplyScalar(1 - scaleT); // set the scale of the instance based on the current time within the loop
+				tempObject.scale.multiplyScalar(1 - scaleT); // set the scale of the instance based on the current time within the loop
 
-				o.updateMatrix();
-				ref.current.setMatrixAt(id, o.matrix);
+				tempObject.updateMatrix();
+				ref.current.setMatrixAt(id, tempObject.matrix);
 			}
 		}
 

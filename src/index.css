@@ -60,3 +60,13 @@ p {
 	line-height: 160%;
 	max-width: 52.3rem;
 }
+.blur-c {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 66%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0);
+	backdrop-filter: blur(10px);
+	z-index: 0;
+}

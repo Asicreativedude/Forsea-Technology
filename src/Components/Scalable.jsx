@@ -1,18 +1,13 @@
 /* eslint-disable react/no-unknown-property */
 
 import { useGLTF } from '@react-three/drei';
-// import { useFrame } from '@react-three/fiber';
+
 import { useRef } from 'react';
 function Scalable() {
 	const { nodes, materials } = useGLTF('/unagi3.glb');
 	const unagi = useRef();
 
-	// materials.base.metalness = 1;
 	materials.base.opacity = 0.3;
-
-	// useFrame(({ clock }) => {
-	// 	// unagi.current.rotation.y += 0.001;
-	// });
 
 	return (
 		<group
