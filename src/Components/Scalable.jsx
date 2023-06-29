@@ -1,52 +1,25 @@
 /* eslint-disable react/no-unknown-property */
 
-import { useGLTF } from '@react-three/drei';
-
 import { useRef } from 'react';
-function Scalable() {
-	const { nodes, materials } = useGLTF('/unagi3.glb');
-	const unagi = useRef();
+import { MathUtils } from 'three';
+import { Instances, Model } from './ModelInstance';
 
-	materials.base.opacity = 0.3;
+function Scalable() {
+	const unagi = useRef();
+	const positions = Array.from({ length: 5 }, () => ({
+		position: [
+			MathUtils.randFloatSpread(1),
+			MathUtils.randFloatSpread(10),
+			MathUtils.randFloatSpread(1),
+		],
+	}));
 
 	return (
-		<group
-			ref={unagi}
-			dispose={null}
-			scale={[0.5, 0.5, 0.5]}
-			position={[0, -400.5, -2]}
-			rotation={[0, Math.PI / 4, 0]}>
-			<mesh
-				castShadow
-				receiveShadow
-				geometry={nodes.Sphere.geometry}
-				material={materials.Plastic}
-				rotation={[-Math.PI, 0, 0]}
-				scale={[-1.07, -0.249, -0.951]}
-			/>
-			<group scale={[0.876, 0.876, 0.656]}>
-				<mesh
-					castShadow
-					receiveShadow
-					geometry={nodes.Plane_1.geometry}
-					material={materials.base}
-				/>
-				<mesh
-					castShadow
-					receiveShadow
-					geometry={nodes.Plane_2.geometry}
-					material={materials.pasted__Salmon1}
-				/>
-			</group>
-			<mesh
-				castShadow
-				receiveShadow
-				geometry={nodes.Plane001.geometry}
-				material={materials.base}
-				position={[0, -0.001, -0.003]}
-				scale={[0.876, 0.876, 0.656]}
-			/>
-		</group>
+		<Instances ref={unagi}>
+			{positions.map((props, index) => (
+				<Model key={index} {...props} />
+			))}
+		</Instances>
 	);
 }
 export default Scalable;

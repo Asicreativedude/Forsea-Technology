@@ -70,3 +70,9 @@ p {
 	backdrop-filter: blur(10px);
 	z-index: 0;
 }
+
+.centerText {
+	text-align: center;
+	margin: 0 auto;
+	width: max-content;
+}

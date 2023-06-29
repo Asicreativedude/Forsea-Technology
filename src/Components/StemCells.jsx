@@ -21,7 +21,7 @@ function StemCells() {
 				trigger: '#page-1',
 				start: 'top top',
 				end: 'bottom top',
-				scrub: true,
+				scrub: 0.2,
 			},
 		});
 		tl.to(stemCellsRef.current.position, {

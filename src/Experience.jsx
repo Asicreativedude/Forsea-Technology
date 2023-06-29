@@ -1,14 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState, useRef } from 'react';
-
-// import {
-// 	EffectComposer,
-// 	Bloom,
-// 	HueSaturation,
-// 	DepthOfField,
-// } from '@react-three/postprocessing';
-
 import { Perf } from 'r3f-perf';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -18,20 +10,19 @@ import StemCells from './Components/StemCells';
 import BioReactor from './Components/BioReactor';
 import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
-import Camera from './Components/Camera';
+// import Camera from './Components/Camera';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function Experience() {
 	const [currentPage, setCurrentPage] = useState(1);
-	const [progress, setProgress] = useState(0);
 	const directLightRef = useRef();
+
 	useEffect(() => {
 		ScrollTrigger.create({
 			start: '0',
 			scrub: true,
 			onUpdate: (self) => {
-				setProgress(self.progress * 10);
 				let page = self.progress * 10 + 1;
 				setCurrentPage(Math.round(page));
 			},
@@ -55,11 +46,10 @@ function Experience() {
 				gl={{ antialias: true, alpha: true }}
 				camera={{
 					near: 0.1,
-					far: 1000,
+					far: 10000,
 					fov: 55,
 				}}>
 				<Perf position='top-left' />
-				<Camera />
 				<color attach='background' args={['#222']} />
 				<ambientLight intensity={1} />
 				<directionalLight
@@ -67,28 +57,14 @@ function Experience() {
 					intensity={1}
 					color={'#F8EDEB'}
 				/>
-				<Suspense fallback={'loading'}>
+				<Suspense fallback={null}>
 					<StemCells />
-					{currentPage >= 2 ? (
-						<>
-							<Cells page={currentPage} progress={progress} />
-							<CellsInner page={currentPage} />
-							<BioReactor page={currentPage} />
-							<Gmo page={currentPage} />
-							<Scalable />
-						</>
-					) : null}
+					<Cells page={currentPage} />
+					{/* <CellsInner page={currentPage} /> */}
+					<BioReactor page={currentPage} />
+					<Gmo page={currentPage} />
+					{currentPage === 10 && <Scalable page={currentPage} />}
 				</Suspense>
-				{/* <EffectComposer smaa>
-					<HueSaturation saturation={0.3} />
-					<Bloom intensity={5} />
-					<DepthOfField
-						focusDistance={0}
-						focalLength={0.06}
-						bokehScale={bokehScale}
-						blur={blur}
-					/>
-				</EffectComposer> */}
 			</Canvas>
 		</div>
 	);
