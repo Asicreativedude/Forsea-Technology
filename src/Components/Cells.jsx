@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { useRef, useEffect, useMemo, useLayoutEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
 import PropTypes from 'prop-types';
@@ -36,7 +36,7 @@ function Cells(props) {
 	}, []);
 
 	useLayoutEffect(() => {
-		if (props.page === 4) {
+		if (props.page >= 3) {
 			let i = 0;
 			for (let j = 0; j < instances.current; j++) {
 				const id = i++;
@@ -51,6 +51,13 @@ function Cells(props) {
 			}
 
 			cellInner.current.instanceColor.needsUpdate = true;
+			if (props.page === 3) {
+				gsap.set(masterBank.current.position, {
+					x: -20,
+					y: 30,
+					z: 0,
+				});
+			}
 		}
 	}, [props.page, colors]);
 
@@ -79,55 +86,54 @@ function Cells(props) {
 				cellInner.current.instanceMatrix.needsUpdate = true;
 				return;
 			}
-		}
-		const time = clock.getElapsedTime() - startTime.current;
-		masterBank.current.rotation.z = time * -0.05;
-		let i = 0;
-		let radiusIndex = 0;
-		let instancesLeft = instances.current;
-		if (cellSize.current < 200) {
-			for (let i = 0; i < instances.current; i++) {
-				cellSize.current = (time * i) / 100;
-			}
-		}
-
-		while (instancesLeft > 0) {
-			let instancesPerRadius = Math.ceil(
-				instancesLeft / (radii.length - radiusIndex) / 2
-			);
-			if (radiusIndex === 0) instancesPerRadius = 10;
-
-			const angleIncrement = (2 * Math.PI) / instancesPerRadius;
-			const currentRadius = radii[radiusIndex];
-			for (let j = 0; j < instancesPerRadius && instancesLeft > 0; j++) {
-				const angle = j * angleIncrement + Math.PI / instancesPerRadius;
-				tempObject.position.set(
-					currentRadius * Math.cos(angle),
-					currentRadius * Math.sin(angle),
-					0
-				);
-				const id = i++;
-				if (radiusIndex === 0) {
-					tempObject.scale.set(1, 1, 1);
-				} else {
-					if (startTime.current) {
-						tempObject.scale.set(
-							Math.min((cellSize.current * j) / 50, 1),
-							Math.min((cellSize.current * j) / 50, 1),
-							Math.min((cellSize.current * j) / 50, 1)
-						);
-					}
+		} else if (startTime.current && props.page === 2) {
+			const time = clock.getElapsedTime() - startTime.current;
+			masterBank.current.rotation.z = time * -0.05;
+			let i = 0;
+			let radiusIndex = 0;
+			let instancesLeft = instances.current;
+			if (cellSize.current < 200) {
+				for (let i = 0; i < instances.current; i++) {
+					cellSize.current = (time * i) / 100;
 				}
-
-				tempObject.updateMatrix();
-				cell.current.setMatrixAt(id, tempObject.matrix);
-				cellInner.current.setMatrixAt(id, tempObject.matrix);
-				instancesLeft--;
 			}
-			radiusIndex++;
-		}
 
-		if (props.page >= 4) {
+			while (instancesLeft > 0) {
+				let instancesPerRadius = Math.ceil(
+					instancesLeft / (radii.length - radiusIndex) / 2
+				);
+				if (radiusIndex === 0) instancesPerRadius = 10;
+
+				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
+				const currentRadius = radii[radiusIndex];
+				for (let j = 0; j < instancesPerRadius && instancesLeft > 0; j++) {
+					const angle = j * angleIncrement + Math.PI / instancesPerRadius;
+					tempObject.position.set(
+						currentRadius * Math.cos(angle),
+						currentRadius * Math.sin(angle),
+						0
+					);
+					const id = i++;
+					if (radiusIndex === 0) {
+						tempObject.scale.set(1, 1, 1);
+					} else {
+						if (startTime.current) {
+							tempObject.scale.set(
+								Math.min((cellSize.current * j) / 50, 1),
+								Math.min((cellSize.current * j) / 50, 1),
+								Math.min((cellSize.current * j) / 50, 1)
+							);
+						}
+					}
+
+					tempObject.updateMatrix();
+					cell.current.setMatrixAt(id, tempObject.matrix);
+					cellInner.current.setMatrixAt(id, tempObject.matrix);
+					instancesLeft--;
+				}
+				radiusIndex++;
+			}
+		} else if (props.page >= 3) {
 			const time = clock.getElapsedTime();
 			masterBank.current.rotation.y += 0.001;
 			for (let j = 0; j < instances.current; j++) {
@@ -147,6 +153,9 @@ function Cells(props) {
 		cell.current.instanceMatrix.needsUpdate = true;
 		cellInner.current.instanceMatrix.needsUpdate = true;
 	});
+
+	const camera = useThree((state) => state.camera);
+
 	useEffect(() => {
 		const initialTl = gsap.timeline({
 			scrollTrigger: {
@@ -156,10 +165,11 @@ function Cells(props) {
 				scrub: 0.2,
 			},
 		});
-		// initialTl.from(opacity, {
-		// 	duration: 1,
-		// 	current: 0,
-		// });
+		initialTl.from(masterBank.current.position, {
+			duration: 1,
+			y: -25,
+		});
+
 		const cellBankTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-2',
@@ -168,10 +178,29 @@ function Cells(props) {
 				scrub: 0.2,
 			},
 		});
-		// cellBankTl.to(opacity, {
-		// 	duration: 1,
-		// 	current: 0,
-		// });
+		cellBankTl.to(
+			camera.position,
+			{
+				duration: 1,
+				x: -15,
+			},
+			'<'
+		);
+		const organoidInsideTl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-4',
+				start: 'top bottom',
+				end: 'top top',
+				scrub: 0.2,
+			},
+		});
+		organoidInsideTl.to(masterBank.current.position, {
+			duration: 1,
+			x: -15,
+			z: 0,
+			y: 0,
+		});
+
 		const organoidTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-4',
@@ -184,8 +213,8 @@ function Cells(props) {
 		organoidTl
 			.to(masterBank.current.position, {
 				duration: 1,
-				z: -40,
-				x: 20,
+				z: -35,
+				x: 2,
 			})
 			.to(
 				radius,
@@ -206,13 +235,13 @@ function Cells(props) {
 		});
 		organoidMoveTl.to(masterBank.current.position, {
 			duration: 1,
-			y: -310,
-			x: 35,
+			x: 16,
+			y: -13,
 		});
-	}, []);
+	}, [camera]);
 	return (
 		<>
-			<group position={[28, -13, -25]} ref={masterBank}>
+			<group position={[28, -13, -30]} ref={masterBank}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
 						<sphereGeometry args={[1, 32, 32]} />

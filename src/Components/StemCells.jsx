@@ -43,10 +43,10 @@ function StemCells() {
 		tl.to(
 			'.blur-c',
 			{
-				duration: 0.5,
+				duration: 1,
 				opacity: 0,
 			},
-			'<+0.5'
+			'<'
 		);
 	}, []);
 

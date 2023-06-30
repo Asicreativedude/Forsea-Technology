@@ -5,12 +5,11 @@ import { Perf } from 'r3f-perf';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Cells from './Components/Cells';
-import CellsInner from './Components/CellsInner';
 import StemCells from './Components/StemCells';
 import BioReactor from './Components/BioReactor';
 import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
-// import Camera from './Components/Camera';
+import GrowthFactors from './Components/GrowthFactors';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -58,12 +57,16 @@ function Experience() {
 					color={'#F8EDEB'}
 				/>
 				<Suspense fallback={null}>
-					<StemCells />
-					<Cells page={currentPage} />
-					{/* <CellsInner page={currentPage} /> */}
-					<BioReactor page={currentPage} />
-					<Gmo page={currentPage} />
-					{currentPage === 10 && <Scalable page={currentPage} />}
+					{currentPage < 8 && (
+						<>
+							<StemCells />
+							<Cells page={currentPage} />
+							<BioReactor page={currentPage} />
+							{currentPage === 6 && <GrowthFactors />}
+							<Gmo page={currentPage} />
+						</>
+					)}
+					{currentPage >= 8 && <Scalable page={currentPage} />}
 				</Suspense>
 			</Canvas>
 		</div>

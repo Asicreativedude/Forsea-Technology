@@ -12,17 +12,29 @@ function Gmo() {
 			scrollTrigger: {
 				trigger: '#page-7',
 				start: 'top bottom',
-				end: 'bottom center',
-				scrub: true,
+				end: 'top top',
+				scrub: 0.2,
 			},
 		});
 		gmoTl.to(gmoRef.current.position, {
 			duration: 1,
-			x: 9,
+			x: -7,
+		});
+		const gmoExitTl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-7',
+				start: 'top -25%',
+				end: 'bottom top',
+				scrub: 0.2,
+			},
+		});
+		gmoExitTl.to(gmoRef.current.position, {
+			duration: 1,
+			x: 15,
 		});
 	}, []);
 	return (
-		<group ref={gmoRef} position={[20, -302.5, -10]} rotation={[0, 0, 0]}>
+		<group ref={gmoRef} position={[25, -3, -5]} rotation={[0, 0, 0]}>
 			<mesh>
 				<torusGeometry args={[5, 0.1, 96, 96]} />
 				<meshPhysicalMaterial>
