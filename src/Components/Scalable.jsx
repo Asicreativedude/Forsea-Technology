@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 
 import { useEffect, useRef } from 'react';
-// import { MathUtils } from 'three';
 import { Instances, Model } from './ModelInstance';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Float } from '@react-three/drei';

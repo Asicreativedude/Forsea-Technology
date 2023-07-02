@@ -134,6 +134,7 @@ export function App() {
 						</div>
 					</div>
 				</div>
+				<div className='hiding-c'></div>
 			</div>
 		</>
 	);

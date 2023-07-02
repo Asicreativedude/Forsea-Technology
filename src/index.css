@@ -68,7 +68,7 @@ p {
 	width: 66%;
 	height: 100%;
 	background: rgba(255, 255, 255, 0);
-	backdrop-filter: blur(5px);
+	backdrop-filter: blur(3px);
 	z-index: 0;
 }
 
@@ -76,4 +76,17 @@ p {
 	text-align: center;
 	margin: 0 auto;
 	width: max-content;
+}
+
+.hiding-c {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #222;
+	opacity: 0;
+	z-index: 0;
+	pointer-events: none;
+	/* border: blue 8px solid; */
 }

@@ -10,6 +10,7 @@ import BioReactor from './Components/BioReactor';
 import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
+import Organoid from './Components/Organoid';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,16 +58,13 @@ function Experience() {
 					color={'#F8EDEB'}
 				/>
 				<Suspense fallback={null}>
-					{currentPage < 8 && (
-						<>
-							<StemCells />
-							<Cells page={currentPage} />
-							<BioReactor page={currentPage} />
-							{currentPage === 6 && <GrowthFactors />}
-							<Gmo page={currentPage} />
-						</>
-					)}
-					{currentPage >= 8 && <Scalable page={currentPage} />}
+					<StemCells />
+					<Cells page={currentPage} />
+					<BioReactor page={currentPage} />
+					<Organoid page={currentPage} />
+					<GrowthFactors />
+					<Gmo page={currentPage} />
+					<Scalable page={currentPage} />
 				</Suspense>
 			</Canvas>
 		</div>

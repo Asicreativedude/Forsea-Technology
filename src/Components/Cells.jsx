@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useRef, useEffect, useMemo, useLayoutEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
@@ -14,79 +14,18 @@ function Cells(props) {
 	const cellInner = useRef();
 	const startTime = useRef(null);
 	const masterBank = useRef();
-	const radius = useRef(25);
 	const instances = useRef(200);
 	const cellSize = useRef(0);
-	const speed = 0.5;
 	const tempObject = new THREE.Object3D();
 	const radii = [5, 8, 11, 14, 17, 20, 23];
-	const colors = useMemo(() => {
-		// let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
-		let cellColors = ['#FFC2D1', '#FFB5A7', '#FB6F92', '#FCD5CE'];
-
-		const numInstances = instances.current;
-		const colorArray = new Array(numInstances * 3).fill(0);
-		for (let i = 0; i < numInstances; i++) {
-			const color = new THREE.Color(
-				cellColors[Math.floor(Math.random() * cellColors.length)]
-			);
-			color.toArray(colorArray, i * 3);
-		}
-		return colorArray;
-	}, []);
-
-	useLayoutEffect(() => {
-		if (props.page >= 3) {
-			let i = 0;
-			for (let j = 0; j < instances.current; j++) {
-				const id = i++;
-				cellInner.current.setColorAt(
-					id,
-					new THREE.Color(
-						colors[id * 3],
-						colors[id * 3 + 1],
-						colors[id * 3 + 2]
-					)
-				);
-			}
-
-			cellInner.current.instanceColor.needsUpdate = true;
-			if (props.page === 3) {
-				gsap.set(masterBank.current.position, {
-					x: -20,
-					y: 30,
-					z: 0,
-				});
-			}
-		}
-	}, [props.page, colors]);
 
 	useFrame(({ clock }) => {
 		if (!startTime.current) {
 			if (props.page === 2) {
 				startTime.current = clock.getElapsedTime();
-			} else {
-				let i = 0;
-				const angleIncrement = (2 * Math.PI) / 10;
-				const currentRadius = 5;
-				for (let j = 0; j <= 10; j++) {
-					const angle = j * angleIncrement + Math.PI / 10;
-					tempObject.position.set(
-						currentRadius * Math.cos(angle),
-						currentRadius * Math.sin(angle),
-						0
-					);
-					const id = i++;
-					tempObject.scale.set(1, 1, 1);
-					tempObject.updateMatrix();
-					cell.current.setMatrixAt(id, tempObject.matrix);
-					cellInner.current.setMatrixAt(id, tempObject.matrix);
-				}
-				cell.current.instanceMatrix.needsUpdate = true;
-				cellInner.current.instanceMatrix.needsUpdate = true;
-				return;
 			}
-		} else if (startTime.current && props.page === 2) {
+			masterBank.current.scale.set(0, 0, 0);
+		} else {
 			const time = clock.getElapsedTime() - startTime.current;
 			masterBank.current.rotation.z = time * -0.05;
 			let i = 0;
@@ -94,7 +33,7 @@ function Cells(props) {
 			let instancesLeft = instances.current;
 			if (cellSize.current < 200) {
 				for (let i = 0; i < instances.current; i++) {
-					cellSize.current = (time * i) / 100;
+					cellSize.current = (time * i) / 200;
 				}
 			}
 
@@ -133,22 +72,6 @@ function Cells(props) {
 				}
 				radiusIndex++;
 			}
-		} else if (props.page >= 3) {
-			const time = clock.getElapsedTime();
-			masterBank.current.rotation.y += 0.001;
-			for (let j = 0; j < instances.current; j++) {
-				const phi = Math.acos(-1 + (2 * j) / instances.current);
-				let theta = Math.sqrt(instances.current * Math.PI) * phi;
-				theta += Math.sin(time * speed + j) * 0.1; // Add small, random movement
-				const x = radius.current * Math.sin(phi) * Math.cos(theta);
-				const y = radius.current * Math.cos(phi);
-				const z = radius.current * Math.sin(phi) * Math.sin(theta);
-				const id = j;
-				tempObject.position.set(x, y, z);
-				tempObject.updateMatrix();
-				cell.current.setMatrixAt(id, tempObject.matrix);
-				cellInner.current.setMatrixAt(id, tempObject.matrix);
-			}
 		}
 		cell.current.instanceMatrix.needsUpdate = true;
 		cellInner.current.instanceMatrix.needsUpdate = true;
@@ -165,10 +88,17 @@ function Cells(props) {
 				scrub: 0.2,
 			},
 		});
-		initialTl.from(masterBank.current.position, {
-			duration: 1,
-			y: -25,
-		});
+		initialTl
+			.from(masterBank.current.position, {
+				duration: 1,
+				y: -25,
+			})
+			.to(masterBank.current.scale, {
+				duration: 1,
+				x: 1,
+				y: 1,
+				z: 1,
+			});
 
 		const cellBankTl = gsap.timeline({
 			scrollTrigger: {
@@ -186,58 +116,6 @@ function Cells(props) {
 			},
 			'<'
 		);
-		const organoidInsideTl = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-4',
-				start: 'top bottom',
-				end: 'top top',
-				scrub: 0.2,
-			},
-		});
-		organoidInsideTl.to(masterBank.current.position, {
-			duration: 1,
-			x: -15,
-			z: 0,
-			y: 0,
-		});
-
-		const organoidTl = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-4',
-				start: 'top top',
-				end: 'bottom top',
-				scrub: 0.2,
-			},
-		});
-
-		organoidTl
-			.to(masterBank.current.position, {
-				duration: 1,
-				z: -35,
-				x: 2,
-			})
-			.to(
-				radius,
-				{
-					duration: 1,
-					current: 15,
-				},
-				'<'
-			);
-
-		const organoidMoveTl = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-5',
-				start: 'top top',
-				end: 'bottom top',
-				scrub: 0.2,
-			},
-		});
-		organoidMoveTl.to(masterBank.current.position, {
-			duration: 1,
-			x: 16,
-			y: -13,
-		});
 	}, [camera]);
 	return (
 		<>
@@ -259,10 +137,7 @@ function Cells(props) {
 				<group>
 					<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
 						<sphereGeometry args={[0.4, 8, 8]} />
-						<meshPhysicalMaterial
-							color={props.page >= 4 ? colors : '#666'}
-							depthWrite={false}
-						/>
+						<meshPhysicalMaterial color={'#666'} depthWrite={false} />
 					</instancedMesh>
 				</group>
 			</group>
