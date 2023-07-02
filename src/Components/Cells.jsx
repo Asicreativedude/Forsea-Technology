@@ -119,7 +119,7 @@ function Cells(props) {
 	}, [camera]);
 	return (
 		<>
-			<group position={[28, -13, -30]} ref={masterBank}>
+			<group position={[18, -13, -20]} ref={masterBank}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
 						<sphereGeometry args={[1, 32, 32]} />
@@ -137,7 +137,7 @@ function Cells(props) {
 				<group>
 					<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
 						<sphereGeometry args={[0.4, 8, 8]} />
-						<meshPhysicalMaterial color={'#666'} depthWrite={false} />
+						<meshPhysicalMaterial color={'#eee'} depthWrite={false} />
 					</instancedMesh>
 				</group>
 			</group>

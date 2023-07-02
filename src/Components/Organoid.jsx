@@ -17,8 +17,8 @@ function Organoid(props) {
 	const masterBank = useRef();
 
 	const startTime = useRef();
-	const radius = useRef(25);
-	const instances = useRef(200);
+	const radius = useRef(15);
+	const instances = useRef(250);
 	const cellSize = useRef(0);
 	const speed = 0.5;
 	const tempObject = new THREE.Object3D();
@@ -125,7 +125,7 @@ function Organoid(props) {
 				radius,
 				{
 					duration: 1,
-					current: 15,
+					current: 10,
 				},
 				'<'
 			);

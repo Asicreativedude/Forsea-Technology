@@ -11,8 +11,8 @@ function BioReactor() {
 	const cellInner = useRef();
 	const bioReactorRef = useRef();
 	const cellSize = useRef(0);
-	const growhtInstances = 20;
-	const instances = 100;
+	const growhtInstances = 100;
+	const instances = 200;
 	const growthFactor = new THREE.Object3D();
 	const cell = new THREE.Object3D();
 
@@ -50,9 +50,9 @@ function BioReactor() {
 			const phi = Math.sqrt(newI) * 0.1;
 			const theta = time * 0.2 * Math.sqrt(newI);
 
-			const x = 20 * Math.sin(phi) * Math.cos(theta) * 1.5 + newI;
+			const x = 20 * Math.sin(phi) * Math.cos(theta) * 1.5;
 			const y = 20 * Math.cos(phi) * Math.sin(theta) + newI * 1.5;
-			const z = 20 * Math.sin(phi) * Math.sin(theta) * -1.5 + newI;
+			const z = 20 * Math.sin(phi) * Math.sin(theta) * -1.5;
 			const id = i;
 
 			growthFactor.position.set(x, y, z);
@@ -151,7 +151,7 @@ function BioReactor() {
 			<group position={[20, -10, -70]}>
 				<instancedMesh ref={cellInner} args={[null, null, instances]}>
 					<sphereGeometry args={[0.4, 8, 8]} />
-					<meshPhysicalMaterial color='#666' depthWrite={false} />
+					<meshPhysicalMaterial color='#eee' depthWrite={false} />
 				</instancedMesh>
 			</group>
 		</group>

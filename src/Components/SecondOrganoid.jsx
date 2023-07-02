@@ -90,7 +90,7 @@ function Organoid(props) {
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-8',
-				start: 'top bottom',
+				start: 'top center',
 				end: 'top top',
 				scrub: 0.2,
 			},
@@ -125,7 +125,7 @@ function Organoid(props) {
 
 	return (
 		<>
-			<group position={[-5, 8, -35]} ref={masterBank}>
+			<group position={[-5, 15, -35]} ref={masterBank}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
 						<sphereGeometry args={[1, 32, 32]} />

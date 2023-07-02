@@ -109,7 +109,7 @@ function GrowthFactors() {
 				growthRef.current.position,
 				{
 					duration: 1,
-					x: -15,
+					x: -20,
 					y: 0,
 					z: -50,
 				},
@@ -137,7 +137,7 @@ function GrowthFactors() {
 				{
 					duration: 1,
 					x: 5,
-					y: 0,
+					y: -10,
 					z: -50,
 				},
 				'<'
@@ -147,7 +147,7 @@ function GrowthFactors() {
 	return (
 		<group scale={[0, 0, 0]} position={[0, 0, -50]} ref={growthRef}>
 			<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
-				<coneGeometry args={[0.5, 1, 4]} />
+				<coneGeometry args={[0.8, 1, 4]} />
 				<meshPhysicalMaterial color={colors} depthWrite={false} wireframe />
 			</instancedMesh>
 		</group>

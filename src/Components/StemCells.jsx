@@ -11,7 +11,7 @@ function StemCells() {
 	const stemCellsRef = useRef();
 	const stemCellsRef2 = useRef();
 	const insideMaterial = new THREE.MeshPhysicalMaterial({
-		color: '#555',
+		color: '#eee',
 		depthWrite: false,
 	});
 
