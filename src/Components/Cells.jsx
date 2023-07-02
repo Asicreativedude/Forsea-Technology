@@ -19,6 +19,7 @@ function Cells(props) {
 	const tempObject = new THREE.Object3D();
 	const radii = [5, 8, 11, 14, 17, 20, 23];
 
+	const opacity = useRef(1);
 	useFrame(({ clock }) => {
 		if (!startTime.current) {
 			if (props.page === 2) {
@@ -73,8 +74,11 @@ function Cells(props) {
 				radiusIndex++;
 			}
 		}
+
 		cell.current.instanceMatrix.needsUpdate = true;
 		cellInner.current.instanceMatrix.needsUpdate = true;
+		cell.current.material.needsUpdate = true;
+		cellInner.current.material.needsUpdate = true;
 	});
 
 	const camera = useThree((state) => state.camera);
@@ -100,22 +104,27 @@ function Cells(props) {
 				z: 1,
 			});
 
-		const cellBankTl = gsap.timeline({
+		const opacity = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-2',
 				start: 'top top',
-				end: 'bottom top',
+				end: 'bottom center',
 				scrub: 0.2,
 			},
 		});
-		cellBankTl.to(
-			camera.position,
-			{
+		opacity
+			.to(cell.current.material, {
 				duration: 1,
-				x: -15,
-			},
-			'<'
-		);
+				opacity: 0,
+			})
+			.to(
+				cellInner.current.material,
+				{
+					duration: 1,
+					opacity: 0,
+				},
+				'<'
+			);
 	}, [camera]);
 	return (
 		<>
@@ -131,13 +140,20 @@ function Cells(props) {
 							ior={1.25}
 							depthWrite={false}
 							depthTest={false}
+							opacity={opacity.current}
+							transparent
 						/>
 					</instancedMesh>
 				</group>
 				<group>
 					<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
 						<sphereGeometry args={[0.4, 8, 8]} />
-						<meshPhysicalMaterial color={'#eee'} depthWrite={false} />
+						<meshPhysicalMaterial
+							color={'#eee'}
+							transparent
+							opacity={opacity.current}
+							depthWrite={false}
+						/>
 					</instancedMesh>
 				</group>
 			</group>

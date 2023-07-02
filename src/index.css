@@ -77,6 +77,7 @@ p {
 #page-10 {
 	position: relative;
 	background-color: #222;
+	overflow: hidden;
 }
 .centerText-c {
 	text-align: center;
@@ -97,7 +98,6 @@ p {
 }
 .center-text.hidden {
 	opacity: 0;
-	/* pointer-events: none; */
 }
 .white-bg {
 	background: #edf1f7;

@@ -117,8 +117,8 @@ function Organoid(props) {
 		organoidTl
 			.to(masterBank.current.position, {
 				duration: 1,
-				z: -35,
-				x: 2,
+				z: -30,
+				x: 15,
 			})
 			.to(
 				radius,
@@ -176,7 +176,7 @@ function Organoid(props) {
 
 	return (
 		<>
-			<group position={[-15, 0, 0]} ref={masterBank}>
+			<group position={[0, 0, 0]} ref={masterBank}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
 						<sphereGeometry args={[1, 32, 32]} />

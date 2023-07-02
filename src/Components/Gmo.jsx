@@ -18,7 +18,7 @@ function Gmo() {
 		});
 		gmoTl.to(gmoRef.current.position, {
 			duration: 1,
-			x: -10,
+			x: 5,
 		});
 		const gmoExitTl = gsap.timeline({
 			scrollTrigger: {

@@ -39,8 +39,9 @@ function Experience() {
 			y: currentPage + 1.5,
 			duration: 1,
 		});
-	}, [currentPage]);
+	}, [currentPage, directLightRef]);
 
+	//white bg reveal
 	useEffect(() => {
 		const centerTexts = document.querySelectorAll('.center-text');
 		const lastPartTl = gsap.timeline({
@@ -52,7 +53,6 @@ function Experience() {
 				pin: true,
 				onUpdate: (self) => {
 					let roundProgress = Math.round(self.progress * 10) / 10;
-					console.log(roundProgress);
 					if (roundProgress === 0.5) {
 						centerTexts.forEach((text) => {
 							text.classList.toggle('hidden');
