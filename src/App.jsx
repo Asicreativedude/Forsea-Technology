@@ -50,7 +50,7 @@ export function App() {
 				<div className='section' id='page-5'>
 					<div className='container'>
 						<div className='tech-c'>
-							<h2 className='tech-text'>
+							<h2 className='tech-text big-title'>
 								With our organoids, we are changing the landscape of cultivated
 								meat
 							</h2>
@@ -104,26 +104,21 @@ export function App() {
 				</div>
 				<div className='section' id='page-10'>
 					<div className='container'>
-						<div className='tech-c centerText'>
-							<p>
+						<div className='tech-c centerText-c'>
+							<p className='center-text'>
 								Our revolutionary organoid technology allows us to produce
 								cultivated meat very similar to the way nature does it – while
 								addressing major industry bottlenecks.
 							</p>
-						</div>
-					</div>
-				</div>
-				<div className='section' id='page-11'>
-					<div className='container'>
-						<div className='tech-c centerText'>
-							<p>
+							<p className='center-text hidden'>
 								Using food processing methods, our organoids are combined to
 								form just about any seafood portion we aim to achieve.
 							</p>
 						</div>
+						<div className='white-bg'></div>
 					</div>
 				</div>
-				<div className='section' id='page-12'>
+				<div className='section' id='page-11'>
 					<div className='container'>
 						<div className='tech-c'>
 							<h2 className='tech-text'>Bring out your plates:</h2>

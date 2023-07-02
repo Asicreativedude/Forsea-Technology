@@ -41,6 +41,34 @@ function Experience() {
 		});
 	}, [currentPage]);
 
+	useEffect(() => {
+		const centerTexts = document.querySelectorAll('.center-text');
+		const lastPartTl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-10',
+				start: 'top top',
+				end: 'bottom top',
+				scrub: 0.2,
+				pin: true,
+				onUpdate: (self) => {
+					let roundProgress = Math.round(self.progress * 10) / 10;
+					console.log(roundProgress);
+					if (roundProgress === 0.5) {
+						centerTexts.forEach((text) => {
+							text.classList.toggle('hidden');
+						});
+					}
+				},
+			},
+		});
+		lastPartTl.to('.white-bg', {
+			duration: 1,
+			width: '100%',
+			height: '100%',
+			borderRadius: '0',
+		});
+	}, []);
+
 	return (
 		<div className='canvas-c'>
 			<Canvas
@@ -74,8 +102,7 @@ function Experience() {
 }
 export default Experience;
 
-{
-	/**pages camera settings:
+/**pages camera settings:
 1: 0,0,0
 2: 250 instances
 3:
@@ -89,4 +116,3 @@ NoScaffolding add another organoid
 
 change colors to pinkish skien yellow
 */
-}

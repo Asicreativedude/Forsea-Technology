@@ -15,7 +15,6 @@ function Organoid(props) {
 	const cell = useRef();
 	const cellInner = useRef();
 	const masterBank = useRef();
-
 	const startTime = useRef();
 	const radius = useRef(15);
 	const instances = useRef(250);

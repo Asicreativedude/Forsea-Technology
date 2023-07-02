@@ -45,6 +45,9 @@ html {
 .tech-text {
 	font-size: 4.6rem;
 }
+.big-title {
+	font-size: 8.6rem;
+}
 h2 {
 	margin: 0;
 	font-family: Merriweather;
@@ -59,7 +62,7 @@ p {
 		Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-weight: 300;
 	line-height: 160%;
-	max-width: 52.3rem;
+	max-width: 50rem;
 }
 .blur-c {
 	position: absolute;
@@ -71,22 +74,42 @@ p {
 	backdrop-filter: blur(3px);
 	z-index: 0;
 }
-
-.centerText {
+#page-10 {
+	position: relative;
+	background-color: #222;
+}
+.centerText-c {
 	text-align: center;
 	margin: 0 auto;
-	width: max-content;
+	width: 60rem;
+	height: 75vh;
+	color: black;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
-
-.hiding-c {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #222;
+.center-text {
+	position: absolute;
+	max-width: 100%;
+	transition: all 0.2s ease-in-out;
+	font-size: 3.2rem;
+}
+.center-text.hidden {
 	opacity: 0;
-	z-index: 0;
-	pointer-events: none;
-	/* border: blue 8px solid; */
+	/* pointer-events: none; */
+}
+.white-bg {
+	background: #edf1f7;
+	width: 75vh;
+	height: 75vh;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 100%;
+}
+#page-11 {
+	background-color: #edf1f7;
+	color: #222;
 }
