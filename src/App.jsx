@@ -105,12 +105,12 @@ export function App() {
 				<div className='section' id='page-10'>
 					<div className='container'>
 						<div className='tech-c centerText-c'>
-							<p className='center-text'>
+							<p className='center-text hidden'>
 								Our revolutionary organoid technology allows us to produce
 								cultivated meat very similar to the way nature does it – while
 								addressing major industry bottlenecks.
 							</p>
-							<p className='center-text hidden'>
+							<p className='center-text '>
 								Using food processing methods, our organoids are combined to
 								form just about any seafood portion we aim to achieve.
 							</p>

@@ -18,6 +18,7 @@ gsap.registerPlugin(ScrollTrigger);
 function Experience() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const directLightRef = useRef();
+	const [switchText, setSwitchText] = useState(false);
 
 	useEffect(() => {
 		ScrollTrigger.create({
@@ -43,7 +44,6 @@ function Experience() {
 
 	//white bg reveal
 	useEffect(() => {
-		const centerTexts = document.querySelectorAll('.center-text');
 		const lastPartTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-10',
@@ -53,10 +53,10 @@ function Experience() {
 				pin: true,
 				onUpdate: (self) => {
 					let roundProgress = Math.round(self.progress * 10) / 10;
-					if (roundProgress === 0.5) {
-						centerTexts.forEach((text) => {
-							text.classList.toggle('hidden');
-						});
+					if (roundProgress > 0.5) {
+						setSwitchText(true);
+					} else {
+						setSwitchText(false);
 					}
 				},
 			},
@@ -68,6 +68,13 @@ function Experience() {
 			borderRadius: '0',
 		});
 	}, []);
+
+	useEffect(() => {
+		const centerTexts = document.querySelectorAll('.center-text');
+		centerTexts.forEach((text) => {
+			text.classList.toggle('hidden');
+		});
+	}, [switchText]);
 
 	return (
 		<div className='canvas-c'>
