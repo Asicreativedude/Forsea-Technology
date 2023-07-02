@@ -9,6 +9,7 @@ function GrowthFactors() {
 	const ref = useRef();
 	const growthFactor = new THREE.Object3D();
 	const growhtInstances = 50;
+	const startTime = useRef(null);
 	const growthRef = useRef();
 	const colors = useMemo(() => {
 		let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
@@ -35,7 +36,7 @@ function GrowthFactors() {
 	}, [colors, growhtInstances]);
 
 	useFrame(({ clock }, delta) => {
-		const time = clock.getElapsedTime();
+		const time = clock.getElapsedTime() - startTime.current;
 		const loopDuration = 10; // duration of the loop in seconds
 		const scaleDuration = 2; // duration of the scale animation in seconds
 		const scaleDelay = 5; // delay before the scale animation starts in seconds
@@ -83,12 +84,39 @@ function GrowthFactors() {
 			growthFactor.updateMatrix();
 			ref.current.setMatrixAt(id, growthFactor.matrix);
 		}
+
 		ref.current.instanceMatrix.needsUpdate = true;
 		ref.current.material.needsUpdate = true;
 	});
 
 	useEffect(() => {
-		const opacityTl = gsap.timeline({
+		const initialTl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-6',
+				start: 'top center',
+				end: 'top top',
+				scrub: 0.2,
+			},
+		});
+		initialTl
+			.to(growthRef.current.scale, {
+				duration: 1,
+				x: 1,
+				y: 1,
+				z: 1,
+			})
+			.to(
+				growthRef.current.position,
+				{
+					duration: 1,
+					x: -15,
+					y: 0,
+					z: -50,
+				},
+				'<'
+			);
+
+		const growthTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-6',
 				start: 'top top',
@@ -96,8 +124,9 @@ function GrowthFactors() {
 				scrub: 0.2,
 			},
 		});
-		opacityTl
-			.to(ref.current.scale, {
+
+		growthTl
+			.to(growthRef.current.scale, {
 				duration: 1,
 				x: 0,
 				y: 0,
@@ -107,16 +136,16 @@ function GrowthFactors() {
 				growthRef.current.position,
 				{
 					duration: 1,
-					x: 0,
+					x: 5,
 					y: 0,
-					z: 0,
+					z: -50,
 				},
 				'<'
 			);
 	}, []);
 
 	return (
-		<group position={[0, 0, -50]} ref={growthRef}>
+		<group scale={[0, 0, 0]} position={[0, 0, -50]} ref={growthRef}>
 			<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
 				<coneGeometry args={[0.5, 1, 4]} />
 				<meshPhysicalMaterial color={colors} depthWrite={false} wireframe />

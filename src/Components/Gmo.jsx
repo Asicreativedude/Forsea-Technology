@@ -18,7 +18,7 @@ function Gmo() {
 		});
 		gmoTl.to(gmoRef.current.position, {
 			duration: 1,
-			x: -7,
+			x: -10,
 		});
 		const gmoExitTl = gsap.timeline({
 			scrollTrigger: {
@@ -30,13 +30,13 @@ function Gmo() {
 		});
 		gmoExitTl.to(gmoRef.current.position, {
 			duration: 1,
-			x: 15,
+			y: -15,
 		});
 	}, []);
 	return (
-		<group ref={gmoRef} position={[25, -3, -5]} rotation={[0, 0, 0]}>
+		<group ref={gmoRef} position={[25, -4, -5]} rotation={[0, 0, 0]}>
 			<mesh>
-				<torusGeometry args={[5, 0.1, 96, 96]} />
+				<torusGeometry args={[6, 0.1, 96, 96]} />
 				<meshPhysicalMaterial>
 					<GradientTexture
 						stops={[0, 0.5, 1]} // As many stops as you want
@@ -46,7 +46,7 @@ function Gmo() {
 				</meshPhysicalMaterial>
 			</mesh>
 			<mesh>
-				<circleGeometry args={[5, 32]} />
+				<circleGeometry args={[6, 32]} />
 				<meshPhysicalMaterial
 					color='#fff'
 					transparent

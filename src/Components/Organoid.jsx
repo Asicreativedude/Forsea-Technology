@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
 Organoid.propTypes = {
 	page: PropTypes.number.isRequired,
 };
