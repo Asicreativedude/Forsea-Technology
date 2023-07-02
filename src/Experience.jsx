@@ -11,6 +11,7 @@ import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
+import SecondOrganoid from './Components/SecondOrganoid';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,6 +63,7 @@ function Experience() {
 					<Cells page={currentPage} />
 					<BioReactor page={currentPage} />
 					<Organoid page={currentPage} />
+					<SecondOrganoid page={currentPage} />
 					<GrowthFactors />
 					<Gmo page={currentPage} />
 					<Scalable page={currentPage} />

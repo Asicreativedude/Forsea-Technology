@@ -1,11 +1,11 @@
 /* eslint-disable react/no-unknown-property */
-import { useRef, useEffect, useMemo, useLayoutEffect } from 'react';
+import { useRef, useMemo, useLayoutEffect, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
 import PropTypes from 'prop-types';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 Organoid.propTypes = {
 	page: PropTypes.number.isRequired,
@@ -17,7 +17,7 @@ function Organoid(props) {
 	const masterBank = useRef();
 
 	const startTime = useRef();
-	const radius = useRef(25);
+	const radius = useRef(10);
 	const instances = useRef(200);
 	const cellSize = useRef(0);
 	const speed = 0.5;
@@ -52,7 +52,7 @@ function Organoid(props) {
 
 	useFrame(({ clock }) => {
 		if (!startTime.current) {
-			if (props.page === 4) {
+			if (props.page === 7) {
 				startTime.current = clock.getElapsedTime();
 			}
 
@@ -75,12 +75,7 @@ function Organoid(props) {
 				const y = radius.current * Math.cos(phi);
 				const z = radius.current * Math.sin(phi) * Math.sin(theta);
 				const id = j;
-
-				tempObject.scale.set(
-					gsap.utils.clamp(0, 1, (cellSize.current * j) / 50),
-					gsap.utils.clamp(0, 1, (cellSize.current * j) / 50),
-					gsap.utils.clamp(0, 1, (cellSize.current * j) / 50)
-				);
+				tempObject.scale.set(1, 1, 1);
 
 				tempObject.position.set(x, y, z);
 				tempObject.updateMatrix();
@@ -92,70 +87,23 @@ function Organoid(props) {
 		cellInner.current.instanceMatrix.needsUpdate = true;
 	});
 	useEffect(() => {
-		ScrollTrigger.create({
-			trigger: '#page-4',
-			start: 'top center',
-			end: 'top top',
-			scrub: 0.2,
-			onUpdate: (self) => {
-				masterBank.current.scale.set(
-					self.progress,
-					self.progress,
-					self.progress
-				);
-			},
-		});
-
-		const organoidTl = gsap.timeline({
+		const tl = gsap.timeline({
 			scrollTrigger: {
-				trigger: '#page-4',
-				start: 'top top',
-				end: 'bottom top',
+				trigger: '#page-8',
+				start: 'top bottom',
+				end: 'top top',
 				scrub: 0.2,
 			},
 		});
-
-		organoidTl
-			.to(masterBank.current.position, {
-				duration: 1,
-				z: -35,
-				x: 2,
-			})
-			.to(
-				radius,
-				{
-					duration: 1,
-					current: 15,
-				},
-				'<'
-			);
-
-		const organoidMoveTl = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-5',
-				start: 'top top',
-				end: 'bottom top',
-				scrub: 0.2,
-			},
-		});
-		organoidMoveTl.to(masterBank.current.position, {
-			duration: 1,
-			y: -13,
-		});
-
-		const organoidMoveTl2 = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-7',
-				start: 'top top',
-				end: 'bottom top',
-				scrub: 0.2,
-			},
-		});
-		organoidMoveTl2.to(
-			radius,
+		tl.from(masterBank.current.position, {
+			y: 50,
+		}).to(
+			masterBank.current.scale,
 			{
+				x: 1,
+				y: 1,
+				z: 1,
 				duration: 1,
-				current: 10,
 			},
 			'<'
 		);
@@ -177,7 +125,7 @@ function Organoid(props) {
 
 	return (
 		<>
-			<group position={[-15, 0, 0]} ref={masterBank}>
+			<group position={[-5, 8, -35]} ref={masterBank}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
 						<sphereGeometry args={[1, 32, 32]} />
