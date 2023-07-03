@@ -76,10 +76,16 @@ function Experience() {
 			<Canvas
 				performance={{ min: 0.5 }}
 				dpr={dpr}
-				gl={{ antialias: true, alpha: true }}
+				gl={{
+					antialias: false,
+					alpha: false,
+					depth: false,
+					stencil: false,
+					preserveDrawingBuffer: false,
+				}}
 				camera={{
 					near: 0.1,
-					far: 1000,
+					far: 200,
 					fov: 55,
 				}}>
 				<PerformanceMonitor

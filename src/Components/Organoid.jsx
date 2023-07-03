@@ -23,18 +23,31 @@ function Organoid(props) {
 	const tempObject = new THREE.Object3D();
 
 	const colors = useMemo(() => {
-		let cellColors = ['#FFC2D1', '#FFB5A7', '#FB6F92', '#FCD5CE'];
+		let cellColors = [
+			['#FFC2D1', '#FB6F92'],
+			['#FFB5A7', '#FCD5CE'],
+			['#FFC2D1', '#FB6F92'],
+			['#FFB5A7', '#FCD5CE'],
+		];
 		const numInstances = instances.current;
 		const colorArray = new Array(numInstances * 3).fill(0);
-		for (let i = 0; i < numInstances; i++) {
-			const color = new THREE.Color(
-				cellColors[Math.floor(Math.random() * cellColors.length)]
-			);
-			color.toArray(colorArray, i * 3);
+		let colorIndex = 0;
+		for (let i = 0; i < cellColors.length; i++) {
+			const groupColors = cellColors[i];
+			for (let j = 0; j < groupColors.length; j++) {
+				const color = new THREE.Color(groupColors[j]);
+				for (
+					let k = 0;
+					k < numInstances / cellColors.length / groupColors.length;
+					k++
+				) {
+					color.toArray(colorArray, colorIndex);
+					colorIndex += 3;
+				}
+			}
 		}
 		return colorArray;
 	}, []);
-
 	useLayoutEffect(() => {
 		let i = 0;
 		for (let j = 0; j < instances.current; j++) {
@@ -67,7 +80,7 @@ function Organoid(props) {
 			for (let j = 0; j < instances.current; j++) {
 				const phi = Math.acos(-1 + (2 * j) / instances.current);
 				let theta = Math.sqrt(instances.current * Math.PI) * phi;
-				theta += Math.sin(time * speed + j) * 0.1; // Add small, random movement
+				theta += Math.sin(time * speed + j) * 0.05; // Add small, random movement
 				const x = radius.current * Math.sin(phi) * Math.cos(theta);
 				const y = radius.current * Math.cos(phi);
 				const z = radius.current * Math.sin(phi) * Math.sin(theta);
@@ -184,14 +197,14 @@ function Organoid(props) {
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
 						color='#FFF4EB'
-						thickness={0.8}
+						thickness={0.6}
 						transmission={0.96}
 						roughness={0.2}
 						ior={1.25}
 					/>
 				</instancedMesh>
 				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
-					<sphereGeometry args={[0.4, 8, 8]} />
+					<sphereGeometry args={[0.5, 8, 8]} />
 					<meshPhysicalMaterial color={colors} />
 				</instancedMesh>
 			</group>
