@@ -2,7 +2,7 @@
 import { useRef, useEffect, useMemo, useLayoutEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { MeshTransmissionMaterial, useFBO } from '@react-three/drei';
+import { MeshTransmissionMaterial } from '@react-three/drei';
 import PropTypes from 'prop-types';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -21,6 +21,7 @@ function Organoid(props) {
 	const cellSize = useRef(0);
 	const speed = 0.5;
 	const tempObject = new THREE.Object3D();
+	const opacity = useRef(1);
 
 	const colors = useMemo(() => {
 		let cellColors = [
@@ -68,6 +69,7 @@ function Organoid(props) {
 
 			masterBank.current.scale.set(0, 0, 0);
 		} else {
+			masterBank.current.scale.set(1, 1, 1);
 			const time = clock.getElapsedTime() - startTime.current;
 			masterBank.current.rotation.y += 0.001;
 
@@ -100,6 +102,8 @@ function Organoid(props) {
 		}
 		cell.current.instanceMatrix.needsUpdate = true;
 		cellInner.current.instanceMatrix.needsUpdate = true;
+		cell.current.material.needsUpdate = true;
+		cellInner.current.material.needsUpdate = true;
 	});
 	useEffect(() => {
 		ScrollTrigger.create({
@@ -108,11 +112,8 @@ function Organoid(props) {
 			end: 'top top',
 			scrub: 0.2,
 			onUpdate: (self) => {
-				masterBank.current.scale.set(
-					self.progress,
-					self.progress,
-					self.progress
-				);
+				cell.current.material.opacity = self.progress;
+				cellInner.current.material.opacity = self.progress;
 			},
 		});
 
@@ -184,12 +185,7 @@ function Organoid(props) {
 			z: 0,
 		});
 	}, []);
-	const buffer = useFBO();
-	useFrame((state) => {
-		state.gl.setRenderTarget(buffer);
-		state.gl.render(state.scene, state.camera);
-		state.gl.setRenderTarget(null);
-	});
+
 	return (
 		<>
 			<group position={[0, 0, 0]} ref={masterBank}>
@@ -201,11 +197,17 @@ function Organoid(props) {
 						transmission={0.96}
 						roughness={0.2}
 						ior={1.25}
+						opacity={opacity.current}
+						transparent
 					/>
 				</instancedMesh>
 				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
 					<sphereGeometry args={[0.5, 8, 8]} />
-					<meshPhysicalMaterial color={colors} />
+					<meshPhysicalMaterial
+						color={colors}
+						opacity={opacity.current}
+						transparent
+					/>
 				</instancedMesh>
 			</group>
 		</>

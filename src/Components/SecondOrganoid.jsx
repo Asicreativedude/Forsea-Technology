@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
 import PropTypes from 'prop-types';
 import gsap from 'gsap';
-// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 Organoid.propTypes = {
 	page: PropTypes.number.isRequired,
