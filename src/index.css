@@ -10,8 +10,19 @@ body,
 	margin: 0;
 	padding: 0;
 }
+
 html {
-	font-size: 10px;
+	font-size: calc(0.3666576964477933rem + 0.21528525296017226vw);
+}
+@media screen and (max-width: 1920px) {
+	html {
+		font-size: calc(0.36665769644779334rem + 0.21528525296017226vw);
+	}
+}
+@media screen and (max-width: 991px) {
+	html {
+		font-size: 0.625rem;
+	}
 }
 
 .canvas-c {
@@ -26,15 +37,13 @@ html {
 	display: flex;
 	align-items: center;
 	justify-content: start;
-	padding: 0 14.4rem;
 	position: relative;
 	pointer-events: none;
 	color: white;
 }
 
 .container {
-	max-width: 172rem;
-	width: 100%;
+	width: 90%;
 	margin: 0 auto;
 }
 .tech-c {

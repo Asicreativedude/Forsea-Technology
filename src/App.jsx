@@ -125,8 +125,8 @@ export function App() {
 						<div className='tech-c'>
 							<h2 className='tech-text'>Bring out your plates:</h2>
 							<p>
-								Bring out your plates: a delicious seafood product, similar in
-								flavor, texture and nutritional value, is being served!
+								A delicious seafood product, similar in flavor, texture and
+								nutritional value, is being served!
 							</p>
 						</div>
 					</div>
