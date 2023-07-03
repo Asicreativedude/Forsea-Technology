@@ -179,7 +179,7 @@ function Organoid(props) {
 			<group position={[0, 0, 0]} ref={masterBank}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
-						<sphereGeometry args={[1, 32, 32]} />
+						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
 							color='#FFF4EB'
 							thickness={0.8}

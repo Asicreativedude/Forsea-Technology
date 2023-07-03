@@ -5,7 +5,13 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { MeshTransmissionMaterial } from '@react-three/drei';
 import gsap from 'gsap';
-function BioReactor() {
+import PropTypes from 'prop-types';
+
+BioReactor.propTypes = {
+	page: PropTypes.number.isRequired,
+};
+
+function BioReactor(props) {
 	const ref = useRef();
 	const cellOuter = useRef();
 	const cellInner = useRef();
@@ -128,7 +134,10 @@ function BioReactor() {
 	}, []);
 
 	return (
-		<group ref={bioReactorRef} position={[0, -10, 0]}>
+		<group
+			ref={bioReactorRef}
+			position={[0, -10, 0]}
+			visible={props.page > 1 && props.page < 5}>
 			<group position={[25, -5, -100]}>
 				<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
 					<coneGeometry args={[0.5, 1, 4]} />
@@ -137,7 +146,7 @@ function BioReactor() {
 			</group>
 			<group position={[20, -10, -70]}>
 				<instancedMesh ref={cellOuter} args={[null, null, instances]}>
-					<sphereGeometry args={[1, 32, 32]} />
+					<sphereGeometry args={[1, 8, 8]} />
 					<MeshTransmissionMaterial
 						color='#FFF4EB'
 						thickness={0.8}

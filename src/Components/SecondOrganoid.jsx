@@ -17,8 +17,8 @@ function Organoid(props) {
 	const masterBank = useRef();
 
 	const startTime = useRef();
-	const radius = useRef(10);
-	const instances = useRef(200);
+	const radius = useRef(5);
+	const instances = useRef(80);
 	const cellSize = useRef(0);
 	const speed = 0.5;
 	const tempObject = new THREE.Object3D();
@@ -125,10 +125,10 @@ function Organoid(props) {
 
 	return (
 		<>
-			<group position={[-5, 15, -35]} ref={masterBank}>
+			<group position={[10, 5, -35]} ref={masterBank} visible={props.page > 6}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
-						<sphereGeometry args={[1, 32, 32]} />
+						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
 							color='#FFF4EB'
 							thickness={0.8}

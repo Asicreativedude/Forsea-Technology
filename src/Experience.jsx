@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useState, useRef } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { PerformanceMonitor, Preload, AdaptiveDpr } from '@react-three/drei';
 import { Perf } from 'r3f-perf';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,9 +18,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 function Experience() {
 	const [currentPage, setCurrentPage] = useState(1);
-	const directLightRef = useRef();
 	const [switchText, setSwitchText] = useState(false);
-
+	const [dpr, setDpr] = useState(1);
 	useEffect(() => {
 		ScrollTrigger.create({
 			start: '0',
@@ -29,18 +29,7 @@ function Experience() {
 				setCurrentPage(Math.round(page));
 			},
 		});
-		const lightTl = gsap.timeline({
-			scrollTrigger: {
-				start: '0',
-				end: '+=1000',
-				scrub: true,
-			},
-		});
-		lightTl.to(directLightRef.current, {
-			y: currentPage + 1.5,
-			duration: 1,
-		});
-	}, [currentPage, directLightRef]);
+	}, [currentPage]);
 
 	//white bg reveal
 	useEffect(() => {
@@ -66,6 +55,7 @@ function Experience() {
 			width: '100%',
 			height: '100%',
 			borderRadius: '0',
+			filter: 'blur(0px)',
 		});
 	}, []);
 
@@ -79,29 +69,34 @@ function Experience() {
 	return (
 		<div className='canvas-c'>
 			<Canvas
+				performance={{ min: 0.5 }}
+				dpr={dpr}
 				gl={{ antialias: true, alpha: true }}
 				camera={{
 					near: 0.1,
-					far: 10000,
+					far: 1000,
 					fov: 55,
 				}}>
+				<PerformanceMonitor
+					onChange={({ factor }) => {
+						setDpr(Math.round(0.5 + 1.5 * factor, 1));
+						console.log(dpr);
+					}}
+				/>
+				<AdaptiveDpr pixelated />
 				<Perf position='top-left' />
 				<color attach='background' args={['#222']} />
 				<ambientLight intensity={1} />
-				<directionalLight
-					ref={directLightRef}
-					intensity={1}
-					color={'#F8EDEB'}
-				/>
 				<Suspense fallback={null}>
 					<StemCells />
 					<Cells page={currentPage} />
 					<BioReactor page={currentPage} />
 					<Organoid page={currentPage} />
-					<SecondOrganoid page={currentPage} />
 					<GrowthFactors />
 					<Gmo page={currentPage} />
+					<SecondOrganoid page={currentPage} />
 					<Scalable page={currentPage} />
+					<Preload all />
 				</Suspense>
 			</Canvas>
 		</div>

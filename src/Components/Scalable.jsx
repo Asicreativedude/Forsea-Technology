@@ -3,10 +3,14 @@
 import { useEffect, useRef } from 'react';
 import { Instances, Model } from './ModelInstance';
 import { useThree } from '@react-three/fiber';
-// import { Float } from '@react-three/drei';
+import { Float } from '@react-three/drei';
 import gsap from 'gsap';
+import PropTypes from 'prop-types';
 
-function Scalable() {
+Scalable.propTypes = {
+	page: PropTypes.number.isRequired,
+};
+function Scalable(props) {
 	const unagi = useRef();
 	const camera = useThree((state) => state.camera);
 	useEffect(() => {
@@ -56,18 +60,6 @@ function Scalable() {
 			position: [-9, -1.5, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
-		{
-			position: [-12, -1.5, 0],
-			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
-		},
-		{
-			position: [-15, -1.5, 0],
-			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
-		},
-		{
-			position: [-18, -1.5, 0],
-			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
-		},
 	];
 
 	// useFrame(({ clock }) => {
@@ -76,17 +68,17 @@ function Scalable() {
 	// });
 
 	return (
-		<group ref={unagi} position={[-40, 0, 0]}>
+		<group ref={unagi} position={[-40, 0, 0]} visible={props.page > 7}>
 			<Instances>
 				{positions.map((props, index) => (
-					// <Float
-					// 	key={index}
-					// 	speed={1}
-					// 	rotationIntensity={0}
-					// 	floatIntensity={1}
-					// 	floatingRange={[-0.5, 0.5]}>
-					<Model key={index} {...props} />
-					// </Float>
+					<Float
+						key={index}
+						speed={1}
+						rotationIntensity={0}
+						floatIntensity={1}
+						floatingRange={[-0.5, 0.5]}>
+						<Model {...props} />
+					</Float>
 				))}
 			</Instances>
 		</group>

@@ -126,20 +126,22 @@ function Cells(props) {
 				'<'
 			);
 	}, [camera]);
+
 	return (
 		<>
-			<group position={[18, -13, -20]} ref={masterBank}>
+			<group
+				position={[18, -13, -20]}
+				ref={masterBank}
+				visible={props.page < 3}>
 				<group>
 					<instancedMesh ref={cell} args={[null, null, instances.current]}>
-						<sphereGeometry args={[1, 32, 32]} />
+						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
 							color='#FFF4EB'
 							thickness={0.8}
 							transmission={0.99}
 							roughness={0.1}
 							ior={1.25}
-							depthWrite={false}
-							depthTest={false}
 							opacity={opacity.current}
 							transparent
 						/>

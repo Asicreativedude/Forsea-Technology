@@ -6,9 +6,8 @@ import { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 
 const context = createContext();
-
 export function Instances({ children, ...props }) {
-	const { nodes } = useGLTF('/unagi.glb');
+	const { nodes } = useGLTF('/unagiCompressed.glb');
 	const instances = useMemo(
 		() => ({
 			Sphere: nodes.Sphere,
@@ -48,4 +47,4 @@ export function Model(props) {
 	);
 }
 
-useGLTF.preload('/unagi.glb');
+useGLTF.preload('/unagiCompressed.glb');

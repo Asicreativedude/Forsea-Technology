@@ -54,10 +54,10 @@ function StemCells() {
 		<>
 			<Float
 				speed={1}
-				rotationIntensity={0}
+				rotationIntensity={1}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[1, 0, -6]} ref={stemCellsRef}>
+				<group position={[3, 0, -6]} ref={stemCellsRef}>
 					<mesh>
 						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
@@ -77,10 +77,10 @@ function StemCells() {
 			</Float>
 			<Float
 				speed={1}
-				rotationIntensity={0}
+				rotationIntensity={1}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[3, 0, -3]} ref={stemCellsRef2}>
+				<group position={[5, 0, -3]} ref={stemCellsRef2}>
 					<mesh>
 						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
