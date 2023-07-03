@@ -6,6 +6,7 @@ import { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 
 const context = createContext();
+
 export function Instances({ children, ...props }) {
 	const { nodes } = useGLTF('/unagiCompressed.glb');
 	const instances = useMemo(
@@ -32,16 +33,18 @@ export function Model(props) {
 		<group {...props} dispose={null}>
 			<instances.Sphere
 				rotation={[-Math.PI, 0, 0]}
-				scale={[-1.07, -0.249, -0.951]}
+				scale={[-1.07035828, -0.24931741, -0.95081627]}
 			/>
-			<group position={[0.004, 0.04, 0.023]} scale={[0.862, 0.134, 0.547]}>
+			<group
+				position={[0.00433087, 0.03961413, 0.02330243]}
+				scale={[0.86152095, 0.13410865, 0.54747868]}>
 				<instances.Cube />
 				<instances.Cube1 />
 			</group>
 			<instances.Logos
-				position={[0, 0.187, 0]}
-				rotation={[Math.PI, 0, Math.PI]}
-				scale={0.414}
+				position={[0, 0.18740255, 0]}
+				rotation={[Math.PI, -9e-8, Math.PI]}
+				scale={0.41428968}
 			/>
 		</group>
 	);

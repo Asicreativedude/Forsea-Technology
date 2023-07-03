@@ -60,7 +60,7 @@ export function App() {
 				<div className='section' id='page-6'>
 					<div className='container'>
 						<div className='tech-c'>
-							<h2 className='tech-text'>Less Growth Factors</h2>
+							<h2 className='tech-text'>1. Less Growth Factors</h2>
 							<p>
 								Organoids are directed to grow naturally into mini-tissue,
 								allowing for a remarkable reduction in growth factors usage.
@@ -71,7 +71,7 @@ export function App() {
 				<div className='section' id='page-7'>
 					<div className='container'>
 						<div className='tech-c'>
-							<h2 className='tech-text'>Non-GMO</h2>
+							<h2 className='tech-text'>2. Non-GMO</h2>
 							<p>
 								By harnessing nature’s tissue formation methods, we are able to
 								produce non-GMO cultivated meat that is both healthy and
@@ -83,7 +83,7 @@ export function App() {
 				<div className='section' id='page-8'>
 					<div className='container'>
 						<div className='tech-c'>
-							<h2 className='tech-text'>No Scaffolding</h2>
+							<h2 className='tech-text'>3. No Scaffolding</h2>
 							<p>
 								Our organoids contain the edible cell. Therefore, scaffolding is
 								not necessary for cultivating our seafood meat.
@@ -94,7 +94,9 @@ export function App() {
 				<div className='section' id='page-9'>
 					<div className='container'>
 						<div className='tech-c'>
-							<h2 className='tech-text'>A Scalable Cost- Effective Process</h2>
+							<h2 className='tech-text'>
+								4. A Scalable Cost- Effective Process
+							</h2>
 							<p>
 								The organoid’s unique characteristics allow us to bypass many
 								costly production steps.

@@ -2,7 +2,7 @@
 import { useRef, useEffect, useMemo, useLayoutEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { MeshTransmissionMaterial } from '@react-three/drei';
+import { MeshTransmissionMaterial, useFBO } from '@react-three/drei';
 import PropTypes from 'prop-types';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -23,7 +23,6 @@ function Organoid(props) {
 	const tempObject = new THREE.Object3D();
 
 	const colors = useMemo(() => {
-		// let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
 		let cellColors = ['#FFC2D1', '#FFB5A7', '#FB6F92', '#FCD5CE'];
 		const numInstances = instances.current;
 		const colorArray = new Array(numInstances * 3).fill(0);
@@ -45,7 +44,6 @@ function Organoid(props) {
 				new THREE.Color(colors[id * 3], colors[id * 3 + 1], colors[id * 3 + 2])
 			);
 		}
-
 		cellInner.current.instanceColor.needsUpdate = true;
 	}, [colors]);
 
@@ -173,30 +171,29 @@ function Organoid(props) {
 			z: 0,
 		});
 	}, []);
-
+	const buffer = useFBO();
+	useFrame((state) => {
+		state.gl.setRenderTarget(buffer);
+		state.gl.render(state.scene, state.camera);
+		state.gl.setRenderTarget(null);
+	});
 	return (
 		<>
 			<group position={[0, 0, 0]} ref={masterBank}>
-				<group>
-					<instancedMesh ref={cell} args={[null, null, instances.current]}>
-						<sphereGeometry args={[1, 16, 16]} />
-						<MeshTransmissionMaterial
-							color='#FFF4EB'
-							thickness={0.8}
-							transmission={0.99}
-							roughness={0.1}
-							ior={1.25}
-							depthWrite={false}
-							depthTest={false}
-						/>
-					</instancedMesh>
-				</group>
-				<group>
-					<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
-						<sphereGeometry args={[0.4, 8, 8]} />
-						<meshPhysicalMaterial color={colors} depthWrite={false} />
-					</instancedMesh>
-				</group>
+				<instancedMesh ref={cell} args={[null, null, instances.current]}>
+					<sphereGeometry args={[1, 16, 16]} />
+					<MeshTransmissionMaterial
+						color='#FFF4EB'
+						thickness={0.8}
+						transmission={0.96}
+						roughness={0.2}
+						ior={1.25}
+					/>
+				</instancedMesh>
+				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
+					<sphereGeometry args={[0.4, 8, 8]} />
+					<meshPhysicalMaterial color={colors} />
+				</instancedMesh>
 			</group>
 		</>
 	);

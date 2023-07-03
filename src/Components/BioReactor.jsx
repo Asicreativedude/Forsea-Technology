@@ -21,7 +21,6 @@ function BioReactor(props) {
 	const instances = 200;
 	const growthFactor = new THREE.Object3D();
 	const cell = new THREE.Object3D();
-
 	const colors = useMemo(() => {
 		let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
 		const numInstances = growhtInstances;
@@ -141,7 +140,7 @@ function BioReactor(props) {
 			<group position={[25, -5, -100]}>
 				<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
 					<coneGeometry args={[0.5, 1, 4]} />
-					<meshPhysicalMaterial color={colors} depthWrite={false} wireframe />
+					<meshPhysicalMaterial color={colors} wireframe />
 				</instancedMesh>
 			</group>
 			<group position={[20, -10, -70]}>
@@ -150,17 +149,16 @@ function BioReactor(props) {
 					<MeshTransmissionMaterial
 						color='#FFF4EB'
 						thickness={0.8}
-						transmission={0.99}
-						roughness={0.1}
+						transmission={0.96}
+						roughness={0.2}
 						ior={1.25}
-						depthWrite={false}
 					/>
 				</instancedMesh>
 			</group>
 			<group position={[20, -10, -70]}>
 				<instancedMesh ref={cellInner} args={[null, null, instances]}>
 					<sphereGeometry args={[0.4, 8, 8]} />
-					<meshPhysicalMaterial color='#eee' depthWrite={false} />
+					<meshPhysicalMaterial color='#eee' />
 				</instancedMesh>
 			</group>
 		</group>

@@ -15,7 +15,6 @@ function Organoid(props) {
 	const cell = useRef();
 	const cellInner = useRef();
 	const masterBank = useRef();
-
 	const startTime = useRef();
 	const radius = useRef(5);
 	const instances = useRef(80);
@@ -132,11 +131,9 @@ function Organoid(props) {
 						<MeshTransmissionMaterial
 							color='#FFF4EB'
 							thickness={0.8}
-							transmission={0.99}
-							roughness={0.1}
+							transmission={0.96}
+							roughness={0.2}
 							ior={1.25}
-							depthWrite={false}
-							depthTest={false}
 						/>
 					</instancedMesh>
 				</group>

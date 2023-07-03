@@ -5,9 +5,14 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
+
+StemCells.propTypes = {
+	page: PropTypes.number.isRequired,
+};
 
 gsap.registerPlugin(ScrollTrigger);
-function StemCells() {
+function StemCells(props) {
 	const stemCellsRef = useRef();
 	const stemCellsRef2 = useRef();
 	const insideMaterial = new THREE.MeshPhysicalMaterial({
@@ -57,7 +62,10 @@ function StemCells() {
 				rotationIntensity={1}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[3, 0, -6]} ref={stemCellsRef}>
+				<group
+					position={[3, 0, -6]}
+					ref={stemCellsRef}
+					visible={props.page < 3}>
 					<mesh>
 						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
@@ -66,7 +74,6 @@ function StemCells() {
 							transmission={0.98}
 							roughness={0.6}
 							ior={1.25}
-							depthWrite={false}
 							resolution={128}
 						/>
 					</mesh>
@@ -80,7 +87,10 @@ function StemCells() {
 				rotationIntensity={1}
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
-				<group position={[5, 0, -3]} ref={stemCellsRef2}>
+				<group
+					position={[5, 0, -3]}
+					ref={stemCellsRef2}
+					visible={props.page < 3}>
 					<mesh>
 						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
@@ -89,7 +99,6 @@ function StemCells() {
 							transmission={0.98}
 							roughness={0.6}
 							ior={1.25}
-							depthWrite={false}
 							resolution={128}
 						/>
 					</mesh>

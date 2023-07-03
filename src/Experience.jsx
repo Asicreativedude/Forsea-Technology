@@ -1,7 +1,12 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useEffect, useState } from 'react';
-import { PerformanceMonitor, Preload, AdaptiveDpr } from '@react-three/drei';
+import {
+	PerformanceMonitor,
+	Preload,
+	AdaptiveDpr,
+	Environment,
+} from '@react-three/drei';
 import { Perf } from 'r3f-perf';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -80,15 +85,15 @@ function Experience() {
 				<PerformanceMonitor
 					onChange={({ factor }) => {
 						setDpr(Math.round(0.5 + 1.5 * factor, 1));
-						console.log(dpr);
 					}}
 				/>
 				<AdaptiveDpr pixelated />
 				<Perf position='top-left' />
 				<color attach='background' args={['#222']} />
-				<ambientLight intensity={1} />
+				{/* <ambientLight intensity={1} /> */}
+				<Environment preset='warehouse' resolution={256} intensity={0.5} />
 				<Suspense fallback={null}>
-					<StemCells />
+					<StemCells page={currentPage} />
 					<Cells page={currentPage} />
 					<BioReactor page={currentPage} />
 					<Organoid page={currentPage} />

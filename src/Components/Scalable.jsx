@@ -36,36 +36,31 @@ function Scalable(props) {
 		});
 		cameraTl2.to(camera.position, {
 			duration: 1,
-			x: -45,
+			x: -44,
 		});
 	}, [camera]);
 	const positions = [
 		{
-			position: [3, -1.5, 0],
+			position: [3, 1, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [0, -1.5, 0],
+			position: [0, 1, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-3, -1.5, 0],
+			position: [-3, 1, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-6, -1.5, 0],
+			position: [-6, 1, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-9, -1.5, 0],
+			position: [-9, 1, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 	];
-
-	// useFrame(({ clock }) => {
-	// 	const time = clock.getElapsedTime();
-	// 	unagi.current.position.x = -40 + Math.sin(time) * 5;
-	// });
 
 	return (
 		<group ref={unagi} position={[-40, 0, 0]} visible={props.page > 7}>

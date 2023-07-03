@@ -18,8 +18,8 @@ function Cells(props) {
 	const cellSize = useRef(0);
 	const tempObject = new THREE.Object3D();
 	const radii = [5, 8, 11, 14, 17, 20, 23];
-
 	const opacity = useRef(1);
+
 	useFrame(({ clock }) => {
 		if (!startTime.current) {
 			if (props.page === 2) {
@@ -133,31 +133,26 @@ function Cells(props) {
 				position={[18, -13, -20]}
 				ref={masterBank}
 				visible={props.page < 3}>
-				<group>
-					<instancedMesh ref={cell} args={[null, null, instances.current]}>
-						<sphereGeometry args={[1, 16, 16]} />
-						<MeshTransmissionMaterial
-							color='#FFF4EB'
-							thickness={0.8}
-							transmission={0.99}
-							roughness={0.1}
-							ior={1.25}
-							opacity={opacity.current}
-							transparent
-						/>
-					</instancedMesh>
-				</group>
-				<group>
-					<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
-						<sphereGeometry args={[0.4, 8, 8]} />
-						<meshPhysicalMaterial
-							color={'#eee'}
-							transparent
-							opacity={opacity.current}
-							depthWrite={false}
-						/>
-					</instancedMesh>
-				</group>
+				<instancedMesh ref={cell} args={[null, null, instances.current]}>
+					<sphereGeometry args={[1, 16, 16]} />
+					<MeshTransmissionMaterial
+						color='#FFF4EB'
+						thickness={0.8}
+						transmission={0.96}
+						roughness={0.2}
+						ior={1.25}
+						opacity={opacity.current}
+						transparent
+					/>
+				</instancedMesh>
+				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
+					<sphereGeometry args={[0.4, 8, 8]} />
+					<meshPhysicalMaterial
+						color={'#eee'}
+						transparent
+						opacity={opacity.current}
+					/>
+				</instancedMesh>
 			</group>
 		</>
 	);
