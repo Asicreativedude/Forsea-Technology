@@ -29,6 +29,8 @@ function Organoid(props) {
 			['#FFB5A7', '#FCD5CE'],
 			['#FFC2D1', '#FB6F92'],
 			['#FFB5A7', '#FCD5CE'],
+			['#FFC2D1', '#FB6F92'],
+			['#FFB5A7', '#FCD5CE'],
 		];
 		const numInstances = instances.current;
 		const colorArray = new Array(numInstances * 3).fill(0);
@@ -75,7 +77,7 @@ function Organoid(props) {
 
 			if (cellSize.current < 200) {
 				for (let i = 0; i < instances.current; i++) {
-					cellSize.current = (time * i) / 200;
+					cellSize.current = (time * i) / 300;
 				}
 			}
 

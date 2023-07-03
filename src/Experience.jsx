@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import {
 	PerformanceMonitor,
 	Preload,
@@ -25,6 +25,7 @@ function Experience() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [switchText, setSwitchText] = useState(false);
 	const [dpr, setDpr] = useState(1);
+	const progressBar = useRef(0);
 	useEffect(() => {
 		ScrollTrigger.create({
 			start: '0',
@@ -32,6 +33,7 @@ function Experience() {
 			onUpdate: (self) => {
 				let page = self.progress * 10 + 1;
 				setCurrentPage(Math.round(page));
+				progressBar.current.style.width = `${self.progress * 125}%`;
 			},
 		});
 	}, [currentPage]);
@@ -110,6 +112,9 @@ function Experience() {
 					<Preload all />
 				</Suspense>
 			</Canvas>
+			<div className='progress-c'>
+				<div className='progress' ref={progressBar} />
+			</div>
 		</div>
 	);
 }
