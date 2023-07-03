@@ -51,6 +51,12 @@ html {
 	z-index: 1;
 	position: relative;
 }
+.tech-text-number {
+	font-size: 2rem;
+	font-family: Merriweather;
+	font-style: italic;
+	margin-bottom: 1.6rem;
+}
 .tech-text {
 	font-size: 4.6rem;
 }

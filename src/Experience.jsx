@@ -66,6 +66,7 @@ function Experience() {
 		});
 	}, []);
 
+	//last page text switch
 	useEffect(() => {
 		const centerTexts = document.querySelectorAll('.center-text');
 		centerTexts.forEach((text) => {
@@ -73,6 +74,24 @@ function Experience() {
 		});
 	}, [switchText]);
 
+	//text entrance
+	useEffect(() => {
+		const sections = document.querySelectorAll('.section');
+		sections.forEach((section) => {
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: section,
+					start: 'top 15%',
+				},
+			});
+			tl.from(section.querySelector('.tech-c'), {
+				duration: 1,
+				opacity: 0,
+				ease: 'power4.out',
+				yPercent: 25,
+			});
+		});
+	}, []);
 	return (
 		<div className='canvas-c'>
 			<Canvas
