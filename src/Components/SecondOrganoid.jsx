@@ -173,7 +173,7 @@ function Organoid(props) {
 			scrollTrigger: {
 				trigger: '#page-8',
 				start: 'top top',
-				end: 'bottom top',
+				end: 'bottom center',
 				scrub: 0.2,
 			},
 		});

@@ -13,12 +13,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Cells from './Components/Cells';
 import StemCells from './Components/StemCells';
 import BioReactor from './Components/BioReactor';
-// import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
 import SecondOrganoid from './Components/SecondOrganoid';
 // import { Html, useProgress } from '@react-three/drei';
+
 gsap.registerPlugin(ScrollTrigger);
 
 // function Loader() {
@@ -138,7 +138,6 @@ function Experience() {
 					<BioReactor page={currentPage} />
 					<Organoid page={currentPage} />
 					<GrowthFactors page={currentPage} />
-					{/* <Gmo page={currentPage} /> */}
 					<SecondOrganoid page={currentPage} />
 					<Scalable page={currentPage} />
 					<Preload all />

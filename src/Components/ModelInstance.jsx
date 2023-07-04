@@ -2,27 +2,24 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/no-unknown-property */
 
-import { useMemo, useContext, createContext } from 'react';
+import { useMemo, useContext, createContext, useRef, useEffect } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
-import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
+import gsap from 'gsap';
+
 const context = createContext();
 export function Instances({ children, ...props }) {
-	const { nodes } = useGLTF('/unagiCompressed.glb');
+	const { nodes } = useGLTF('/unagi.glb');
 	const instances = useMemo(
 		() => ({
-			Sphere: nodes.Sphere,
-			Cube: nodes.Cube003_1,
-			Cube1: nodes.Cube003_2,
-			Logos: nodes['logos-01'],
+			Cube: nodes.Cube001,
+			Cube1: nodes.Cube001_1,
+			Cube2: nodes.Cube001_2,
+			Cube3: nodes.Cube001_3,
 		}),
 		[nodes]
 	);
-	instances.Sphere.material = new THREE.MeshPhysicalMaterial({
-		color: '#fff',
-		transparent: true,
-		opacity: 0.4,
-		roughness: 0.1,
-	});
+
 	return (
 		<Merged meshes={instances} {...props}>
 			{(instances) => (
@@ -33,24 +30,37 @@ export function Instances({ children, ...props }) {
 }
 
 export function Model(props) {
+	useEffect(() => {
+		const scalble = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-9',
+				start: 'top center',
+				end: 'bottom top',
+				scrub: 0.2,
+				onUpdate: (self) => {
+					positionOffset.current = self.progress * 15;
+				},
+			},
+		});
+	}, []);
+	const positionOffset = useRef(0);
 	const instances = useContext(context);
+	const model = useRef();
+	useFrame(() => {
+		model.current.position.z = -3 + positionOffset.current;
+	});
 	return (
 		<group {...props} dispose={null}>
-			<instances.Sphere
-				rotation={[-Math.PI, 0, 0]}
-				scale={[-1.07, -0.249, -0.951]}
-			/>
-			<group position={[0.004, 0.04, 0.023]} scale={[0.862, 0.134, 0.547]}>
+			<group
+				ref={model}
+				position={[-2, 0, 0]}
+				scale={[0.86152095, 0.13410865, 0.54747868]}>
 				<instances.Cube />
 				<instances.Cube1 />
+				<instances.Cube2 />
+				<instances.Cube3 />
 			</group>
-			<instances.Logos
-				position={[0, 0.187, 0]}
-				rotation={[Math.PI, 0, Math.PI]}
-				scale={0.414}
-			/>
 		</group>
 	);
 }
-
 useGLTF.preload('/unagiCompressed.glb');
