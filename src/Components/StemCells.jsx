@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 
 StemCells.propTypes = {
 	page: PropTypes.number.isRequired,
+	isMobile: PropTypes.bool.isRequired,
 };
 
 gsap.registerPlugin(ScrollTrigger);
@@ -31,17 +32,18 @@ function StemCells(props) {
 		});
 		tl.to(stemCellsRef.current.position, {
 			duration: 1,
-			x: 9,
-			y: 15,
-			z: -15,
+
+			x: props.isMobile ? -10 : 9,
+			y: props.isMobile ? 2 : 15,
+			z: props.isMobile ? -3 : -15,
 		});
 		tl.to(
 			stemCellsRef2.current.position,
 			{
 				duration: 1,
-				x: 10,
-				y: 20,
-				z: -15,
+				x: props.isMobile ? -10 : 10,
+				y: props.isMobile ? 4 : 20,
+				z: props.isMobile ? -3 : -15,
 			},
 			'<'
 		);
@@ -53,7 +55,7 @@ function StemCells(props) {
 			},
 			'<'
 		);
-	}, []);
+	}, [props.isMobile]);
 
 	return (
 		<>
@@ -63,11 +65,13 @@ function StemCells(props) {
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
 				<group
-					position={[3, 0, -6]}
+					position={props.isMobile ? [0, -2, -4] : [3, 0, -6]}
 					ref={stemCellsRef}
 					visible={props.page < 3}>
 					<mesh>
-						<sphereGeometry args={[1, 16, 16]} />
+						<sphereGeometry
+							args={props.isMobile ? [0.5, 16, 16] : [1, 16, 16]}
+						/>
 						<MeshTransmissionMaterial
 							color='#ffffff'
 							thickness={0.5}
@@ -78,7 +82,9 @@ function StemCells(props) {
 						/>
 					</mesh>
 					<mesh material={insideMaterial}>
-						<sphereGeometry args={[0.4, 16, 16]} />
+						<sphereGeometry
+							args={props.isMobile ? [0.1, 8, 8] : [0.4, 16, 16]}
+						/>
 					</mesh>
 				</group>
 			</Float>
@@ -88,11 +94,13 @@ function StemCells(props) {
 				floatIntensity={1}
 				floatingRange={[-0.5, 0.5]}>
 				<group
-					position={[5, 0, -3]}
+					position={props.isMobile ? [-1, -1, -2] : [5, 0, -3]}
 					ref={stemCellsRef2}
 					visible={props.page < 3}>
 					<mesh>
-						<sphereGeometry args={[1, 16, 16]} />
+						<sphereGeometry
+							args={props.isMobile ? [0.5, 16, 16] : [1, 16, 16]}
+						/>
 						<MeshTransmissionMaterial
 							color='#ffffff'
 							thickness={0.5}
@@ -103,7 +111,9 @@ function StemCells(props) {
 						/>
 					</mesh>
 					<mesh material={insideMaterial}>
-						<sphereGeometry args={[0.4, 16, 16]} />
+						<sphereGeometry
+							args={props.isMobile ? [0.1, 8, 8] : [0.4, 16, 16]}
+						/>
 					</mesh>
 				</group>
 			</Float>

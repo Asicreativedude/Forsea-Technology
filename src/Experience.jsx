@@ -39,6 +39,8 @@ function Experience() {
 	const [switchText, setSwitchText] = useState(false);
 	const [dpr, setDpr] = useState(1);
 	const progressBar = useRef(0);
+	const isMobile = window.innerWidth < 991;
+
 	useEffect(() => {
 		ScrollTrigger.create({
 			start: '0',
@@ -106,48 +108,50 @@ function Experience() {
 		});
 	}, []);
 	return (
-		<div className='canvas-c'>
-			<Canvas
-				performance={{ min: 0.5 }}
-				dpr={dpr}
-				gl={{
-					antialias: false,
-					alpha: false,
-					depth: false,
-					stencil: false,
-					preserveDrawingBuffer: false,
-				}}
-				camera={{
-					near: 0.1,
-					far: 200,
-					fov: 55,
-				}}>
-				<PerformanceMonitor
-					onChange={({ factor }) => {
-						setDpr(Math.round(0.5 + 1.5 * factor, 1));
+		<>
+			<div className='canvas-c'>
+				<Canvas
+					performance={{ min: 0.5 }}
+					dpr={dpr}
+					gl={{
+						antialias: false,
+						alpha: false,
+						depth: false,
+						stencil: false,
+						preserveDrawingBuffer: false,
 					}}
-				/>
-				<AdaptiveDpr pixelated />
-				<Perf position='top-left' />
+					camera={{
+						near: 0.1,
+						far: 200,
+						fov: 55,
+					}}>
+					<PerformanceMonitor
+						onChange={({ factor }) => {
+							setDpr(Math.round(0.5 + 1.5 * factor, 1));
+						}}
+					/>
+					<AdaptiveDpr pixelated />
+					<Perf position='top-left' />
 
-				<color attach='background' args={['#222']} />
-				<Suspense fallback={null}>
-					<Environment preset='warehouse' />
-					<StemCells page={currentPage} />
-					<Cells page={currentPage} />
-					<BioReactor page={currentPage} />
-					<Organoid page={currentPage} />
-					<GrowthFactors page={currentPage} />
-					<SecondOrganoid page={currentPage} />
-					<Scalable page={currentPage} />
-					<Preload all />
-				</Suspense>
-			</Canvas>
+					<color attach='background' args={['#222']} />
+					<Suspense fallback={null}>
+						<Environment preset='warehouse' />
+						<StemCells page={currentPage} isMobile={isMobile} />
+						<Cells page={currentPage} isMobile={isMobile} />
+						<BioReactor page={currentPage} isMobile={isMobile} />
+						<Organoid page={currentPage} isMobile={isMobile} />
+						<GrowthFactors page={currentPage} isMobile={isMobile} />
+						<SecondOrganoid page={currentPage} isMobile={isMobile} />
+						<Scalable page={currentPage} isMobile={isMobile} />
+						<Preload all />
+					</Suspense>
+				</Canvas>
+			</div>
 
 			<div className='progress-c'>
 				<div className='progress' ref={progressBar} />
 			</div>
-		</div>
+		</>
 	);
 }
 export default Experience;

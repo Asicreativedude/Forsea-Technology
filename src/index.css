@@ -135,13 +135,58 @@ p {
 .progress-c {
 	width: 24.5rem;
 	height: 4px;
-	position: absolute;
+	position: fixed;
 	bottom: 12.8rem;
 	left: 5%;
+	z-index: 9999;
 	background-color: #edf1f7;
 }
 .progress {
 	width: 0%;
 	height: 100%;
 	background-color: #538ce1;
+}
+
+@media only screen and (max-width: 991px) {
+	.section {
+		justify-content: center;
+		align-items: start;
+	}
+	.container {
+		width: 100%;
+		padding: 6.4rem 1.6rem;
+	}
+	.tech-c {
+		width: 100%;
+	}
+
+	.tech-text-number {
+		font-size: 1.2rem;
+		font-family: Merriweather;
+		font-style: italic;
+		margin-bottom: 1.6rem;
+	}
+	.tech-text {
+		font-size: 2.4rem;
+	}
+	.centerText-c {
+		width: 100%;
+		height: 100%;
+	}
+	.center-text {
+		font-size: 2.4rem;
+	}
+	.white-bg {
+		width: 100%;
+		height: 100%;
+	}
+	.progress-c {
+		bottom: 5rem;
+	}
+	.blur-c {
+		width: 100%;
+		height: 60%;
+		bottom: 0;
+		top: auto;
+	}
 }

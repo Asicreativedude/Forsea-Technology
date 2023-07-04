@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 import { useRef, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
 import PropTypes from 'prop-types';
@@ -8,6 +8,7 @@ import gsap from 'gsap';
 
 Cells.propTypes = {
 	page: PropTypes.number.isRequired,
+	isMobile: PropTypes.bool.isRequired,
 };
 function Cells(props) {
 	const cell = useRef();
@@ -15,9 +16,10 @@ function Cells(props) {
 	const startTime = useRef(null);
 	const masterBank = useRef();
 	const instances = useRef(200);
+	props.isMobile ? (instances.current = 100) : (instances.current = 200);
 	const cellSize = useRef(0);
 	const tempObject = new THREE.Object3D();
-	const radii = [5, 8, 11, 14, 17, 20, 23];
+	const radii = props.isMobile ? [3, 6, 9, 12] : [5, 8, 11, 14, 17, 20, 23];
 	const opacity = useRef(1);
 
 	useFrame(({ clock }) => {
@@ -81,8 +83,6 @@ function Cells(props) {
 		cellInner.current.material.needsUpdate = true;
 	});
 
-	const camera = useThree((state) => state.camera);
-
 	useEffect(() => {
 		const initialTl = gsap.timeline({
 			scrollTrigger: {
@@ -95,7 +95,8 @@ function Cells(props) {
 		initialTl
 			.from(masterBank.current.position, {
 				duration: 1,
-				y: -25,
+				y: props.isMobile ? '' : -25,
+				x: props.isMobile ? -5 : '',
 			})
 			.to(masterBank.current.scale, {
 				duration: 1,
@@ -125,16 +126,16 @@ function Cells(props) {
 				},
 				'<'
 			);
-	}, [camera]);
+	}, [props.isMobile]);
 
 	return (
 		<>
 			<group
-				position={[18, -13, -20]}
+				position={props.isMobile ? [0, -11, -20] : [18, -13, -20]}
 				ref={masterBank}
 				visible={props.page < 3}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
-					<sphereGeometry args={[1, 16, 16]} />
+					<sphereGeometry args={props.isMobile ? [0.5, 16, 16] : [1, 16, 16]} />
 					<MeshTransmissionMaterial
 						color='#FFF4EB'
 						thickness={0.8}
@@ -146,7 +147,7 @@ function Cells(props) {
 					/>
 				</instancedMesh>
 				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
-					<sphereGeometry args={[0.4, 8, 8]} />
+					<sphereGeometry args={props.isMobile ? [0.1, 8, 8] : [0.4, 8, 8]} />
 					<meshPhysicalMaterial
 						color={'#eee'}
 						transparent
