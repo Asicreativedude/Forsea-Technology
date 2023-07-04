@@ -5,7 +5,7 @@
 import { useMemo, useContext, createContext, useRef, useEffect } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
 
 const context = createContext();
 export function Instances({ children, ...props }) {
@@ -31,15 +31,13 @@ export function Instances({ children, ...props }) {
 
 export function Model(props) {
 	useEffect(() => {
-		const scalble = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-9',
-				start: 'top center',
-				end: 'bottom top',
-				scrub: 0.2,
-				onUpdate: (self) => {
-					positionOffset.current = self.progress * 15;
-				},
+		ScrollTrigger.create({
+			trigger: '#page-9',
+			start: 'top center',
+			end: 'bottom top',
+			scrub: 0.2,
+			onUpdate: (self) => {
+				positionOffset.current = self.progress * 15;
 			},
 		});
 	}, []);

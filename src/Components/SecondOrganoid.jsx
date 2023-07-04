@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useRef, useMemo, useLayoutEffect, useEffect } from 'react';
+import { useRef, useMemo, useLayoutEffect, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
@@ -24,21 +24,7 @@ function Organoid(props) {
 	const opacity = useRef(1);
 	const speed = 0.5;
 	const tempObject = new THREE.Object3D();
-
-	// const colors = useMemo(() => {
-	// 	// let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
-	// 	let cellColors = ['#FFC2D1', '#FFB5A7', '#FB6F92', '#FCD5CE'];
-	// 	const numInstances = instances.current;
-	// 	const colorArray = new Array(numInstances * 3).fill(0);
-	// 	for (let i = 0; i < numInstances; i++) {
-	// 		const color = new THREE.Color(
-	// 			cellColors[Math.floor(Math.random() * cellColors.length)]
-	// 		);
-	// 		color.toArray(colorArray, i * 3);
-	// 	}
-	// 	return colorArray;
-	// }, []);
-
+	const [visible, setVisible] = useState(true);
 	const colors = useMemo(() => {
 		let cellColors = [
 			['#FFC2D1', '#FB6F92'],
@@ -175,6 +161,13 @@ function Organoid(props) {
 				start: 'top top',
 				end: 'bottom center',
 				scrub: 0.2,
+				onUpdate: (self) => {
+					if (self.progress > 0.9) {
+						setVisible(false);
+					} else {
+						setVisible(true);
+					}
+				},
 			},
 		});
 		organoidExitTl
@@ -213,7 +206,7 @@ function Organoid(props) {
 			<group
 				position={[15, 5, -28]}
 				ref={masterBank}
-				visible={props.page > 6 && props.page < 9}>
+				visible={props.page > 6 && visible}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial

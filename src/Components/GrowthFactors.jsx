@@ -154,7 +154,7 @@ function GrowthFactors(props) {
 			scale={[0, 0, 0]}
 			position={[0, 0, -50]}
 			ref={growthRef}
-			visible={props.page > 4 && props.page < 9}>
+			visible={props.page > 4 && props.page < 8}>
 			<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
 				<coneGeometry args={[0.8, 1, 4]} />
 				<meshPhysicalMaterial color={colors} depthWrite={false} wireframe />

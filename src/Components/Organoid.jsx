@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useRef, useEffect, useMemo, useLayoutEffect } from 'react';
+import { useRef, useEffect, useMemo, useLayoutEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
@@ -22,7 +22,7 @@ function Organoid(props) {
 	const speed = 0.5;
 	const tempObject = new THREE.Object3D();
 	const opacity = useRef(1);
-
+	const [visible, setVisible] = useState(true);
 	const colors = useMemo(() => {
 		let cellColors = [
 			['#FFC2D1', '#FB6F92'],
@@ -187,6 +187,13 @@ function Organoid(props) {
 				start: 'top top',
 				end: 'bottom center',
 				scrub: 0.2,
+				onUpdate: (self) => {
+					if (self.progress > 0.9) {
+						setVisible(false);
+					} else {
+						setVisible(true);
+					}
+				},
 			},
 		});
 		organoidExitTl
@@ -209,7 +216,7 @@ function Organoid(props) {
 			<group
 				position={[0, 0, 0]}
 				ref={masterBank}
-				visible={props.page > 2 && props.page < 9}>
+				visible={props.page > 2 && visible}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
