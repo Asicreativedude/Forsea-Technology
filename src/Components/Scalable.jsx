@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Instances, Model } from './ModelInstance';
-import { useThree } from '@react-three/fiber';
+
 import { Float } from '@react-three/drei';
 import gsap from 'gsap';
 import PropTypes from 'prop-types';
@@ -12,58 +12,45 @@ Scalable.propTypes = {
 };
 function Scalable(props) {
 	const unagi = useRef();
-	const camera = useThree((state) => state.camera);
 	useEffect(() => {
-		const cameraTl = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-9',
-				start: 'top bottom',
-				end: 'top top',
-				scrub: 0.2,
-			},
-		});
-		cameraTl.to(camera.position, {
-			duration: 1,
-			x: -40,
-		});
-		const cameraTl2 = gsap.timeline({
-			scrollTrigger: {
-				trigger: '#page-9',
-				start: 'top top',
-				end: 'bottom top',
-				scrub: 0.2,
-			},
-		});
-		cameraTl2.to(camera.position, {
-			duration: 1,
-			x: -44,
-		});
-	}, [camera]);
+		// const cameraTl = gsap.timeline({
+		// 	scrollTrigger: {
+		// 		trigger: '#page-9',
+		// 		start: 'top center',
+		// 		end: 'bottom top',
+		// 		scrub: 0.2,
+		// 	},
+		// });
+		// cameraTl.to(unagi.current.position, {
+		// 	duration: 1,
+		// 	x: 0,
+		// });
+	}, []);
 	const positions = [
 		{
-			position: [3, 0.5, 0],
+			position: [-3, 0.5, 1],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [0, 0.5, 0],
+			position: [0, 0.5, -1],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-3, 0.5, 0],
+			position: [3, 0.5, -3],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-6, 0.5, 0],
+			position: [6, 0.5, -5],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-9, 0.5, 0],
+			position: [9, 0.5, -7],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 	];
 
 	return (
-		<group ref={unagi} position={[-40, 0, 0]} visible={props.page > 7}>
+		<group ref={unagi} position={[0, 0, 0]} visible={props.page > 7}>
 			<Instances>
 				{positions.map((props, index) => (
 					<Float

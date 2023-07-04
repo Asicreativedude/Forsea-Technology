@@ -4,7 +4,7 @@
 
 import { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
-
+import * as THREE from 'three';
 const context = createContext();
 export function Instances({ children, ...props }) {
 	const { nodes } = useGLTF('/unagiCompressed.glb');
@@ -17,6 +17,12 @@ export function Instances({ children, ...props }) {
 		}),
 		[nodes]
 	);
+	instances.Sphere.material = new THREE.MeshPhysicalMaterial({
+		color: '#fff',
+		transparent: true,
+		opacity: 0.4,
+		roughness: 0.1,
+	});
 	return (
 		<Merged meshes={instances} {...props}>
 			{(instances) => (

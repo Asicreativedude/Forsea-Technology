@@ -21,6 +21,7 @@ function Organoid(props) {
 	const radius = useRef(5);
 	const instances = useRef(80);
 	const cellSize = useRef(0);
+	const opacity = useRef(1);
 	const speed = 0.5;
 	const tempObject = new THREE.Object3D();
 
@@ -129,31 +130,35 @@ function Organoid(props) {
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-8',
-				start: 'top center',
+				start: 'top bottom',
 				end: 'top top',
 				scrub: 0.2,
 			},
 		});
 		tl.from(masterBank.current.position, {
 			y: 50,
-		})
-			.from(
-				masterBank2.current.position,
-				{
-					y: 50,
-				},
-				'<'
-			)
-			.to(
-				masterBank.current.scale,
-				{
-					x: 1,
-					y: 1,
-					z: 1,
-					duration: 1,
-				},
-				'<'
-			)
+		}).to(
+			masterBank.current.scale,
+			{
+				x: 1,
+				y: 1,
+				z: 1,
+				duration: 1,
+			},
+			'<'
+		);
+		const tl2 = gsap.timeline({
+			scrollTrigger: {
+				trigger: '#page-7',
+				start: 'top center',
+				end: 'bottom top',
+				scrub: 0.2,
+			},
+		});
+		tl2
+			.from(masterBank2.current.position, {
+				y: 50,
+			})
 			.to(
 				masterBank2.current.scale,
 				{
@@ -185,10 +190,14 @@ function Organoid(props) {
 				},
 				'<'
 			)
-			.to(cell2.current.material, {
-				duration: 1,
-				opacity: 0,
-			})
+			.to(
+				cell2.current.material,
+				{
+					duration: 1,
+					opacity: 0,
+				},
+				'<'
+			)
 			.to(
 				cellInner2.current.material,
 				{
@@ -201,7 +210,10 @@ function Organoid(props) {
 
 	return (
 		<>
-			<group position={[15, 5, -28]} ref={masterBank} visible={props.page > 6}>
+			<group
+				position={[15, 5, -28]}
+				ref={masterBank}
+				visible={props.page > 6 && props.page < 9}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
@@ -210,14 +222,24 @@ function Organoid(props) {
 						transmission={0.96}
 						roughness={0.2}
 						ior={1.25}
+						opacity={opacity.current}
+						transparent
 					/>
 				</instancedMesh>
 				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
 					<sphereGeometry args={[0.5, 8, 8]} />
-					<meshPhysicalMaterial color={colors} depthWrite={false} />
+					<meshPhysicalMaterial
+						color={colors}
+						depthWrite={false}
+						opacity={opacity.current}
+						transparent
+					/>
 				</instancedMesh>
 			</group>
-			<group position={[8, 3, -30]} ref={masterBank2} visible={props.page > 6}>
+			<group
+				position={[8, 3, -30]}
+				ref={masterBank2}
+				visible={props.page > 5 && props.page < 9}>
 				<instancedMesh ref={cell2} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
@@ -226,11 +248,18 @@ function Organoid(props) {
 						transmission={0.96}
 						roughness={0.2}
 						ior={1.25}
+						opacity={opacity.current}
+						transparent
 					/>
 				</instancedMesh>
 				<instancedMesh ref={cellInner2} args={[null, null, instances.current]}>
 					<sphereGeometry args={[0.5, 8, 8]} />
-					<meshPhysicalMaterial color={colors} depthWrite={false} />
+					<meshPhysicalMaterial
+						color={colors}
+						depthWrite={false}
+						opacity={opacity.current}
+						transparent
+					/>
 				</instancedMesh>
 			</group>
 		</>

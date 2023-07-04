@@ -13,7 +13,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Cells from './Components/Cells';
 import StemCells from './Components/StemCells';
 import BioReactor from './Components/BioReactor';
-import Gmo from './Components/Gmo';
+// import Gmo from './Components/Gmo';
 import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
@@ -132,13 +132,13 @@ function Experience() {
 
 				<color attach='background' args={['#222']} />
 				<Suspense fallback={null}>
-					<Environment preset='warehouse' resolution={256} intensity={0.5} />
+					<Environment preset='warehouse' />
 					<StemCells page={currentPage} />
 					<Cells page={currentPage} />
 					<BioReactor page={currentPage} />
 					<Organoid page={currentPage} />
-					<GrowthFactors />
-					<Gmo page={currentPage} />
+					<GrowthFactors page={currentPage} />
+					{/* <Gmo page={currentPage} /> */}
 					<SecondOrganoid page={currentPage} />
 					<Scalable page={currentPage} />
 					<Preload all />

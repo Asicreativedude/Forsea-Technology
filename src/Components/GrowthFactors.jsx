@@ -4,8 +4,13 @@ import { useFrame } from '@react-three/fiber';
 import { useLayoutEffect, useRef, useMemo, useEffect } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
+import PropTypes from 'prop-types';
 
-function GrowthFactors() {
+GrowthFactors.propTypes = {
+	page: PropTypes.number.isRequired,
+};
+
+function GrowthFactors(props) {
 	const ref = useRef();
 	const growthFactor = new THREE.Object3D();
 	const growhtInstances = 50;
@@ -145,7 +150,11 @@ function GrowthFactors() {
 	}, []);
 
 	return (
-		<group scale={[0, 0, 0]} position={[0, 0, -50]} ref={growthRef}>
+		<group
+			scale={[0, 0, 0]}
+			position={[0, 0, -50]}
+			ref={growthRef}
+			visible={props.page > 4 && props.page < 9}>
 			<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
 				<coneGeometry args={[0.8, 1, 4]} />
 				<meshPhysicalMaterial color={colors} depthWrite={false} wireframe />

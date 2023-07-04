@@ -206,7 +206,10 @@ function Organoid(props) {
 
 	return (
 		<>
-			<group position={[0, 0, 0]} ref={masterBank} visible={props.page > 2}>
+			<group
+				position={[0, 0, 0]}
+				ref={masterBank}
+				visible={props.page > 2 && props.page < 9}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
