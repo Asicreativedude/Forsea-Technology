@@ -14,6 +14,9 @@ function Organoid(props) {
 	const cell = useRef();
 	const cellInner = useRef();
 	const masterBank = useRef();
+	const cell2 = useRef();
+	const cellInner2 = useRef();
+	const masterBank2 = useRef();
 	const startTime = useRef();
 	const radius = useRef(5);
 	const instances = useRef(80);
@@ -71,9 +74,14 @@ function Organoid(props) {
 				id,
 				new THREE.Color(colors[id * 3], colors[id * 3 + 1], colors[id * 3 + 2])
 			);
+			cellInner2.current.setColorAt(
+				id,
+				new THREE.Color(colors[id * 3], colors[id * 3 + 1], colors[id * 3 + 2])
+			);
 		}
 
 		cellInner.current.instanceColor.needsUpdate = true;
+		cellInner2.current.instanceColor.needsUpdate = true;
 	}, [colors]);
 
 	useFrame(({ clock }) => {
@@ -83,10 +91,11 @@ function Organoid(props) {
 			}
 
 			masterBank.current.scale.set(0, 0, 0);
+			masterBank2.current.scale.set(0, 0, 0);
 		} else {
 			const time = clock.getElapsedTime() - startTime.current;
 			masterBank.current.rotation.y += 0.001;
-
+			masterBank2.current.rotation.y += 0.001;
 			if (cellSize.current < 200) {
 				for (let i = 0; i < instances.current; i++) {
 					cellSize.current = (time * i) / 200;
@@ -107,10 +116,14 @@ function Organoid(props) {
 				tempObject.updateMatrix();
 				cell.current.setMatrixAt(id, tempObject.matrix);
 				cellInner.current.setMatrixAt(id, tempObject.matrix);
+				cell2.current.setMatrixAt(id, tempObject.matrix);
+				cellInner2.current.setMatrixAt(id, tempObject.matrix);
 			}
 		}
 		cell.current.instanceMatrix.needsUpdate = true;
 		cellInner.current.instanceMatrix.needsUpdate = true;
+		cell2.current.instanceMatrix.needsUpdate = true;
+		cellInner2.current.instanceMatrix.needsUpdate = true;
 	});
 	useEffect(() => {
 		const tl = gsap.timeline({
@@ -123,16 +136,34 @@ function Organoid(props) {
 		});
 		tl.from(masterBank.current.position, {
 			y: 50,
-		}).to(
-			masterBank.current.scale,
-			{
-				x: 1,
-				y: 1,
-				z: 1,
-				duration: 1,
-			},
-			'<'
-		);
+		})
+			.from(
+				masterBank2.current.position,
+				{
+					y: 50,
+				},
+				'<'
+			)
+			.to(
+				masterBank.current.scale,
+				{
+					x: 1,
+					y: 1,
+					z: 1,
+					duration: 1,
+				},
+				'<'
+			)
+			.to(
+				masterBank2.current.scale,
+				{
+					x: 1,
+					y: 1,
+					z: 1,
+					duration: 1,
+				},
+				'<'
+			);
 		const organoidExitTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-8',
@@ -141,17 +172,36 @@ function Organoid(props) {
 				scrub: 0.2,
 			},
 		});
-		organoidExitTl.to(masterBank.current.scale, {
-			duration: 1,
-			x: 0,
-			y: 0,
-			z: 0,
-		});
+		organoidExitTl
+			.to(cell.current.material, {
+				duration: 1,
+				opacity: 0,
+			})
+			.to(
+				cellInner.current.material,
+				{
+					duration: 1,
+					opacity: 0,
+				},
+				'<'
+			)
+			.to(cell2.current.material, {
+				duration: 1,
+				opacity: 0,
+			})
+			.to(
+				cellInner2.current.material,
+				{
+					duration: 1,
+					opacity: 0,
+				},
+				'<'
+			);
 	}, []);
 
 	return (
 		<>
-			<group position={[10, 5, -35]} ref={masterBank} visible={props.page > 6}>
+			<group position={[15, 5, -28]} ref={masterBank} visible={props.page > 6}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
@@ -163,6 +213,22 @@ function Organoid(props) {
 					/>
 				</instancedMesh>
 				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
+					<sphereGeometry args={[0.5, 8, 8]} />
+					<meshPhysicalMaterial color={colors} depthWrite={false} />
+				</instancedMesh>
+			</group>
+			<group position={[8, 3, -30]} ref={masterBank2} visible={props.page > 6}>
+				<instancedMesh ref={cell2} args={[null, null, instances.current]}>
+					<sphereGeometry args={[1, 16, 16]} />
+					<MeshTransmissionMaterial
+						color='#FFF4EB'
+						thickness={0.6}
+						transmission={0.96}
+						roughness={0.2}
+						ior={1.25}
+					/>
+				</instancedMesh>
+				<instancedMesh ref={cellInner2} args={[null, null, instances.current]}>
 					<sphereGeometry args={[0.5, 8, 8]} />
 					<meshPhysicalMaterial color={colors} depthWrite={false} />
 				</instancedMesh>

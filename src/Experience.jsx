@@ -18,8 +18,21 @@ import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
 import SecondOrganoid from './Components/SecondOrganoid';
-
+// import { Html, useProgress } from '@react-three/drei';
 gsap.registerPlugin(ScrollTrigger);
+
+// function Loader() {
+// 	const { active, progress, errors, item, loaded, total } = useProgress();
+// 	console.log(active, progress, errors, item, loaded, total);
+// 	useEffect(() => {
+// 		console.log(active, progress);
+// 	}, [active, progress]);
+// 	return (
+// 		<Html style={{ zIndex: '9999', color: 'white' }} center>
+// 			{progress} % loaded
+// 		</Html>
+// 	);
+// }
 
 function Experience() {
 	const [currentPage, setCurrentPage] = useState(1);
@@ -116,9 +129,10 @@ function Experience() {
 				/>
 				<AdaptiveDpr pixelated />
 				<Perf position='top-left' />
+
 				<color attach='background' args={['#222']} />
-				<Environment preset='warehouse' resolution={256} intensity={0.5} />
 				<Suspense fallback={null}>
+					<Environment preset='warehouse' resolution={256} intensity={0.5} />
 					<StemCells page={currentPage} />
 					<Cells page={currentPage} />
 					<BioReactor page={currentPage} />
@@ -130,6 +144,7 @@ function Experience() {
 					<Preload all />
 				</Suspense>
 			</Canvas>
+
 			<div className='progress-c'>
 				<div className='progress' ref={progressBar} />
 			</div>

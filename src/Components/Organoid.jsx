@@ -164,14 +164,23 @@ function Organoid(props) {
 				scrub: 0.2,
 			},
 		});
-		organoidMoveTl2.to(
-			radius,
-			{
-				duration: 1,
-				current: 10,
-			},
-			'<'
-		);
+		organoidMoveTl2
+			.to(
+				radius,
+				{
+					duration: 1,
+					current: 10,
+				},
+				'<'
+			)
+			.to(
+				masterBank.current.position,
+				{
+					duration: 1,
+					y: -3,
+				},
+				'<'
+			);
 		const organoidExitTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-8',
@@ -180,12 +189,19 @@ function Organoid(props) {
 				scrub: 0.2,
 			},
 		});
-		organoidExitTl.to(masterBank.current.scale, {
-			duration: 1,
-			x: 0,
-			y: 0,
-			z: 0,
-		});
+		organoidExitTl
+			.to(cell.current.material, {
+				duration: 1,
+				opacity: 0,
+			})
+			.to(
+				cellInner.current.material,
+				{
+					duration: 1,
+					opacity: 0,
+				},
+				'<'
+			);
 	}, []);
 
 	return (
