@@ -4,8 +4,11 @@ import { GradientTexture } from '@react-three/drei';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
-
-function Gmo() {
+import PropTypes from 'prop-types';
+Gmo.propTypes = {
+	page: PropTypes.number.isRequired,
+};
+function Gmo(props) {
 	const gmoRef = useRef();
 	useEffect(() => {
 		const gmoTl = gsap.timeline({
@@ -34,7 +37,11 @@ function Gmo() {
 		});
 	}, []);
 	return (
-		<group ref={gmoRef} position={[25, -4, -5]} rotation={[0, 0, 0]}>
+		<group
+			ref={gmoRef}
+			position={[25, -4, -5]}
+			rotation={[0, 0, 0]}
+			visible={props.page > 5}>
 			<mesh>
 				<torusGeometry args={[6, 0.1, 96, 96]} />
 				<meshPhysicalMaterial>

@@ -21,15 +21,24 @@ function BioReactor(props) {
 	const instances = 200;
 	const growthFactor = new THREE.Object3D();
 	const cell = new THREE.Object3D();
+
 	const colors = useMemo(() => {
-		let cellColors = ['#61FF00', '#9E00FF', '#FF005C', '#00A3FF'];
+		const cellColors = [
+			['#61FF00', '#9E00FF'],
+			['#FF005C', '#00A3FF'],
+			['#61FF00', '#9E00FF'],
+			['#FF005C', '#00A3FF'],
+		];
 		const numInstances = growhtInstances;
 		const colorArray = new Array(numInstances * 3).fill(0);
+		let colorIndex = 0;
 		for (let i = 0; i < numInstances; i++) {
+			const groupColors = cellColors[i % cellColors.length];
 			const color = new THREE.Color(
-				cellColors[Math.floor(Math.random() * cellColors.length)]
+				groupColors[Math.floor(i / 2) % groupColors.length]
 			);
-			color.toArray(colorArray, i * 3);
+			color.toArray(colorArray, colorIndex);
+			colorIndex += 3;
 		}
 		return colorArray;
 	}, [growhtInstances]);
@@ -140,7 +149,7 @@ function BioReactor(props) {
 			<group position={[25, -5, -100]}>
 				<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
 					<coneGeometry args={[0.5, 1, 4]} />
-					<meshPhysicalMaterial color={colors} wireframe />
+					<meshBasicMaterial color={colors} wireframe />
 				</instancedMesh>
 			</group>
 			<group position={[20, -10, -70]}>

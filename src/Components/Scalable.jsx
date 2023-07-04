@@ -41,23 +41,23 @@ function Scalable(props) {
 	}, [camera]);
 	const positions = [
 		{
-			position: [3, 1, 0],
+			position: [3, 0.5, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [0, 1, 0],
+			position: [0, 0.5, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-3, 1, 0],
+			position: [-3, 0.5, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-6, 1, 0],
+			position: [-6, 0.5, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 		{
-			position: [-9, 1, 0],
+			position: [-9, 0.5, 0],
 			rotation: [Math.PI / 4, Math.PI, Math.PI / 8],
 		},
 	];
@@ -69,7 +69,7 @@ function Scalable(props) {
 					<Float
 						key={index}
 						speed={1}
-						rotationIntensity={0}
+						rotationIntensity={1}
 						floatIntensity={1}
 						floatingRange={[-0.5, 0.5]}>
 						<Model {...props} />

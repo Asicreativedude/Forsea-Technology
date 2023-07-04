@@ -152,24 +152,20 @@ function Organoid(props) {
 	return (
 		<>
 			<group position={[10, 5, -35]} ref={masterBank} visible={props.page > 6}>
-				<group>
-					<instancedMesh ref={cell} args={[null, null, instances.current]}>
-						<sphereGeometry args={[1, 16, 16]} />
-						<MeshTransmissionMaterial
-							color='#FFF4EB'
-							thickness={0.6}
-							transmission={0.96}
-							roughness={0.2}
-							ior={1.25}
-						/>
-					</instancedMesh>
-				</group>
-				<group>
-					<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
-						<sphereGeometry args={[0.5, 8, 8]} />
-						<meshPhysicalMaterial color={colors} depthWrite={false} />
-					</instancedMesh>
-				</group>
+				<instancedMesh ref={cell} args={[null, null, instances.current]}>
+					<sphereGeometry args={[1, 16, 16]} />
+					<MeshTransmissionMaterial
+						color='#FFF4EB'
+						thickness={0.6}
+						transmission={0.96}
+						roughness={0.2}
+						ior={1.25}
+					/>
+				</instancedMesh>
+				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
+					<sphereGeometry args={[0.5, 8, 8]} />
+					<meshPhysicalMaterial color={colors} depthWrite={false} />
+				</instancedMesh>
 			</group>
 		</>
 	);

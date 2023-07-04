@@ -117,7 +117,6 @@ function Experience() {
 				<AdaptiveDpr pixelated />
 				<Perf position='top-left' />
 				<color attach='background' args={['#222']} />
-				{/* <ambientLight intensity={1} /> */}
 				<Environment preset='warehouse' resolution={256} intensity={0.5} />
 				<Suspense fallback={null}>
 					<StemCells page={currentPage} />
