@@ -9,7 +9,7 @@ import { ScrollTrigger } from 'gsap/all';
 
 const context = createContext();
 export function Instances({ children, ...props }) {
-	const { nodes } = useGLTF('/box.glb');
+	const { nodes } = useGLTF('/box2.glb');
 	const instances = useMemo(
 		() => ({
 			Logos: nodes['logos-01001'],
