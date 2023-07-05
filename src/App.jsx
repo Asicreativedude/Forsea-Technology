@@ -37,6 +37,7 @@ export function App() {
 							</h2>
 						</div>
 					</div>
+					{/* <div className='bioreactor-tube'></div> */}
 				</div>
 				<div className='section' id='page-4'>
 					<div className='container'>

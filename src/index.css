@@ -86,8 +86,8 @@ p {
 	width: 66%;
 	height: 100%;
 	background: rgba(255, 255, 255, 0);
-	backdrop-filter: blur(3px);
-	--webkit-backdrop-filter: blur(3px);
+	backdrop-filter: blur(7px);
+	--webkit-backdrop-filter: blur(7px);
 	z-index: 0;
 }
 #page-10 {
@@ -145,6 +145,13 @@ p {
 	width: 0%;
 	height: 100%;
 	background-color: #538ce1;
+}
+
+.bioreactor-tube {
+	background: #0d64e637;
+	opacity: 0.54;
+	height: 100vh;
+	width: 100vw;
 }
 
 @media only screen and (max-width: 991px) {

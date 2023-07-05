@@ -74,11 +74,10 @@ function StemCells(props) {
 						/>
 						<MeshTransmissionMaterial
 							color='#ffffff'
-							thickness={0.5}
-							transmission={0.98}
-							roughness={0.6}
+							thickness={0.8}
+							transmission={0.96}
+							roughness={0.2}
 							ior={1.25}
-							resolution={128}
 						/>
 					</mesh>
 					<mesh material={insideMaterial}>
@@ -103,11 +102,10 @@ function StemCells(props) {
 						/>
 						<MeshTransmissionMaterial
 							color='#ffffff'
-							thickness={0.5}
-							transmission={0.98}
-							roughness={0.6}
+							thickness={0.8}
+							transmission={0.96}
+							roughness={0.2}
 							ior={1.25}
-							resolution={128}
 						/>
 					</mesh>
 					<mesh material={insideMaterial}>

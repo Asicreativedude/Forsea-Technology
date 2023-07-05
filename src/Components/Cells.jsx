@@ -16,10 +16,10 @@ function Cells(props) {
 	const startTime = useRef(null);
 	const masterBank = useRef();
 	const instances = useRef(200);
-	props.isMobile ? (instances.current = 100) : (instances.current = 200);
+	props.isMobile ? (instances.current = 50) : (instances.current = 200);
 	const cellSize = useRef(0);
 	const tempObject = new THREE.Object3D();
-	const radii = props.isMobile ? [3, 6, 9, 12] : [5, 8, 11, 14, 17, 20, 23];
+	const radii = props.isMobile ? [2, 4, 6] : [5, 8, 11, 14, 17, 20, 23];
 	const opacity = useRef(1);
 
 	useFrame(({ clock }) => {
@@ -44,7 +44,13 @@ function Cells(props) {
 				let instancesPerRadius = Math.ceil(
 					instancesLeft / (radii.length - radiusIndex) / 2
 				);
-				if (radiusIndex === 0) instancesPerRadius = 10;
+				if (radiusIndex === 0) {
+					if (props.isMobile) {
+						instancesPerRadius = 5;
+					} else {
+						instancesPerRadius = 10;
+					}
+				}
 
 				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
 				const currentRadius = radii[radiusIndex];

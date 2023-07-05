@@ -21,7 +21,6 @@ function BioReactor(props) {
 	const instances = 200;
 	const growthFactor = new THREE.Object3D();
 	const cell = new THREE.Object3D();
-
 	const colors = useMemo(() => {
 		const cellColors = [
 			['#61FF00', '#9E00FF'],
@@ -142,35 +141,37 @@ function BioReactor(props) {
 	}, []);
 
 	return (
-		<group
-			ref={bioReactorRef}
-			position={[0, -10, 0]}
-			visible={props.page > 1 && props.page < 5}>
-			<group position={[25, -5, -100]}>
-				<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
-					<coneGeometry args={[0.5, 1, 4]} />
-					<meshBasicMaterial color={colors} wireframe />
-				</instancedMesh>
+		<>
+			<group
+				ref={bioReactorRef}
+				position={[0, -10, 0]}
+				visible={props.page > 1 && props.page < 5}>
+				<group position={[25, -5, -100]}>
+					<instancedMesh ref={ref} args={[null, null, growhtInstances]}>
+						<coneGeometry args={[0.5, 1, 4]} />
+						<meshBasicMaterial color={colors} wireframe />
+					</instancedMesh>
+				</group>
+				<group position={[20, -10, -70]}>
+					<instancedMesh ref={cellOuter} args={[null, null, instances]}>
+						<sphereGeometry args={[1, 8, 8]} />
+						<MeshTransmissionMaterial
+							color='#FFF4EB'
+							thickness={0.8}
+							transmission={0.96}
+							roughness={0.2}
+							ior={1.25}
+						/>
+					</instancedMesh>
+				</group>
+				<group position={[20, -10, -70]}>
+					<instancedMesh ref={cellInner} args={[null, null, instances]}>
+						<sphereGeometry args={[0.4, 8, 8]} />
+						<meshPhysicalMaterial color='#eee' />
+					</instancedMesh>
+				</group>
 			</group>
-			<group position={[20, -10, -70]}>
-				<instancedMesh ref={cellOuter} args={[null, null, instances]}>
-					<sphereGeometry args={[1, 8, 8]} />
-					<MeshTransmissionMaterial
-						color='#FFF4EB'
-						thickness={0.8}
-						transmission={0.96}
-						roughness={0.2}
-						ior={1.25}
-					/>
-				</instancedMesh>
-			</group>
-			<group position={[20, -10, -70]}>
-				<instancedMesh ref={cellInner} args={[null, null, instances]}>
-					<sphereGeometry args={[0.4, 8, 8]} />
-					<meshPhysicalMaterial color='#eee' />
-				</instancedMesh>
-			</group>
-		</group>
+		</>
 	);
 }
 export default BioReactor;
