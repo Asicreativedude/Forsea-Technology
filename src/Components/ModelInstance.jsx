@@ -2,10 +2,8 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/no-unknown-property */
 
-import { useMemo, useContext, createContext, useRef, useEffect } from 'react';
+import { useMemo, useContext, createContext } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import { ScrollTrigger } from 'gsap/all';
 
 const context = createContext();
 export function Instances({ children, ...props }) {
@@ -17,7 +15,6 @@ export function Instances({ children, ...props }) {
 		}),
 		[nodes]
 	);
-	console.log(instances);
 	return (
 		<Merged meshes={instances} {...props}>
 			{(instances) => (

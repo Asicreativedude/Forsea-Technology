@@ -126,7 +126,7 @@ function Organoid(props) {
 			for (let j = 0; j < instances.current; j++) {
 				const phi = Math.acos(-1 + (2 * j) / instances.current);
 				let theta = Math.sqrt(instances.current * Math.PI) * phi;
-				theta += Math.sin(time * speed + j) * 0.05; // Add small, random movement
+				props.isMobile ? '' : (theta += Math.sin(time * speed + j) * 0.05); // Add small, random movement
 				const x = radius.current * Math.sin(phi) * Math.cos(theta);
 				const y = radius.current * Math.cos(phi);
 				const z = radius.current * Math.sin(phi) * Math.sin(theta);

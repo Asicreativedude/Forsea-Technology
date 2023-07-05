@@ -3,9 +3,10 @@
 import Experience from './Experience';
 
 export function App() {
+	const isMobile = window.innerWidth < 991;
 	return (
 		<>
-			<Experience />
+			{isMobile ? '' : <Experience />}
 			<div className='page-w'>
 				<div className='section' id='page-1'>
 					<div className='container'>

@@ -39,7 +39,6 @@ function Experience() {
 	const [switchText, setSwitchText] = useState(false);
 	const [dpr, setDpr] = useState(1);
 	const progressBar = useRef(0);
-	const isMobile = window.innerWidth < 991;
 
 	useEffect(() => {
 		ScrollTrigger.create({
@@ -136,13 +135,13 @@ function Experience() {
 					<color attach='background' args={['#222']} />
 					<Suspense fallback={null}>
 						<Environment preset='warehouse' />
-						<StemCells page={currentPage} isMobile={isMobile} />
-						<Cells page={currentPage} isMobile={isMobile} />
-						<BioReactor page={currentPage} isMobile={isMobile} />
-						<Organoid page={currentPage} isMobile={isMobile} />
-						<GrowthFactors page={currentPage} isMobile={isMobile} />
-						<SecondOrganoid page={currentPage} isMobile={isMobile} />
-						<Scalable page={currentPage} isMobile={isMobile} />
+						<StemCells page={currentPage} />
+						<Cells page={currentPage} />
+						<BioReactor page={currentPage} />
+						<Organoid page={currentPage} />
+						<GrowthFactors page={currentPage} />
+						<SecondOrganoid page={currentPage} />
+						<Scalable page={currentPage} />
 						<Preload all />
 					</Suspense>
 				</Canvas>

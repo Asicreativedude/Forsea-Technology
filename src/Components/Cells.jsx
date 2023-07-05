@@ -8,7 +8,6 @@ import gsap from 'gsap';
 
 Cells.propTypes = {
 	page: PropTypes.number.isRequired,
-	isMobile: PropTypes.bool.isRequired,
 };
 function Cells(props) {
 	const cell = useRef();
@@ -16,10 +15,9 @@ function Cells(props) {
 	const startTime = useRef(null);
 	const masterBank = useRef();
 	const instances = useRef(200);
-	props.isMobile ? (instances.current = 50) : (instances.current = 200);
 	const cellSize = useRef(0);
 	const tempObject = new THREE.Object3D();
-	const radii = props.isMobile ? [2, 4, 6] : [5, 8, 11, 14, 17, 20, 23];
+	const radii = [5, 8, 11, 14, 17, 20, 23];
 	const opacity = useRef(1);
 
 	useFrame(({ clock }) => {
@@ -45,11 +43,7 @@ function Cells(props) {
 					instancesLeft / (radii.length - radiusIndex) / 2
 				);
 				if (radiusIndex === 0) {
-					if (props.isMobile) {
-						instancesPerRadius = 5;
-					} else {
-						instancesPerRadius = 10;
-					}
+					instancesPerRadius = 10;
 				}
 
 				const angleIncrement = (2 * Math.PI) / instancesPerRadius;
@@ -101,8 +95,7 @@ function Cells(props) {
 		initialTl
 			.from(masterBank.current.position, {
 				duration: 1,
-				y: props.isMobile ? '' : -25,
-				x: props.isMobile ? -5 : '',
+				y: -25,
 			})
 			.to(masterBank.current.scale, {
 				duration: 1,
@@ -132,16 +125,16 @@ function Cells(props) {
 				},
 				'<'
 			);
-	}, [props.isMobile]);
+	}, []);
 
 	return (
 		<>
 			<group
-				position={props.isMobile ? [0, -11, -20] : [18, -13, -20]}
+				position={[18, -13, -20]}
 				ref={masterBank}
 				visible={props.page < 3}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
-					<sphereGeometry args={props.isMobile ? [0.5, 16, 16] : [1, 16, 16]} />
+					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
 						color='#FFF4EB'
 						thickness={0.8}
@@ -153,7 +146,7 @@ function Cells(props) {
 					/>
 				</instancedMesh>
 				<instancedMesh ref={cellInner} args={[null, null, instances.current]}>
-					<sphereGeometry args={props.isMobile ? [0.1, 8, 8] : [0.4, 8, 8]} />
+					<sphereGeometry args={[0.4, 8, 8]} />
 					<meshPhysicalMaterial
 						color={'#eee'}
 						transparent
