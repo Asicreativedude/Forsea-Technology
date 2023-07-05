@@ -9,17 +9,15 @@ import { ScrollTrigger } from 'gsap/all';
 
 const context = createContext();
 export function Instances({ children, ...props }) {
-	const { nodes } = useGLTF('/unagi.glb');
+	const { nodes } = useGLTF('/box.glb');
 	const instances = useMemo(
 		() => ({
-			Cube: nodes.Cube001,
-			Cube1: nodes.Cube001_1,
-			Cube2: nodes.Cube001_2,
-			Cube3: nodes.Cube001_3,
+			Logos: nodes['logos-01001'],
+			Cube: nodes.Cube006,
 		}),
 		[nodes]
 	);
-
+	console.log(instances);
 	return (
 		<Merged meshes={instances} {...props}>
 			{(instances) => (
@@ -30,34 +28,15 @@ export function Instances({ children, ...props }) {
 }
 
 export function Model(props) {
-	useEffect(() => {
-		ScrollTrigger.create({
-			trigger: '#page-9',
-			start: 'top center',
-			end: 'bottom top',
-			scrub: 0.2,
-			onUpdate: (self) => {
-				positionOffset.current = self.progress * 15;
-			},
-		});
-	}, []);
-	const positionOffset = useRef(0);
 	const instances = useContext(context);
-	const model = useRef();
-	useFrame(() => {
-		model.current.position.z = -3 + positionOffset.current;
-	});
 	return (
 		<group {...props} dispose={null}>
-			<group
-				ref={model}
-				position={[-2, 0, 0]}
-				scale={[0.86152095, 0.13410865, 0.54747868]}>
-				<instances.Cube />
-				<instances.Cube1 />
-				<instances.Cube2 />
-				<instances.Cube3 />
-			</group>
+			<instances.Logos
+				position={[0.004, 0.068, 0.166]}
+				rotation={[0, -0.002, 0]}
+				scale={0.116}
+			/>
+			<instances.Cube scale={[0.214, 0.059, 0.335]} />
 		</group>
 	);
 }

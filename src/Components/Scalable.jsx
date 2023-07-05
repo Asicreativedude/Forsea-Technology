@@ -15,16 +15,19 @@ function Scalable(props) {
 	const [visible, setVisible] = useState(false);
 	const positions = [
 		{
-			position: [-0.5, -3, 0],
-			rotation: [Math.PI / 1.8, Math.PI, Math.PI * 2],
+			position: [1, -1, 0],
+			scale: [3, 3, 3],
+			rotation: [Math.PI / 0.7, Math.PI, Math.PI * 1.1],
 		},
 		{
-			position: [1, -1.5, -0.5],
-			rotation: [Math.PI / 1.8, Math.PI, Math.PI * 2],
+			position: [3, 0, -2],
+			scale: [3, 3, 3],
+			rotation: [Math.PI / 0.7, Math.PI, Math.PI * 1.2],
 		},
 		{
-			position: [-1, 0, 0.5],
-			rotation: [Math.PI / 1.8, Math.PI, Math.PI * 2],
+			position: [3, 3, 0],
+			scale: [3, 3, 3],
+			rotation: [Math.PI / 0.7, Math.PI, Math.PI * 1.2],
 		},
 	];
 	useEffect(() => {
@@ -42,11 +45,22 @@ function Scalable(props) {
 			},
 		});
 	}, []);
+
+	useEffect(() => {
+		ScrollTrigger.create({
+			trigger: '#page-9',
+			start: 'top center',
+			end: 'bottom top',
+			scrub: 0.2,
+			onUpdate: (self) => {
+				positionOffset.current = self.progress * 15;
+			},
+		});
+	}, []);
+	const positionOffset = useRef(0);
+
 	return (
-		<group
-			ref={unagi}
-			position={[0, -1, 0]}
-			visible={props.page > 7 && visible}>
+		<group ref={unagi} position={[0, 0, 0]} visible={props.page > 7 && visible}>
 			<Instances>
 				{positions.map((props, index) => (
 					<Float
