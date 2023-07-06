@@ -3,6 +3,7 @@
 import { MeshTransmissionMaterial, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
+import { useThree } from '@react-three/fiber';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -55,7 +56,8 @@ function StemCells(props) {
 			'<'
 		);
 	}, []);
-
+	const renderer = useThree((state) => state.gl);
+	console.log(renderer);
 	return (
 		<>
 			<Float

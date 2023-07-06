@@ -95,7 +95,7 @@ export function App() {
 							</p>
 						</div>
 					</div>
-				</div>{' '}
+				</div>
 				<div className='section' id='page-9'>
 					<div className='container'>
 						<div className='tech-c'>

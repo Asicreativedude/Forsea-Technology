@@ -6,6 +6,7 @@ import {
 	Preload,
 	AdaptiveDpr,
 	Environment,
+	AdaptiveEvents,
 } from '@react-three/drei';
 import { Perf } from 'r3f-perf';
 import gsap from 'gsap';
@@ -17,6 +18,7 @@ import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
 import SecondOrganoid from './Components/SecondOrganoid';
+
 // import { Html, useProgress } from '@react-three/drei';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -106,6 +108,7 @@ function Experience() {
 			});
 		});
 	}, []);
+
 	return (
 		<>
 			<div className='canvas-c'>
@@ -118,6 +121,11 @@ function Experience() {
 						depth: false,
 						stencil: false,
 						preserveDrawingBuffer: false,
+						shadowMap: {
+							enabled: false,
+							autoUpdate: false,
+							needsUpdate: false,
+						},
 					}}
 					camera={{
 						near: 0.1,
@@ -129,9 +137,9 @@ function Experience() {
 							setDpr(Math.round(0.5 + 1.5 * factor, 1));
 						}}
 					/>
+					<AdaptiveEvents />
 					<AdaptiveDpr pixelated />
 					<Perf position='top-left' />
-
 					<color attach='background' args={['#222']} />
 					<Suspense fallback={null}>
 						<Environment preset='warehouse' />

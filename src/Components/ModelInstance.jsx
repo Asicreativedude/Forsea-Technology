@@ -7,7 +7,9 @@ import { useGLTF, Merged } from '@react-three/drei';
 
 const context = createContext();
 export function Instances({ children, ...props }) {
-	const { nodes } = useGLTF('/box2.glb');
+	const { nodes } = useGLTF(
+		'https://uploads-ssl.webflow.com/645d43bcad69ce6ac8fffa52/64a5735b500fa85b4fa4874c_box2.glb.txt'
+	);
 	const instances = useMemo(
 		() => ({
 			Logos: nodes['logos-01001'],

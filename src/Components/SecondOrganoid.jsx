@@ -17,14 +17,12 @@ function Organoid(props) {
 	const cell2 = useRef();
 	const cellInner2 = useRef();
 	const masterBank2 = useRef();
-	const startTime = useRef();
 	const radius = useRef(5);
 	const instances = useRef(80);
-	const cellSize = useRef(0);
 	const opacity = useRef(1);
-	const speed = 0.5;
-	const tempObject = new THREE.Object3D();
+	const tempObject = useMemo(() => new THREE.Object3D(), []);
 	const [visible, setVisible] = useState(true);
+
 	const colors = useMemo(() => {
 		let cellColors = [
 			['#FCD2CA', '#FF4775'],
@@ -111,48 +109,36 @@ function Organoid(props) {
 
 		cellInner.current.instanceColor.needsUpdate = true;
 		cellInner2.current.instanceColor.needsUpdate = true;
-	}, [colors]);
+	}, [colors, props.page, radius, tempObject]);
 
-	useFrame(({ clock }) => {
-		if (!startTime.current) {
-			if (props.page === 7) {
-				startTime.current = clock.getElapsedTime();
-			}
-
-			masterBank.current.scale.set(0, 0, 0);
-			masterBank2.current.scale.set(0, 0, 0);
-		} else {
-			const time = clock.getElapsedTime() - startTime.current;
-			masterBank.current.rotation.y += 0.001;
-			masterBank2.current.rotation.y += 0.001;
-			if (cellSize.current < 200) {
-				for (let i = 0; i < instances.current; i++) {
-					cellSize.current = (time * i) / 200;
-				}
-			}
-
-			for (let j = 0; j < instances.current; j++) {
-				const phi = Math.acos(-1 + (2 * j) / instances.current);
-				let theta = Math.sqrt(instances.current * Math.PI) * phi;
-				theta += Math.sin(time * speed + j) * 0.1; // Add small, random movement
-				const x = radius.current * Math.sin(phi) * Math.cos(theta);
-				const y = radius.current * Math.cos(phi);
-				const z = radius.current * Math.sin(phi) * Math.sin(theta);
-				const id = j;
-				tempObject.scale.set(1, 1, 1);
-
-				tempObject.position.set(x, y, z);
-				tempObject.updateMatrix();
-				cell.current.setMatrixAt(id, tempObject.matrix);
-				cellInner.current.setMatrixAt(id, tempObject.matrix);
-				cell2.current.setMatrixAt(id, tempObject.matrix);
-				cellInner2.current.setMatrixAt(id, tempObject.matrix);
-			}
+	useEffect(() => {
+		for (let j = 0; j < instances.current; j++) {
+			const phi = Math.acos(-1 + (2 * j) / instances.current);
+			let theta = Math.sqrt(instances.current * Math.PI) * phi;
+			const x = radius.current * Math.sin(phi) * Math.cos(theta);
+			const y = radius.current * Math.cos(phi);
+			const z = radius.current * Math.sin(phi) * Math.sin(theta);
+			const id = j;
+			tempObject.scale.set(1, 1, 1);
+			tempObject.position.set(x, y, z);
+			tempObject.updateMatrix();
+			cell.current.setMatrixAt(id, tempObject.matrix);
+			cellInner.current.setMatrixAt(id, tempObject.matrix);
+			cell2.current.setMatrixAt(id, tempObject.matrix);
+			cellInner2.current.setMatrixAt(id, tempObject.matrix);
 		}
 		cell.current.instanceMatrix.needsUpdate = true;
 		cellInner.current.instanceMatrix.needsUpdate = true;
 		cell2.current.instanceMatrix.needsUpdate = true;
 		cellInner2.current.instanceMatrix.needsUpdate = true;
+
+		masterBank.current.scale.set(0, 0, 0);
+		masterBank2.current.scale.set(0, 0, 0);
+	}, [tempObject]);
+
+	useFrame(() => {
+		masterBank.current.rotation.y += 0.001;
+		masterBank2.current.rotation.y += 0.001;
 	});
 	useEffect(() => {
 		const tl = gsap.timeline({
@@ -164,6 +150,7 @@ function Organoid(props) {
 			},
 		});
 		tl.from(masterBank.current.position, {
+			duration: 1,
 			y: 50,
 		}).to(
 			masterBank.current.scale,
@@ -185,6 +172,7 @@ function Organoid(props) {
 		});
 		tl2
 			.from(masterBank2.current.position, {
+				duration: 1,
 				y: 50,
 			})
 			.to(
