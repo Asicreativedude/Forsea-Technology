@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unknown-property */
 
 import { useRef, useEffect, useState } from 'react';
+import { Belt } from './Belt';
 import { Instances, Model } from './ModelInstance';
-
-import { Float } from '@react-three/drei';
+// import * as THREE from 'three';
 import { ScrollTrigger } from 'gsap/all';
 import PropTypes from 'prop-types';
+import { useFrame, useThree } from '@react-three/fiber';
 
 Scalable.propTypes = {
 	page: PropTypes.number.isRequired,
@@ -15,19 +16,14 @@ function Scalable(props) {
 	const [visible, setVisible] = useState(false);
 	const positions = [
 		{
-			position: [1, -1, 0],
-			scale: [3, 3, 3],
-			rotation: [Math.PI / 0.7, Math.PI, Math.PI * 1.1],
+			position: [0, -1.5, 0],
+			scale: [1, 1, 1],
+			rotation: [0, Math.PI / 12, 0],
 		},
 		{
-			position: [3, 0, -2],
-			scale: [3, 3, 3],
-			rotation: [Math.PI / 0.7, Math.PI, Math.PI * 1.2],
-		},
-		{
-			position: [3, 3, 0],
-			scale: [3, 3, 3],
-			rotation: [Math.PI / 0.7, Math.PI, Math.PI * 1.2],
+			position: [3, -1.5, 0],
+			scale: [1, 1, 1],
+			rotation: [0, Math.PI / 12, 0],
 		},
 	];
 	useEffect(() => {
@@ -58,22 +54,32 @@ function Scalable(props) {
 		});
 	}, []);
 	const positionOffset = useRef(0);
+	// useFrame(({ clock }) => {
+	// 	const t = clock.getElapsedTime();
+	// 	if (unagi.current.position.x > -8) {
+	// 		unagi.current.position.x -= t * 0.0001;
+	// 	} else if (unagi.current.position.x < -3) {
+	// 		unagi.current.position.x = -2;
+	// 	}
+	// 	console.log(unagi.current.position.x);
+	// });
+	const camera = useThree((state) => state.camera);
+	console.log(unagi);
 
 	return (
-		<group ref={unagi} position={[0, 0, 0]} visible={props.page > 7 && visible}>
-			<Instances>
-				{positions.map((props, index) => (
-					<Float
-						key={index}
-						speed={1}
-						rotationIntensity={0.2}
-						floatIntensity={0.2}
-						floatingRange={[-0.5, 0.5]}>
-						<Model {...props} />
-					</Float>
-				))}
-			</Instances>
-		</group>
+		<>
+			{/* <Belt /> */}
+			<group
+				ref={unagi}
+				position={[0, 0.2, 1]}
+				visible={props.page > 7 && visible}>
+				<Instances>
+					{positions.map((props, index) => (
+						<Model {...props} key={index} />
+					))}
+				</Instances>
+			</group>
+		</>
 	);
 }
 export default Scalable;

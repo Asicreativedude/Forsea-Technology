@@ -18,7 +18,7 @@ import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
 import SecondOrganoid from './Components/SecondOrganoid';
-
+import { Belt } from './Components/Belt';
 // import { Html, useProgress } from '@react-three/drei';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -150,6 +150,8 @@ function Experience() {
 						<GrowthFactors page={currentPage} />
 						<SecondOrganoid page={currentPage} />
 						<Scalable page={currentPage} />
+						<Belt />
+
 						<Preload all />
 					</Suspense>
 				</Canvas>

@@ -2,41 +2,47 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/no-unknown-property */
 
-import { useMemo, useContext, createContext } from 'react';
+import { useMemo, useContext, createContext, useRef } from 'react';
 import { useGLTF, Merged } from '@react-three/drei';
+// import { useFrame } from '@react-three/fiber';
 
 const context = createContext();
 export function Instances({ children, ...props }) {
-	const { nodes } = useGLTF(
-		'https://uploads-ssl.webflow.com/645d43bcad69ce6ac8fffa52/64a5735b500fa85b4fa4874c_box2.glb.txt'
-	);
+	const { nodes } = useGLTF('/fillet.glb');
 	const instances = useMemo(
 		() => ({
-			Logos: nodes['logos-01001'],
-			Cube: nodes.Cube006,
+			Cube: nodes.Cube,
 		}),
 		[nodes]
 	);
+	instances.Cube.material.side = 0;
+
+	console.log(instances);
 	return (
 		<Merged meshes={instances} {...props}>
 			{(instances) => (
-				<context.Provider value={instances} children={children} />
+				<context.Provider
+					value={instances}
+					children={children}
+					renderOrder={0}
+				/>
 			)}
 		</Merged>
 	);
 }
 
 export function Model(props) {
+	const model = useRef();
 	const instances = useContext(context);
 	return (
-		<group {...props} dispose={null}>
-			<instances.Logos
-				position={[0.004, 0.068, 0.166]}
-				rotation={[0, -0.002, 0]}
-				scale={0.116}
+		<group {...props} dispose={null} ref={model}>
+			<instances.Cube
+				position={[0, 0, 0]}
+				rotation={[Math.PI, -1.5016994, Math.PI]}
+				scale={[0.34342137, 0.13872905, 1.02933764]}
 			/>
-			<instances.Cube scale={[0.214, 0.059, 0.335]} />
 		</group>
 	);
 }
-useGLTF.preload('/unagiCompressed.glb');
+
+useGLTF.preload('/fillet.glb');
