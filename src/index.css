@@ -90,6 +90,13 @@ p {
 	--webkit-backdrop-filter: blur(7px);
 	z-index: 0;
 }
+#page-9 {
+	flex-direction: column;
+	justify-content: center;
+}
+#myVideo {
+	margin-bottom: 9.6rem;
+}
 #page-10 {
 	position: relative;
 	background-color: #222;

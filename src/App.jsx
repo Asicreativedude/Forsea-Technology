@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 
 import Experience from './Experience';
-
+// import Conveyor from './Components/Conveyor';
 export function App() {
 	const isMobile = window.innerWidth < 991;
 	return (
@@ -38,7 +38,6 @@ export function App() {
 							</h2>
 						</div>
 					</div>
-					{/* <div className='bioreactor-tube'></div> */}
 				</div>
 				<div className='section' id='page-4'>
 					<div className='container'>
@@ -97,6 +96,9 @@ export function App() {
 					</div>
 				</div>
 				<div className='section' id='page-9'>
+					<video autoPlay muted loop id='myVideo'>
+						<source src='../Comp.mp4' />
+					</video>
 					<div className='container'>
 						<div className='tech-c'>
 							<div className='tech-text-number'>04/04</div>
