@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 
-import { useLayoutEffect, useRef, useMemo, useEffect } from 'react';
+import { useLayoutEffect, useRef, useMemo, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { MeshTransmissionMaterial } from '@react-three/drei';
@@ -21,6 +21,7 @@ function BioReactor(props) {
 	const instances = useRef(200);
 	const growthFactor = new THREE.Object3D();
 	const cell = new THREE.Object3D();
+	const [visible, setVisible] = useState(false);
 	const colors = useMemo(() => {
 		const cellColors = [
 			['#61FF00', '#9E00FF'],
@@ -121,6 +122,13 @@ function BioReactor(props) {
 				start: 'top bottom',
 				end: 'top top',
 				scrub: 0.2,
+				onUpdate: (self) => {
+					if (self.progress > 0.2) {
+						setVisible(true);
+					} else {
+						setVisible(false);
+					}
+				},
 			},
 		});
 		bioTl.from(bioReactorRef.current.position, {
@@ -147,7 +155,7 @@ function BioReactor(props) {
 			<group
 				ref={bioReactorRef}
 				position={[0, -10, 0]}
-				visible={props.page > 1 && props.page < 5}>
+				visible={props.page > 1 && props.page < 5 && visible}>
 				<group position={[25, -5, -100]}>
 					<instancedMesh ref={ref} args={[null, null, growthInstnaces.current]}>
 						<coneGeometry args={[0.5, 1, 4]} />
@@ -159,6 +167,7 @@ function BioReactor(props) {
 						<sphereGeometry args={[1, 8, 8]} />
 						<MeshTransmissionMaterial
 							color='#FFF4EB'
+							backside={false}
 							thickness={0.8}
 							transmission={0.96}
 							roughness={0.2}

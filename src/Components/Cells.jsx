@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { MeshTransmissionMaterial } from '@react-three/drei';
@@ -19,6 +19,7 @@ function Cells(props) {
 	const tempObject = new THREE.Object3D();
 	const radii = [5, 8, 11, 14, 17, 20, 23];
 	const opacity = useRef(1);
+	const [visible, setVisible] = useState(false);
 
 	useFrame(({ clock }) => {
 		if (!startTime.current) {
@@ -90,6 +91,14 @@ function Cells(props) {
 				start: 'top bottom',
 				end: 'top top',
 				scrub: 0.2,
+				onUpdate: (self) => {
+					if (self.progress > 0.4) {
+						setVisible(true);
+					} else {
+						console.log('hi');
+						setVisible(false);
+					}
+				},
 			},
 		});
 		initialTl
@@ -132,11 +141,12 @@ function Cells(props) {
 			<group
 				position={[18, -13, -20]}
 				ref={masterBank}
-				visible={props.page < 3}>
+				visible={props.page < 3 && visible}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
 						color='#FFF4EB'
+						backside={false}
 						thickness={0.8}
 						transmission={0.96}
 						roughness={0.2}

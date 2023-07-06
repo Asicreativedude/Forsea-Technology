@@ -262,11 +262,12 @@ function Organoid(props) {
 			<group
 				position={[8, 3, -30]}
 				ref={masterBank2}
-				visible={props.page > 5 && props.page < 9}>
+				visible={props.page > 5 && visible}>
 				<instancedMesh ref={cell2} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
 						color='#FFF4EB'
+						backside={false}
 						thickness={0.6}
 						transmission={0.96}
 						roughness={0.2}

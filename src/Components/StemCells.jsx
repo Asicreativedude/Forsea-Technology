@@ -3,9 +3,8 @@
 import { MeshTransmissionMaterial, Float } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { useThree } from '@react-three/fiber';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 StemCells.propTypes = {
@@ -20,6 +19,7 @@ function StemCells(props) {
 		color: '#eee',
 		depthWrite: false,
 	});
+	const [visible, setVisible] = useState(true);
 
 	useEffect(() => {
 		const tl = gsap.timeline({
@@ -28,6 +28,13 @@ function StemCells(props) {
 				start: 'top top',
 				end: 'bottom top',
 				scrub: 0.2,
+				onUpdate: (self) => {
+					if (self.progress > 0.4) {
+						setVisible(false);
+					} else {
+						setVisible(true);
+					}
+				},
 			},
 		});
 		tl.to(stemCellsRef.current.position, {
@@ -56,8 +63,7 @@ function StemCells(props) {
 			'<'
 		);
 	}, []);
-	const renderer = useThree((state) => state.gl);
-	console.log(renderer);
+
 	return (
 		<>
 			<Float
@@ -68,7 +74,7 @@ function StemCells(props) {
 				<group
 					position={[3, 0, -6]}
 					ref={stemCellsRef}
-					visible={props.page < 3}>
+					visible={props.page < 3 && visible}>
 					<mesh>
 						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial
@@ -92,7 +98,7 @@ function StemCells(props) {
 				<group
 					position={[5, 0, -3]}
 					ref={stemCellsRef2}
-					visible={props.page < 3}>
+					visible={props.page < 3 && visible}>
 					<mesh>
 						<sphereGeometry args={[1, 16, 16]} />
 						<MeshTransmissionMaterial

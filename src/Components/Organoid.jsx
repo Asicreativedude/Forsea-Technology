@@ -263,6 +263,7 @@ function Organoid(props) {
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
 					<MeshTransmissionMaterial
+						backside={false}
 						color='#FFF4EB'
 						thickness={0.6}
 						transmission={0.96}
