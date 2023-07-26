@@ -112,36 +112,37 @@ function Experience() {
 	return (
 		<>
 			<div className='canvas-c'>
-				<Canvas
-					performance={{ min: 0.5 }}
-					dpr={dpr}
-					gl={{
-						antialias: false,
-						alpha: false,
-						depth: false,
-						stencil: false,
-						preserveDrawingBuffer: false,
-						shadowMap: {
-							enabled: false,
-							autoUpdate: false,
-							needsUpdate: false,
-						},
-					}}
-					camera={{
-						near: 0.1,
-						far: 200,
-						fov: 55,
-					}}>
-					<PerformanceMonitor
-						onChange={({ factor }) => {
-							setDpr(Math.round(0.5 + 1.5 * factor, 1));
+				<Suspense fallback={<span>loading...</span>}>
+					<Canvas
+						performance={{ min: 1 }}
+						dpr={dpr}
+						gl={{
+							antialias: false,
+							alpha: false,
+							depth: false,
+							stencil: false,
+							preserveDrawingBuffer: false,
+							shadowMap: {
+								enabled: false,
+								autoUpdate: false,
+								needsUpdate: false,
+							},
 						}}
-					/>
-					<AdaptiveEvents />
-					<AdaptiveDpr pixelated />
-					<Perf position='top-left' />
-					<color attach='background' args={['#222']} />
-					<Suspense fallback={null}>
+						camera={{
+							near: 0.1,
+							far: 200,
+							fov: 55,
+						}}>
+						<PerformanceMonitor
+							onChange={({ factor }) => {
+								setDpr(Math.round(0.5 + 1.5 * factor, 1));
+							}}
+						/>
+						<AdaptiveEvents />
+						<AdaptiveDpr pixelated />
+						<Perf position='top-left' />
+						<color attach='background' args={['#222']} />
+
 						<Environment preset='warehouse' />
 						<StemCells page={currentPage} />
 						<Cells page={currentPage} />
@@ -150,8 +151,8 @@ function Experience() {
 						<GrowthFactors page={currentPage} />
 						<SecondOrganoid page={currentPage} />
 						<Preload all />
-					</Suspense>
-				</Canvas>
+					</Canvas>
+				</Suspense>
 			</div>
 
 			<div className='progress-c'>
