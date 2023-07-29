@@ -16,12 +16,12 @@ function Organoid(props) {
 	const cellInner = useRef();
 	const masterBank = useRef();
 	const startTime = useRef();
-	const radius = useRef(15);
-	const instances = useRef(250);
+	const radius = useRef(8);
+	const instances = useRef(150);
 	const cellSize = useRef(0);
-	const speed = 0.5;
+	// const speed = 0.5;
 	const tempObject = new THREE.Object3D();
-	const opacity = useRef(1);
+	const opacity = useRef(0);
 	const [visible, setVisible] = useState(true);
 	const colors = useMemo(() => {
 		let cellColors = [
@@ -119,14 +119,14 @@ function Organoid(props) {
 
 			if (cellSize.current < 200) {
 				for (let i = 0; i < instances.current; i++) {
-					cellSize.current = (time * i) / 300;
+					cellSize.current = (time * i) / 200;
 				}
 			}
 
 			for (let j = 0; j < instances.current; j++) {
 				const phi = Math.acos(-1 + (2 * j) / instances.current);
 				let theta = Math.sqrt(instances.current * Math.PI) * phi;
-				theta += Math.sin(time * speed + j) * 0.05; // Add small, random movement
+				// theta += Math.sin(time * speed + j) * 0.05; // Add small, random movement
 				const x = radius.current * Math.sin(phi) * Math.cos(theta);
 				const y = radius.current * Math.cos(phi);
 				const z = radius.current * Math.sin(phi) * Math.sin(theta);
@@ -156,8 +156,8 @@ function Organoid(props) {
 			end: 'top top',
 			scrub: 0.2,
 			onUpdate: (self) => {
-				cell.current.material.opacity = self.progress;
-				cellInner.current.material.opacity = self.progress;
+				cell.current.material.opacity = self.progress / 1.5;
+				cellInner.current.material.opacity = self.progress / 1.5;
 			},
 		});
 
@@ -266,9 +266,9 @@ function Organoid(props) {
 						backside={false}
 						color='#FFF4EB'
 						thickness={0.6}
-						transmission={0.92}
+						transmission={0.96}
 						roughness={0.2}
-						ior={1.25}
+						ior={1.1}
 						opacity={opacity.current}
 						transparent
 					/>

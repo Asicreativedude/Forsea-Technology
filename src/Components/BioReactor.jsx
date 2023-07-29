@@ -18,7 +18,7 @@ function BioReactor(props) {
 	const bioReactorRef = useRef();
 	const cellSize = useRef(0);
 	const growthInstnaces = useRef(100);
-	const instances = useRef(200);
+	const instances = useRef(100);
 	const growthFactor = new THREE.Object3D();
 	const cell = new THREE.Object3D();
 	const [visible, setVisible] = useState(false);
@@ -145,7 +145,7 @@ function BioReactor(props) {
 			},
 		});
 		bioExitTl.to(bioReactorRef.current.position, {
-			x: 85,
+			x: 120,
 			duration: 1,
 		});
 	}, []);
@@ -171,7 +171,7 @@ function BioReactor(props) {
 							thickness={0.8}
 							transmission={0.96}
 							roughness={0.2}
-							ior={1.25}
+							ior={1}
 						/>
 					</instancedMesh>
 				</group>

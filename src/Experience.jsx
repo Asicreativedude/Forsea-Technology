@@ -49,8 +49,7 @@ function Experience() {
 			onUpdate: (self) => {
 				let page = self.progress * 10 + 1;
 				setCurrentPage(Math.round(page));
-				progressBar.current.style.width = `${self.progress * 125}%`;
-				console.log(currentPage);
+				progressBar.current.style.width = `${self.progress * 100}%`;
 			},
 		});
 	}, [currentPage]);
@@ -85,7 +84,7 @@ function Experience() {
 
 	//last page text switch
 	useEffect(() => {
-		const centerTexts = document.querySelectorAll('.center-text');
+		const centerTexts = document.querySelectorAll('.section-page-circle-text');
 		centerTexts.forEach((text) => {
 			text.classList.toggle('hidden');
 		});
@@ -93,7 +92,7 @@ function Experience() {
 
 	//text entrance
 	useEffect(() => {
-		const sections = document.querySelectorAll('.section');
+		const sections = document.querySelectorAll('.section_page');
 		sections.forEach((section) => {
 			const tl = gsap.timeline({
 				scrollTrigger: {
@@ -101,7 +100,7 @@ function Experience() {
 					start: 'top 15%',
 				},
 			});
-			tl.from(section.querySelector('.tech-c'), {
+			tl.from(section.querySelector('.section-page-content'), {
 				duration: 1,
 				opacity: 0,
 				ease: 'power4.out',
@@ -135,6 +134,15 @@ function Experience() {
 				duration: 1,
 				opacity: 0,
 			});
+		gsap.timeline({
+			scrollTrigger: {
+				trigger: '.section_bring-out',
+				start: 'top 15%',
+				onEnter: () => {
+					document.querySelector('.trigger-roll-in').click();
+				},
+			},
+		});
 	}, []);
 	return (
 		<>
@@ -164,17 +172,19 @@ function Experience() {
 						<color attach='background' args={['#222']} />
 
 						<Environment preset='warehouse' />
-						<Suspense fallback={<span>loading...</span>}>
-							<StemCells page={currentPage} />
-							<Cells page={currentPage} />
-							{currentPage}
-							<BioReactor page={currentPage} />
+						<Suspense fallback={null}>
+							{currentPage < 3 && <StemCells page={currentPage} />}
+							{currentPage < 4 && <Cells page={currentPage} />}
+							{currentPage > 1 && currentPage < 5 && (
+								<BioReactor page={currentPage} />
+							)}
 							<Organoid page={currentPage} />
-							<GrowthFactors page={currentPage} />
-							<SecondOrganoid page={currentPage} />
-
-							<Preload all />
+							{currentPage > 5 && currentPage < 8 && (
+								<GrowthFactors page={currentPage} />
+							)}
+							{currentPage > 7 && <SecondOrganoid page={currentPage} />}
 						</Suspense>
+						<Preload all />
 						<PerformanceMonitor
 							onChange={({ factor }) => {
 								setDpr(Math.round(0.5 + 1.5 * factor, 1));

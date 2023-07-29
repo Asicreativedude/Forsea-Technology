@@ -18,7 +18,7 @@ function Cells(props) {
 	const cellSize = useRef(0);
 	const tempObject = new THREE.Object3D();
 	const radii = [5, 8, 11, 14, 17, 20, 23];
-	const opacity = useRef(1);
+	const opacity = useRef(0.9);
 	const [visible, setVisible] = useState(false);
 
 	useFrame(({ clock }) => {
@@ -62,9 +62,9 @@ function Cells(props) {
 					} else {
 						if (startTime.current) {
 							tempObject.scale.set(
-								Math.min((cellSize.current * j) / 50, 1),
-								Math.min((cellSize.current * j) / 50, 1),
-								Math.min((cellSize.current * j) / 50, 1)
+								Math.min((cellSize.current * j) / 50, 0.8),
+								Math.min((cellSize.current * j) / 50, 0.8),
+								Math.min((cellSize.current * j) / 50, 0.8)
 							);
 						}
 					}
@@ -95,7 +95,6 @@ function Cells(props) {
 					if (self.progress > 0.4) {
 						setVisible(true);
 					} else {
-						console.log('hi');
 						setVisible(false);
 					}
 				},
@@ -108,9 +107,9 @@ function Cells(props) {
 			})
 			.to(masterBank.current.scale, {
 				duration: 1,
-				x: 1,
-				y: 1,
-				z: 1,
+				x: 0.8,
+				y: 0.8,
+				z: 0.8,
 			});
 
 		const opacity = gsap.timeline({
@@ -131,7 +130,11 @@ function Cells(props) {
 				{
 					duration: 1,
 					opacity: 0,
+					onComplete: () => {
+						setVisible(false);
+					},
 				},
+
 				'<'
 			);
 	}, []);
@@ -141,6 +144,7 @@ function Cells(props) {
 			<group
 				position={[18, -13, -20]}
 				ref={masterBank}
+				scale={[0.8, 0.8, 0.8]}
 				visible={props.page < 3 && visible}>
 				<instancedMesh ref={cell} args={[null, null, instances.current]}>
 					<sphereGeometry args={[1, 16, 16]} />
@@ -150,7 +154,7 @@ function Cells(props) {
 						thickness={0.8}
 						transmission={0.96}
 						roughness={0.2}
-						ior={1.25}
+						ior={1}
 						opacity={opacity.current}
 						transparent
 					/>
