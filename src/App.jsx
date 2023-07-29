@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 
 import Experience from './Experience';
-// import Conveyor from './Components/Conveyor';
 export function App() {
 	const isMobile = window.innerWidth < 991;
 	return (

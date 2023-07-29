@@ -114,7 +114,7 @@ function Experience() {
 			<div className='canvas-c'>
 				<Suspense fallback={<span>loading...</span>}>
 					<Canvas
-						performance={{ min: 1 }}
+						performance={{ min: 0.5 }}
 						dpr={dpr}
 						gl={{
 							antialias: false,
@@ -142,7 +142,6 @@ function Experience() {
 						<AdaptiveDpr pixelated />
 						<Perf position='top-left' />
 						<color attach='background' args={['#222']} />
-
 						<Environment preset='warehouse' />
 						<StemCells page={currentPage} />
 						<Cells page={currentPage} />
