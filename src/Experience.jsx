@@ -8,13 +8,12 @@ import {
 	Environment,
 	AdaptiveEvents,
 } from '@react-three/drei';
-import { Perf } from 'r3f-perf';
+// import { Perf } from 'r3f-perf';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Cells from './Components/Cells';
 import StemCells from './Components/StemCells';
 import BioReactor from './Components/BioReactor';
-// import Scalable from './Components/Scalable';
 import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
 import SecondOrganoid from './Components/SecondOrganoid';
@@ -44,12 +43,14 @@ function Experience() {
 
 	useEffect(() => {
 		ScrollTrigger.create({
-			start: '0',
+			trigger: '.page-w',
+			start: 'top top',
 			scrub: true,
 			onUpdate: (self) => {
 				let page = self.progress * 10 + 1;
 				setCurrentPage(Math.round(page));
 				progressBar.current.style.width = `${self.progress * 125}%`;
+				console.log(currentPage);
 			},
 		});
 	}, [currentPage]);
@@ -108,11 +109,37 @@ function Experience() {
 			});
 		});
 	}, []);
-
+	useEffect(() => {
+		const microscopeTl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '.microscrop-svg',
+				start: 'top 35%',
+				scrub: true,
+			},
+		});
+		microscopeTl
+			.to('.microscrop-svg', {
+				duration: 1,
+				scale: 10,
+				x: '-70vw',
+			})
+			.to(
+				'.section_from-cell-to-delicious',
+				{
+					duration: 1,
+					backgroundColor: '#222',
+				},
+				'<'
+			)
+			.to('.microscrop-svg', {
+				duration: 1,
+				opacity: 0,
+			});
+	}, []);
 	return (
 		<>
-			<div className='canvas-c'>
-				<Suspense fallback={<span>loading...</span>}>
+			<div className='canvas-wrapper'>
+				<div className='canvas-c'>
 					<Canvas
 						performance={{ min: 0.5 }}
 						dpr={dpr}
@@ -133,6 +160,21 @@ function Experience() {
 							far: 200,
 							fov: 55,
 						}}>
+						{/* <Perf position='top-left' /> */}
+						<color attach='background' args={['#222']} />
+
+						<Environment preset='warehouse' />
+						<Suspense fallback={<span>loading...</span>}>
+							<StemCells page={currentPage} />
+							<Cells page={currentPage} />
+							{currentPage}
+							<BioReactor page={currentPage} />
+							<Organoid page={currentPage} />
+							<GrowthFactors page={currentPage} />
+							<SecondOrganoid page={currentPage} />
+
+							<Preload all />
+						</Suspense>
 						<PerformanceMonitor
 							onChange={({ factor }) => {
 								setDpr(Math.round(0.5 + 1.5 * factor, 1));
@@ -140,39 +182,15 @@ function Experience() {
 						/>
 						<AdaptiveEvents />
 						<AdaptiveDpr pixelated />
-						<Perf position='top-left' />
-						<color attach='background' args={['#222']} />
-						<Environment preset='warehouse' />
-						<StemCells page={currentPage} />
-						<Cells page={currentPage} />
-						<BioReactor page={currentPage} />
-						<Organoid page={currentPage} />
-						<GrowthFactors page={currentPage} />
-						<SecondOrganoid page={currentPage} />
-						<Preload all />
 					</Canvas>
-				</Suspense>
-			</div>
-
-			<div className='progress-c'>
-				<div className='progress' ref={progressBar} />
+				</div>
+				<div className='progress-container'>
+					<div className='progress-c'>
+						<div className='progress' ref={progressBar} />
+					</div>
+				</div>
 			</div>
 		</>
 	);
 }
 export default Experience;
-
-/**pages camera settings:
-1: 0,0,0
-2: 250 instances
-3:
-4: 100 instances radius 10
-5:  
-addible cell - organoid from the inside
-landsacape - organoid from the outside big
-growth factors fade away from the organoid
-NonGMO wrap organoid 
-NoScaffolding add another organoid
-
-change colors to pinkish skien yellow
-*/

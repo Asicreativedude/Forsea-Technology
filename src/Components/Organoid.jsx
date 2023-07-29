@@ -266,7 +266,7 @@ function Organoid(props) {
 						backside={false}
 						color='#FFF4EB'
 						thickness={0.6}
-						transmission={0.96}
+						transmission={0.92}
 						roughness={0.2}
 						ior={1.25}
 						opacity={opacity.current}

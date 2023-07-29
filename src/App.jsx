@@ -7,10 +7,10 @@ export function App() {
 		<>
 			{isMobile ? '' : <Experience />}
 			<div className='page-w'>
-				<div className='section' id='page-1'>
+				<div className='section_page' id='page-1'>
 					<div className='container'>
-						<div className='tech-c'>
-							<h2 className='tech-text'>
+						<div className='section-page-content'>
+							<h2 className='section-page-h2'>
 								Using proprietary Forsea methods, we collect stem cells from
 								fish without causing them any harm.
 							</h2>
@@ -18,10 +18,10 @@ export function App() {
 					</div>
 					<div className='blur-c'></div>
 				</div>
-				<div className='section' id='page-2'>
+				<div className='section_page' id='page-2'>
 					<div className='container'>
-						<div className='tech-c'>
-							<h2 className='tech-text'>
+						<div className='section-page-content'>
+							<h2 className='section-page-h2'>
 								We create a master cell bank from the cells we’ve collected,
 								which has unique characteristics and infinite cell growth
 								capabilities.
@@ -29,52 +29,52 @@ export function App() {
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-3'>
+				<div className='section_page' id='page-3'>
 					<div className='container'>
-						<div className='tech-c'>
-							<h2 className='tech-text'>
+						<div className='section-page-content'>
+							<h2 className='section-page-h2'>
 								We use bioreactors to build and grow organoids.
 							</h2>
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-4'>
+				<div className='section_page' id='page-4'>
 					<div className='container'>
-						<div className='tech-c'>
-							<h2 className='tech-text'>
+						<div className='section-page-content'>
+							<h2 className='section-page-h2'>
 								These organoids contain all of the addible cells we need.
 							</h2>
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-5'>
+				<div className='section_page' id='page-5'>
 					<div className='container'>
-						<div className='tech-c'>
-							<h2 className='tech-text big-title'>
+						<div className='section-page-content'>
+							<h2 className='section-page-h2 is--xl'>
 								With our organoids, we are changing the landscape of cultivated
 								meat
 							</h2>
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-6'>
+				<div className='section_page' id='page-6'>
 					<div className='container'>
-						<div className='tech-c'>
-							<div className='tech-text-number'>01/04</div>
-							<h2 className='tech-text'> Less Growth Factors</h2>
-							<p>
+						<div className='section-page-content'>
+							<div className='section-page-pagination'>01/04</div>
+							<h3 className='section-page-h3'> Less Growth Factors</h3>
+							<p className='section-page-p'>
 								Organoids are directed to grow naturally into mini-tissue,
 								allowing for a remarkable reduction in growth factors usage.
 							</p>
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-7'>
+				<div className='section_page' id='page-7'>
 					<div className='container'>
-						<div className='tech-c'>
-							<div className='tech-text-number'>02/04</div>
-							<h2 className='tech-text'>Non-GMO</h2>
-							<p>
+						<div className='section-page-content'>
+							<div className='section-page-pagination'>02/04</div>
+							<h3 className='section-page-h3'>Non-GMO</h3>
+							<p className='section-page-p'>
 								By harnessing nature’s tissue formation methods, we are able to
 								produce non-GMO cultivated meat that is both healthy and
 								nourishing.
@@ -82,36 +82,38 @@ export function App() {
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-8'>
+				<div className='section_page' id='page-8'>
 					<div className='container'>
-						<div className='tech-c'>
-							<div className='tech-text-number'>03/04</div>
-							<h2 className='tech-text'>No Scaffolding</h2>
-							<p>
+						<div className='section-page-content'>
+							<div className='section-page-pagination'>03/04</div>
+							<h3 className='section-page-h3'>No Scaffolding</h3>
+							<p className='section-page-p'>
 								Our organoids contain the edible cell. Therefore, scaffolding is
 								not necessary for cultivating our seafood meat.
 							</p>
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-9'>
+				<div className='section_page is--page-9' id='page-9'>
 					<video autoPlay muted loop id='myVideo'>
 						<source src='../Comp.mp4' />
 					</video>
 					<div className='container'>
-						<div className='tech-c'>
-							<div className='tech-text-number'>04/04</div>
-							<h2 className='tech-text'>A Scalable Cost- Effective Process</h2>
-							<p>
+						<div className='section-page-content'>
+							<div className='section-page-pagination'>04/04</div>
+							<h3 className='section-page-h3'>
+								A Scalable Cost- Effective Process
+							</h3>
+							<p className='section-page-p'>
 								The organoid’s unique characteristics allow us to bypass many
 								costly production steps.
 							</p>
 						</div>
 					</div>
 				</div>
-				<div className='section' id='page-10'>
+				<div className='section_page' id='page-10'>
 					<div className='container'>
-						<div className='tech-c centerText-c'>
+						<div className='section-page-content centerText-c'>
 							<p className='center-text hidden'>
 								Our revolutionary organoid technology allows us to produce
 								cultivated meat very similar to the way nature does it – while
@@ -123,17 +125,6 @@ export function App() {
 							</p>
 						</div>
 						<div className='white-bg'></div>
-					</div>
-				</div>
-				<div className='section' id='page-11'>
-					<div className='container'>
-						<div className='tech-c'>
-							<h2 className='tech-text'>Bring out your plates:</h2>
-							<p>
-								A delicious seafood product, similar in flavor, texture and
-								nutritional value, is being served!
-							</p>
-						</div>
 					</div>
 				</div>
 			</div>

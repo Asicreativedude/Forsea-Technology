@@ -31,7 +31,7 @@ html {
 	position: fixed;
 	z-index: 0;
 }
-.section {
+.section_page {
 	width: 100%;
 	height: 100vh;
 	display: flex;
@@ -46,21 +46,21 @@ html {
 	width: 90%;
 	margin: 0 auto;
 }
-.tech-c {
+.section-page-content {
 	width: 80rem;
 	z-index: 1;
 	position: relative;
 }
-.tech-text-number {
+.section-page-pagination {
 	font-size: 2rem;
 	font-family: Merriweather;
 	font-style: italic;
 	margin-bottom: 1.6rem;
 }
-.tech-text {
+.section-page-h2 {
 	font-size: 4.6rem;
 }
-.big-title {
+.section-page-h2 .is--xl {
 	font-size: 8.6rem;
 }
 h2 {
@@ -159,6 +159,13 @@ p {
 	opacity: 0.54;
 	height: 100vh;
 	width: 100vw;
+}
+
+.microskop-div {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 @media only screen and (max-width: 991px) {
