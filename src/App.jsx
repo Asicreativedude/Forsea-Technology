@@ -4,11 +4,12 @@
 import Experience from './Experience';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export function App() {
-	const isMobile = window.innerWidth < 991;
-	const [switchText, setSwitchText] = useState(false);
+	const isMobile = window.innerWidth <= 991;
+
+	// const [switchText, setSwitchText] = useState(false);
 
 	useEffect(() => {
 		if (isMobile) {
@@ -50,78 +51,44 @@ export function App() {
 				},
 			});
 
-			const sections = document.querySelectorAll('.section_page');
-
+			const sections = document.querySelectorAll(
+				'.mobile-tech-sticky > .section_page'
+			);
 			let index = 0;
 			gsap.timeline({
 				scrollTrigger: {
 					trigger: '.tech-embed-wrapper',
 					start: 'top top',
+					end: 'bottom bottom',
 					scrub: true,
 					onUpdate: (self) => {
 						index = Math.round(self.progress * 10) + 1;
-						console.log(index);
 						sections.forEach((section) => {
-							if (index > 9) {
-								return;
-							}
 							if (section.id === `page-${index}`) {
 								section.classList.add('active');
 							} else {
 								section.classList.remove('active');
 							}
 						});
-					},
-				},
-			});
-
-			const lastPartTl = gsap.timeline({
-				scrollTrigger: {
-					trigger: '#page-10',
-					start: 'top top',
-					end: 'bottom top',
-					scrub: 0.2,
-					pin: true,
-					onUpdate: (self) => {
-						console.log(self.progress);
-						let roundProgress = Math.round(self.progress * 10) / 10;
-						if (roundProgress > 0.5) {
-							setSwitchText(true);
+						if (self.progress > 0.98) {
+							document
+								.querySelector('.section_bring-out')
+								.classList.add('active');
 						} else {
-							setSwitchText(false);
+							document
+								.querySelector('.section_bring-out')
+								.classList.remove('active');
 						}
 					},
 				},
 			});
-			lastPartTl.to('.white-bg', {
-				duration: 1,
-				width: '100%',
-				height: '100%',
-				borderRadius: '0',
-				filter: 'blur(0px)',
-			});
-			const centerTexts = document.querySelectorAll(
-				'.section-page-circle-text'
-			);
-			centerTexts.forEach((text) => {
-				text.classList.toggle('hidden');
-			});
 		}
-		gsap.timeline({
-			scrollTrigger: {
-				trigger: '.section_bring-out',
-				start: 'top 25%',
-				onEnter: () => {
-					document.querySelector('.trigger-roll-in').click();
-				},
-			},
-		});
-	}, [isMobile, switchText]);
+	}, [isMobile]);
 
 	return (
 		<>
-			{isMobile ? null : <Experience />}
-			{isMobile ? null : (
+			{!isMobile && <Experience />}
+			{!isMobile && (
 				<div className='page-w'>
 					<div className='section_page' id='page-1'>
 						<div className='container'>
@@ -211,9 +178,12 @@ export function App() {
 						</div>
 					</div>
 					<div className='section_page is--page-9' id='page-9'>
-						<video autoPlay muted loop id='myVideo'>
-							<source src='../Comp.mp4' />
-						</video>
+						<div className='scalable-video-embed'>
+							<video autoPlay muted loop id='scalableVideo'>
+								<source src='https://uploads-ssl.webflow.com/6490147be4f743ad6fe5e064/64c62cc18516d8d5e11d826a_Comp-transcode.mp4' />
+								<source src='https://uploads-ssl.webflow.com/6490147be4f743ad6fe5e064/64c62cc18516d8d5e11d826a_Comp-transcode.webm' />
+							</video>
+						</div>
 						<div className='container'>
 							<div className='section-page-content'>
 								<div className='section-page-pagination'>04/04</div>
@@ -232,3 +202,22 @@ export function App() {
 		</>
 	);
 }
+
+////text entrance
+// useEffect(() => {
+// 	const sections = document.querySelectorAll('.section_page');
+// 	sections.forEach((section) => {
+// 		const tl = gsap.timeline({
+// 			scrollTrigger: {
+// 				trigger: section,
+// 				start: 'top 15%',
+// 			},
+// 		});
+// 		tl.from(section.querySelector('.section-page-content'), {
+// 			duration: 1,
+// 			opacity: 0,
+// 			ease: 'power4.out',
+// 			yPercent: 25,
+// 		});
+// 	});
+// }, []);

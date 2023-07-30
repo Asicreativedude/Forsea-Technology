@@ -19,7 +19,7 @@ function Organoid(props) {
 	const masterBank2 = useRef();
 	const radius = useRef(5);
 	const instances = useRef(80);
-	const opacity = useRef(0.9);
+	const opacity = useRef(1);
 	const tempObject = useMemo(() => new THREE.Object3D(), []);
 	const [visible, setVisible] = useState(true);
 

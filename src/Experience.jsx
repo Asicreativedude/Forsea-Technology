@@ -29,7 +29,7 @@ function Experience() {
 	// progressBar and section snapping
 	useEffect(() => {
 		ScrollTrigger.create({
-			trigger: '.page-w',
+			trigger: '.tech-embed-wrapper',
 			start: 'top top',
 			scrub: true,
 			onUpdate: (self) => {
@@ -44,7 +44,7 @@ function Experience() {
 	useEffect(() => {
 		const lastPartTl = gsap.timeline({
 			scrollTrigger: {
-				trigger: '#page-10',
+				trigger: '.is--page-10',
 				start: 'top top',
 				end: 'bottom top',
 				scrub: 0.2,
@@ -57,14 +57,24 @@ function Experience() {
 						setSwitchText(false);
 					}
 				},
+				onEnterBack: () => {
+					document
+						.querySelector('.section_bring-out')
+						.classList.remove('active');
+					document.querySelector('.trigger-roll-in').click();
+				},
 			},
 		});
-		lastPartTl.to('.white-bg', {
+		lastPartTl.to('.is--page-10 > .white-bg', {
 			duration: 1,
 			width: '100%',
 			height: '100%',
 			borderRadius: '0',
 			filter: 'blur(0px)',
+			onComplete: () => {
+				document.querySelector('.section_bring-out').classList.add('active');
+				document.querySelector('.trigger-roll-in').click();
+			},
 		});
 	}, []);
 
@@ -75,25 +85,6 @@ function Experience() {
 			text.classList.toggle('hidden');
 		});
 	}, [switchText]);
-
-	//text entrance
-	useEffect(() => {
-		const sections = document.querySelectorAll('.section_page');
-		sections.forEach((section) => {
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: section,
-					start: 'top 15%',
-				},
-			});
-			tl.from(section.querySelector('.section-page-content'), {
-				duration: 1,
-				opacity: 0,
-				ease: 'power4.out',
-				yPercent: 25,
-			});
-		});
-	}, []);
 
 	//microscope animation
 	useEffect(() => {
@@ -122,17 +113,6 @@ function Experience() {
 				duration: 1,
 				opacity: 0,
 			});
-
-		// plate scroll
-		gsap.timeline({
-			scrollTrigger: {
-				trigger: '.section_bring-out',
-				start: 'top 15%',
-				onEnter: () => {
-					document.querySelector('.trigger-roll-in').click();
-				},
-			},
-		});
 	}, []);
 	return (
 		<>
@@ -147,6 +127,7 @@ function Experience() {
 							depth: false,
 							stencil: false,
 							preserveDrawingBuffer: false,
+							sortObjects: false,
 							shadowMap: {
 								enabled: false,
 								autoUpdate: false,
@@ -172,7 +153,9 @@ function Experience() {
 							{currentPage > 5 && currentPage < 8 && (
 								<GrowthFactors page={currentPage} />
 							)}
-							{currentPage > 7 && <SecondOrganoid page={currentPage} />}
+							{currentPage > 6 && currentPage < 10 && (
+								<SecondOrganoid page={currentPage} />
+							)}
 						</Suspense>
 						<Preload all />
 						<PerformanceMonitor

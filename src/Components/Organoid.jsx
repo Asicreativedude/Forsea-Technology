@@ -16,10 +16,9 @@ function Organoid(props) {
 	const cellInner = useRef();
 	const masterBank = useRef();
 	const startTime = useRef();
-	const radius = useRef(8);
+	const radius = useRef(10);
 	const instances = useRef(150);
 	const cellSize = useRef(0);
-	// const speed = 0.5;
 	const tempObject = new THREE.Object3D();
 	const opacity = useRef(0);
 	const [visible, setVisible] = useState(true);
@@ -156,8 +155,8 @@ function Organoid(props) {
 			end: 'top top',
 			scrub: 0.2,
 			onUpdate: (self) => {
-				cell.current.material.opacity = self.progress / 1.5;
-				cellInner.current.material.opacity = self.progress / 1.5;
+				cell.current.material.opacity = self.progress;
+				cellInner.current.material.opacity = self.progress;
 			},
 		});
 
@@ -180,7 +179,7 @@ function Organoid(props) {
 				radius,
 				{
 					duration: 1,
-					current: 10,
+					current: 7,
 				},
 				'<'
 			);
@@ -206,24 +205,15 @@ function Organoid(props) {
 				scrub: 0.2,
 			},
 		});
-		organoidMoveTl2
-			.to(
-				radius,
-				{
-					duration: 1,
-					current: 10,
-				},
-				'<'
-			)
-			.to(
-				masterBank.current.position,
-				{
-					duration: 1,
-					y: -5,
-					z: -40,
-				},
-				'<'
-			);
+		organoidMoveTl2.to(
+			masterBank.current.position,
+			{
+				duration: 1,
+				y: -5,
+				z: -40,
+			},
+			'<'
+		);
 		const organoidExitTl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '#page-8',
