@@ -18,22 +18,7 @@ import GrowthFactors from './Components/GrowthFactors';
 import Organoid from './Components/Organoid';
 import SecondOrganoid from './Components/SecondOrganoid';
 
-// import { Html, useProgress } from '@react-three/drei';
-
 gsap.registerPlugin(ScrollTrigger);
-
-// function Loader() {
-// 	const { active, progress, errors, item, loaded, total } = useProgress();
-// 	console.log(active, progress, errors, item, loaded, total);
-// 	useEffect(() => {
-// 		console.log(active, progress);
-// 	}, [active, progress]);
-// 	return (
-// 		<Html style={{ zIndex: '9999', color: 'white' }} center>
-// 			{progress} % loaded
-// 		</Html>
-// 	);
-// }
 
 function Experience() {
 	const [currentPage, setCurrentPage] = useState(1);
@@ -41,6 +26,7 @@ function Experience() {
 	const [dpr, setDpr] = useState(1);
 	const progressBar = useRef(0);
 
+	// progressBar and section snapping
 	useEffect(() => {
 		ScrollTrigger.create({
 			trigger: '.page-w',
@@ -108,6 +94,8 @@ function Experience() {
 			});
 		});
 	}, []);
+
+	//microscope animation
 	useEffect(() => {
 		const microscopeTl = gsap.timeline({
 			scrollTrigger: {
@@ -134,6 +122,8 @@ function Experience() {
 				duration: 1,
 				opacity: 0,
 			});
+
+		// plate scroll
 		gsap.timeline({
 			scrollTrigger: {
 				trigger: '.section_bring-out',
