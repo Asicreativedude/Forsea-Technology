@@ -32,6 +32,23 @@ export function App() {
 					x: '-200vw',
 					y: '25vh',
 				})
+
+				.to(
+					'.section_from-cell-to-delicious',
+					{
+						duration: 0.2,
+						backgroundColor: '#222',
+					},
+					'<'
+				)
+				.to(
+					'.microscope-s',
+					{
+						duration: 0.2,
+						backgroundColor: '#222',
+					},
+					'<'
+				)
 				.from(
 					'.tech-embed-wrapper',
 					{
