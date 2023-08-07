@@ -17,28 +17,43 @@ export function App() {
 
 			const microscopeTl = gsap.timeline({
 				scrollTrigger: {
-					trigger: '.microscrop-svg',
+					trigger: '.microscrop-svg ',
 					start: 'top 35%',
 					scrub: true,
+					onEnterBack: () => {
+						document.querySelector('.microscrop-svg').style.display = 'flex';
+					},
 				},
 			});
 			microscopeTl
-				.to('.microscrop-svg', {
+				.to('.microscrop-svg svg', {
 					duration: 1,
 					scale: 10,
-					x: '-100vw',
+					x: '-200vw',
+					y: '25vh',
 				})
-				.to(
-					'.section_from-cell-to-delicious',
+				.from(
+					'.tech-embed-wrapper',
 					{
-						duration: 1,
-						backgroundColor: '#222',
+						opacity: 0,
+						duration: 0.3,
+						onComplete: () => {
+							setTimeout(() => {
+								document.querySelector('#page-1').classList.add('active');
+								document
+									.querySelector('.progress-container')
+									.classList.add('active');
+							}, 200);
+						},
 					},
 					'<'
 				)
-				.to('.microscrop-svg', {
-					duration: 1,
+				.to('.microscrop-svg svg', {
+					duration: 0.2,
 					opacity: 0,
+					onComplete: () => {
+						document.querySelector('.microscrop-svg').style.display = 'none';
+					},
 				});
 
 			const progressBar = document.querySelector('.progress');
@@ -74,10 +89,12 @@ export function App() {
 							document
 								.querySelector('.section_bring-out')
 								.classList.add('active');
+							document.querySelector('.trigger-roll-in').click();
 						} else {
 							document
 								.querySelector('.section_bring-out')
 								.classList.remove('active');
+							document.querySelector('.trigger-roll-in').click();
 						}
 					},
 				},
@@ -203,7 +220,7 @@ export function App() {
 	);
 }
 
-////text entrance
+// //text entrance
 // useEffect(() => {
 // 	const sections = document.querySelectorAll('.section_page');
 // 	sections.forEach((section) => {

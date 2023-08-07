@@ -93,24 +93,35 @@ function Experience() {
 				trigger: '.microscrop-svg',
 				start: 'top 35%',
 				scrub: true,
+				easeing: 'power1.inOut',
 			},
 		});
 		microscopeTl
 			.to('.microscrop-svg', {
-				duration: 1,
+				duration: 0.7,
 				scale: 10,
-				x: '-70vw',
+				x: window.innerWidth > 1920 ? '-55vw' : '-75vw',
+				y: '65vh',
 			})
 			.to(
 				'.section_from-cell-to-delicious',
 				{
-					duration: 1,
+					duration: 0.2,
 					backgroundColor: '#222',
 				},
 				'<'
 			)
+			.to(
+				'.microscope-s',
+				{
+					duration: 0.2,
+					backgroundColor: '#222',
+				},
+				'<'
+			)
+
 			.to('.microscrop-svg', {
-				duration: 1,
+				duration: 0.3,
 				opacity: 0,
 			});
 	}, []);
